@@ -126,10 +126,35 @@
       }
     }
 
+    #live-chart {
+            width: 100%;
+            height: 261px;
+        }
+
     iframe {
       border: none;
       width: 420%;
       height: 60px; /* Adjust the height to fit your status bar */
+    }
+#splash-screen {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background-color: darkblue;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #splash-logo {
+      font-size: 2rem;
+      color: white;
+    }
+
+    /* Hide the splash screen after the content is loaded */
+    body.loaded #splash-screen {
+      display: none;
     }
 
 
