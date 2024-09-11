@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=420, height=380, initial-scale=1.0">
   <title>Compact Dashboard</title>
   <!-- Bootstrap CSS -->
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
@@ -51,36 +53,178 @@
       width: 100%;
       height: auto;
     }
+
+    .status-bar {
+      background-color: #e8e8e8;
+      padding: 5px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #ccc;
+    }
+    .status-bar-icons {
+      display: flex;
+      gap: 10px;
+    }
+    .status-bar-icons i {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+    }
+    .status-bar-icons .icon-red {
+      background-color: red;
+    }
+    .status-bar-icons .icon-blue {
+      background-color: blue;
+    }
+    .status-bar-icons .icon-gray {
+      background-color: gray;
+    }
+    .status-bar-info {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      font-size: 12px;
+    }
+    .status-bar-info i {
+      font-size: 12px;
+    }
+    .home-button {
+      font-size: 20px;
+      color: #000;
+      cursor: pointer;
+    }
+    .btn-custom {
+      height: 100px; /* Adjust button height as needed */
+      font-size: 18px;
+      text-align: center;
+    }
+    .btn-largest {
+      height: 200px; /* Make the largest button taller */
+      font-size: 24px;
+    }
+
+    .btn-layout {
+      height: 150px; /* Set button height */
+      font-size: 20px; /* Adjust text size */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container-custom {
+      max-width: 700px; /* Custom width for the layout */
+    }
+
+    .btn-layout {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px; /* Adjust text size for responsiveness */
+      height: 100px; /* Adjust height for responsiveness */
+    }
+    /* Custom container width */
+    .container-custom {
+      max-width: 420px; /* Adjust to fit 420px screens with margins */
+        max-height: 380px;
+    }
+
+    /* Media query to adjust button size on smaller screens */
+    @media (max-width: 420px) {
+      .btn-layout {
+        height: 50px; /* Smaller button height for small screens */
+        font-size: 14px; /* Smaller text for small screens */
+      }
+    }
+
+    iframe {
+      border: none;
+      width: 420%;
+      height: 60px; /* Adjust the height to fit your status bar */
+    }
+
   </style>
 </head>
 <body>
 
-  <!-- Status bar -->
-  <div class="status-bar">
-    <span>Status:</span> All systems are operational
-  </div>
-
-  <!-- Bootstrap-based navigation bar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid justify-content-around">
-      <a class="nav-link text-white" href="{{ url_for('home') }}">Analyze</a>
-      <a class="nav-link text-white" href="#profile">Profile</a>
-      <a class="nav-link text-white" href="#settings">Settings</a>
-      <a class="nav-link text-white" href="#about">About</a>
-      <a class="nav-link text-white" href="#logout">Logout</a>
-    </div>
-  </nav>
-
-  <!-- Main content area -->
-  <div class="content bg-white">
-
-    <!-- Chart Section -->
-{#    <div class="chart-container">#}
-{#      <img id="live-chart" src="/plot.png" alt="live chart">#}
+{#<!-- Status Bar -->#}
+{#  <div class="status-bar">#}
+{#    <!-- Home Button -->#}
+{#    <div>#}
+{#      <button class="btn btn-primary">#}
+{#          <i class="bi bi-house"></i>#}
+{#      </button>#}
+{#    </div>#}
+{##}
+{#    <!-- Status Bar Icons -->#}
+{#    <div class="status-bar-icons">#}
+{#      <i class="icon-red"></i>#}
+{#      <i class="icon-blue"></i>#}
+{#      <i class="icon-gray"></i>#}
+{#    </div>#}
+{##}
+{#    <!-- Status Bar Info -->#}
+{#    <div class="status-bar-info">#}
+{#      <i class="bi bi-wifi-off"></i>#}
+{#      <span>26 Jun 2024 2:17 PM</span>#}
 {#    </div>#}
 {#  </div>#}
+{##}
+{#  <!-- Bootstrap-based navigation bar -->#}
+{#  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">#}
+{#    <div class="container-fluid justify-content-around">#}
+{#      <a class="nav-link text-white" href="{{ url_for('home') }}">Analyze</a>#}
+{#      <a class="nav-link text-white" href="#profile">Profile</a>#}
+{#      <a class="nav-link text-white" href="#settings">Settings</a>#}
+{#      <a class="nav-link text-white" href="#about">About</a>#}
+{#      <a class="nav-link text-white" href="#logout">Logout</a>#}
+{#    </div>#}
+{#  </nav>#}
 
-  <!-- JavaScript for updating the chart -->
+<!-- Status Bar -->
+{% include 'statusBar.html' %}
+
+  <!-- Main content area -->
+<div class="container mt-4 container-custom">
+  <!-- First Row (2 buttons) -->
+  <div class="row mb-2">
+    <div class="col-6">
+      <button class="btn btn-primary w-100 mh-100 btn-layout">
+        <i class="bi bi-folder"></i> Directories
+      </button>
+    </div>
+    <div class="col-6">
+      <button class="btn btn-secondary w-100 mh-100 btn-layout">
+        <i class="bi bi-graph-up"></i> Spectrum
+      </button>
+    </div>
+  </div>
+
+  <!-- Second Row (2 buttons) -->
+  <div class="row mb-2">
+    <div class="col-6">
+      <button class="btn btn-primary w-100 mh-100 btn-layout">
+        <i class="bi bi-cube"></i> Models
+      </button>
+    </div>
+    <div class="col-6">
+      <button class="btn btn-success w-100 mh-100 btn-layout">
+        <i class="bi bi-journal"></i> Activity Log
+      </button>
+    </div>
+  </div>
+
+  <!-- Third Row (1 large button) -->
+  <div class="row">
+    <div class="col-12">
+      <button class="btn btn-primary w-100 btn-layout" style="height: 60px;">
+        <i class="bi bi-gear"></i> Settings
+      </button>
+    </div>
+  </div>
+</div>
+
+
+{#end of the body#}
   <script>
     function updateChart() {
       const img = document.getElementById('live-chart');
@@ -91,5 +235,7 @@
 
   <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
+
 </html>

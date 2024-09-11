@@ -6,7 +6,9 @@
   <title>Compact Dashboard</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
+   <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
     body {
       height: 380px;
       width: 420px;
@@ -51,25 +53,63 @@
       width: 100%;
       height: auto;
     }
+
+    .status-bar {
+      background-color: #e8e8e8;
+      padding: 5px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #ccc;
+    }
+    .status-bar-icons {
+      display: flex;
+      gap: 10px;
+    }
+    .status-bar-icons i {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+    }
+    .status-bar-icons .icon-red {
+      background-color: red;
+    }
+    .status-bar-icons .icon-blue {
+      background-color: blue;
+    }
+    .status-bar-icons .icon-gray {
+      background-color: gray;
+    }
+    .status-bar-info {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      font-size: 12px;
+    }
+    .status-bar-info i {
+      font-size: 12px;
+    }
+    .home-button {
+      font-size: 20px;
+      color: #000;
+      cursor: pointer;
+    }
+    .btn-custom {
+      height: 100px; /* Adjust button height as needed */
+      font-size: 18px;
+      text-align: center;
+    }
+    .btn-largest {
+      height: 200px; /* Make the largest button taller */
+      font-size: 24px;
+    }
   </style>
+
 </head>
 <body>
 
-  <!-- Status bar -->
-  <div class="status-bar">
-    <span>Status:</span> All systems are operational
-  </div>
-
-  <!-- Bootstrap-based navigation bar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid justify-content-around">
-      <a class="nav-link text-white" href="{{ url_for('navigate_to_index') }}">Home</a>
-      <a class="nav-link text-white" href="#profile">Profile</a>
-      <a class="nav-link text-white" href="#settings">Settings</a>
-      <a class="nav-link text-white" href="#about">About</a>
-      <a class="nav-link text-white" href="#logout">Logout</a>
-    </div>
-  </nav>
+<!-- Status Bar -->
+{% include 'statusBar.html' %}
 
   <!-- Main content area -->
   <div class="content bg-white">
@@ -85,7 +125,7 @@
       const img = document.getElementById('live-chart');
       img.src = '/plot.png?rand=' + Math.random();  // Prevent caching by adding random parameter
     }
-    setInterval(updateChart, 2000);  // Update the chart every 1 seconds
+    setInterval(updateChart, 500);  // Update the chart every 1 seconds
   </script>
 
   <!-- Bootstrap JS Bundle with Popper -->
