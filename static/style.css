@@ -1,0 +1,135 @@
+
+    body {
+      height: 380px;
+      width: 420px;
+      overflow: hidden;
+    }
+    .content {
+      height: calc(100% - 120px);
+      overflow-y: auto;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .status-bar {
+      background-color: #ffc107;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .status-bar span {
+      font-weight: bold;
+      color: #333;
+    }
+    .button {
+      font-size: 12px;
+      padding: 8px;
+    }
+    @media (max-width: 420px) {
+      .content {
+        padding: 8px;
+      }
+      .button {
+        padding: 6px;
+        font-size: 10px;
+      }
+    }
+    /* Additional style for chart */
+    .chart-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    #live-chart {
+      width: 100%;
+      height: auto;
+    }
+
+    .status-bar {
+      background-color: #e8e8e8;
+      padding: 5px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #ccc;
+    }
+    .status-bar-icons {
+      display: flex;
+      gap: 10px;
+    }
+    .status-bar-icons i {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+    }
+    .status-bar-icons .icon-red {
+      background-color: red;
+    }
+    .status-bar-icons .icon-blue {
+      background-color: blue;
+    }
+    .status-bar-icons .icon-gray {
+      background-color: gray;
+    }
+    .status-bar-info {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      font-size: 12px;
+    }
+    .status-bar-info i {
+      font-size: 12px;
+    }
+    .home-button {
+      font-size: 20px;
+      color: #000;
+      cursor: pointer;
+    }
+    .btn-custom {
+      height: 100px; /* Adjust button height as needed */
+      font-size: 18px;
+      text-align: center;
+    }
+    .btn-largest {
+      height: 200px; /* Make the largest button taller */
+      font-size: 24px;
+    }
+
+    .btn-layout {
+      height: 150px; /* Set button height */
+      font-size: 20px; /* Adjust text size */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container-custom {
+      max-width: 700px; /* Custom width for the layout */
+    }
+
+    .btn-layout {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px; /* Adjust text size for responsiveness */
+      height: 100px; /* Adjust height for responsiveness */
+    }
+    /* Custom container width */
+    .container-custom {
+      max-width: 420px; /* Adjust to fit 420px screens with margins */
+        max-height: 380px;
+    }
+
+    /* Media query to adjust button size on smaller screens */
+    @media (max-width: 420px) {
+      .btn-layout {
+        height: 50px; /* Smaller button height for small screens */
+        font-size: 14px; /* Smaller text for small screens */
+      }
+    }
+
+    iframe {
+      border: none;
+      width: 420%;
+      height: 60px; /* Adjust the height to fit your status bar */
+    }
+
+
