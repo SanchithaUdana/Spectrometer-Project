@@ -1,10 +1,10 @@
-from flask import Flask, render_template, redirect, url_for, Response
+from flask import Flask, render_template, redirect, url_for, Response, jsonify
 import matplotlib.pyplot as plt
 import io
 import random
+import socket
 
 app = Flask(__name__)
-
 
 # Global variables to simulate live data for the chart
 x_data = []
@@ -36,9 +36,9 @@ def navigate_to_index():
     return redirect(url_for('index'))
 
 
-@app.route('/home')
-def home():
-    return render_template('home.html')
+@app.route('/analyze')
+def analyze():
+    return render_template('analyze.html')
 
 
 # Route to serve the live-updating chart image

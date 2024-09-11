@@ -14,8 +14,8 @@
 
     <!-- Status Bar Info -->
     <div class="status-bar-info">
-      <i class="bi bi-wifi-off"></i>
-      <span>26 Jun 2024 2:17 PM</span>
+      <i id="wifi-icon" class="icon-gray bi bi-wifi-off"></i>
+      <span id="status-time">Loading ...</span>
     </div>
 
   </div>
@@ -24,9 +24,31 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid justify-content-around">
       <a class="nav-link text-white" href="{{ url_for('navigate_to_index') }}">Home</a>
-      <a class="nav-link text-white" href="{{ url_for('home') }}">Analyze</a>
+      <a class="nav-link text-white" href="{{ url_for('analyze') }}">Analyze</a>
       <a class="nav-link text-white" href="#settings">Settings</a>
       <a class="nav-link text-white" href="#about">About</a>
       <a class="nav-link text-white" href="#logout">Logout</a>
     </div>
   </nav>
+
+{#update time and date#}
+<script>
+    function updateDateTime() {
+        const dateTimeSpan = document.getElementById('status-time');
+        const now = new Date();
+
+        // Format the date and time
+        const date = now.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+        const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        // Set the formatted date and time to the HTML element
+        dateTimeSpan.textContent = `${date} ${time}`;
+    }
+
+    // Call the function once to initialize
+    updateDateTime();
+
+    // Update the date and time every second
+    setInterval(updateDateTime, 1000);
+</script>
+
