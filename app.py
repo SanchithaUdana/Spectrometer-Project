@@ -13,6 +13,19 @@ x_data = []
 y_data = []
 
 
+def generate_live_data():
+    global x_data, y_data
+    if len(x_data) >= 20:  # Keep last 20 data points for better view
+        x_data.pop(0)
+        y_data.pop(0)
+
+    # Simulate live data (random sine wave)
+    new_x = x_data[-1] + 1 if x_data else 0
+    new_y = np.sin(new_x) + random.uniform(-0.5, 0.5)  # Adding some random noise
+    x_data.append(new_x)
+    y_data.append(new_y)
+
+
 # Function to generate a live chart using matplotlib
 def generate_plot():
     plt.figure(figsize=(5, 3))
@@ -44,19 +57,6 @@ def analyze():
 
 
 # Function to simulate updating plot data
-def generate_live_data():
-    global x_data, y_data
-    if len(x_data) >= 20:  # Keep last 20 data points for better view
-        x_data.pop(0)
-        y_data.pop(0)
-
-    # Simulate live data (random sine wave)
-    new_x = x_data[-1] + 1 if x_data else 0
-    new_y = np.sin(new_x) + random.uniform(-0.5, 0.5)  # Adding some random noise
-    x_data.append(new_x)
-    y_data.append(new_y)
-
-
 # Route to serve the live-updating chart image
 # Route to generate the plot dynamically
 @app.route('/plot.png')

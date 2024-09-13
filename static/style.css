@@ -136,6 +136,7 @@
       width: 420%;
       height: 60px; /* Adjust the height to fit your status bar */
     }
+
 #splash-screen {
       position: fixed;
       width: 100vw;
