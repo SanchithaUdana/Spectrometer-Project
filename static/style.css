@@ -3,6 +3,8 @@
       height: 380px;
       width: 420px;
       overflow: hidden;
+        background-color: #052755;
+
     }
     .content {
       height: calc(100% - 120px);
@@ -137,25 +139,5 @@
       height: 60px; /* Adjust the height to fit your status bar */
     }
 
-#splash-screen {
-      position: fixed;
-      width: 100vw;
-      height: 100vh;
-      background-color: darkblue;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    #splash-logo {
-      font-size: 2rem;
-      color: white;
-    }
-
-    /* Hide the splash screen after the content is loaded */
-    body.loaded #splash-screen {
-      display: none;
-    }
 
 

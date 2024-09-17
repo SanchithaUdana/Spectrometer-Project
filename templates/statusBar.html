@@ -5,31 +5,50 @@
       <a class="btn btn-primary bi bi-house" href="{{ url_for('navigate_to_index') }}" role="button"></a>
     </div>
 
-    <!-- Status Bar Icons -->
+    <!-- system status -->
     <div class="status-bar-icons">
       <i class="icon-red"></i>
       <i class="icon-blue"></i>
       <i class="icon-gray"></i>
     </div>
 
-    <!-- Status Bar Info -->
+    <!-- Wifi Connectivity -->
     <div class="status-bar-info">
       <i id="wifi-icon" class="icon-gray bi bi-wifi-off"></i>
       <span id="status-time">Loading ...</span>
     </div>
 
+
   </div>
 
-  <!-- Bootstrap-based navigation bar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid justify-content-around">
-      <a class="nav-link text-white" href="{{ url_for('navigate_to_index') }}">Home</a>
-      <a class="nav-link text-white" href="{{ url_for('analyze') }}">Analyze</a>
-      <a class="nav-link text-white" href="#settings">Settings</a>
-      <a class="nav-link text-white" href="#about">About</a>
-      <a class="nav-link text-white" href="#logout">Logout</a>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="rebootModal" tabindex="-1" aria-labelledby="rebootModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rebootModalLabel">Confirm Re-Boot</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to reboot the application?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmReboot">Confirm</button>
+      </div>
     </div>
-  </nav>
+  </div>
+</div>
+
+<script>
+  // Event listener for the confirm button inside the modal
+  document.getElementById('confirmReboot').addEventListener('click', function() {
+    // Redirect to the splash page
+    window.location.href = "{{ url_for('splash') }}";
+  });
+</script>
+
 
 {#update time and date#}
 <script>
@@ -52,3 +71,6 @@
     setInterval(updateDateTime, 1000);
 </script>
 
+
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

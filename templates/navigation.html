@@ -1,0 +1,10 @@
+{#navigation bar#}
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid justify-content-around">
+{#    <a class="nav-link text-white" href="{{ url_for('navigate_to_index') }}">Home</a>#}
+    <a class="nav-link text-white" href="{{ url_for('analyze') }}">Analyze</a>
+    <a class="nav-link text-white" href="#settings">Settings</a>
+    <a class="nav-link text-white" href="#about">About</a>
+    <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#rebootModal">Re-Boot</a> <!-- Open modal -->
+  </div>
+</nav>

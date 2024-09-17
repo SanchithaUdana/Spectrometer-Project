@@ -42,18 +42,44 @@ def generate_plot():
 
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def splash():
+    return render_template('splash.html')
 
 
 @app.route('/navigate_to_index')
 def navigate_to_index():
-    return redirect(url_for('index'))
+    return render_template('index.html')
 
 
 @app.route('/analyze')
 def analyze():
     return render_template('analyze.html')
+
+
+# Route for Directories page
+@app.route('/directories')
+def directories():
+    return render_template('directories.html')
+
+# Route for Spectrum page
+@app.route('/spectrum')
+def spectrum():
+    return render_template('analyze.html')
+
+# Route for Models page
+@app.route('/models')
+def models():
+    return render_template('models.html')
+
+# Route for Activity Log page
+@app.route('/activity-log')
+def activity_log():
+    return render_template('activity_log.html')
+
+# Route for Settings page
+@app.route('/settings')
+def settings():
+    return render_template('settings.html')
 
 
 # Function to simulate updating plot data
