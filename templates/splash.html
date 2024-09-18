@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=420, height=380, initial-scale=1.0">
+  <meta name="viewport" content="width=480, height=320, initial-scale=1.0">
   <title>Splash Screen</title>
 
   <!-- Custom CSS for splash screen -->
@@ -27,13 +27,13 @@
     }
 
     #splash-logo img {
-      width: 300px; /* Adjust image width to fit the screen */
+      width: 480px; /* Adjust image width to fit the screen */
       height: auto;
     }
 
     h1 {
       color: white;
-      margin-top: 20px;
+      margin-top: 1px;
     }
   </style>
 
@@ -50,7 +50,7 @@
   <div id="splash-container">
     <!-- Image Placeholder: Replace with actual image in the 'static' folder -->
     <div id="splash-logo">
-      <img src="{{ url_for('static', filename='splash.png') }}" alt="Splash Image" style="width: 420px; height: 380px" >
+      <img src="{{ url_for('static', filename='splash.png') }}" alt="Splash Image" style="width: 480px; height: 320px" >
     </div>
   </div>
 

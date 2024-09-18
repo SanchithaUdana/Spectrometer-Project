@@ -2,52 +2,25 @@
 
     <!-- Home Button -->
     <div>
-      <a class="btn btn-primary bi bi-house" href="{{ url_for('navigate_to_index') }}" role="button"></a>
+        <a class="btn btn-primary bi bi-house" href="{{ url_for('navigate_to_index') }}" role="button"
+           style="height: 30px"></a>
     </div>
 
     <!-- system status -->
     <div class="status-bar-icons">
-      <i class="icon-red"></i>
-      <i class="icon-blue"></i>
-      <i class="icon-gray"></i>
+        <i class="icon-red"></i>
+        <i class="icon-blue"></i>
+        <i class="icon-gray"></i>
     </div>
 
     <!-- Wifi Connectivity -->
     <div class="status-bar-info">
-      <i id="wifi-icon" class="icon-gray bi bi-wifi-off"></i>
-      <span id="status-time">Loading ...</span>
+        <i id="wifi-icon" class="icon-gray bi bi-wifi-off"></i>
+        <span id="status-time">Loading ...</span>
     </div>
 
 
-  </div>
-
-
-<!-- Bootstrap Modal -->
-<div class="modal fade" id="rebootModal" tabindex="-1" aria-labelledby="rebootModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="rebootModalLabel">Confirm Re-Boot</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to reboot the application?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="confirmReboot">Confirm</button>
-      </div>
-    </div>
-  </div>
 </div>
-
-<script>
-  // Event listener for the confirm button inside the modal
-  document.getElementById('confirmReboot').addEventListener('click', function() {
-    // Redirect to the splash page
-    window.location.href = "{{ url_for('splash') }}";
-  });
-</script>
 
 
 {#update time and date#}
@@ -57,8 +30,8 @@
         const now = new Date();
 
         // Format the date and time
-        const date = now.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
-        const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const date = now.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric'});
+        const time = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
 
         // Set the formatted date and time to the HTML element
         dateTimeSpan.textContent = `${date} ${time}`;

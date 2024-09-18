@@ -61,25 +61,34 @@ def analyze():
 def directories():
     return render_template('directories.html')
 
+
 # Route for Spectrum page
 @app.route('/spectrum')
 def spectrum():
     return render_template('analyze.html')
+
 
 # Route for Models page
 @app.route('/models')
 def models():
     return render_template('models.html')
 
+
 # Route for Activity Log page
 @app.route('/activity-log')
 def activity_log():
     return render_template('activity_log.html')
 
+
 # Route for Settings page
 @app.route('/settings')
 def settings():
     return render_template('settings.html')
+
+
+@app.route('/appType')
+def appType():
+    return render_template('appType.html')
 
 
 # Function to simulate updating plot data
