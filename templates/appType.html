@@ -1,29 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=420, height=380, initial-scale=1.0">
-  <title>Dashboard Spectrum</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=420, height=380, initial-scale=1.0">
+    <title>Dashboard Spectrum</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background-color: white;
+        }
+
+        .btn-click {
+            transition: background-color 0.3s ease; /* Smooth transition for color change */
+        }
+
+        .btn-click:active, .btn-custom:focus {
+            background-color: #5E5BEA; /* Change color when button is clicked */
+
+        }
+    </style>
 
 </head>
 <body>
 
 
 <!-- Status Bar -->
-{% include 'statusBar.html' %}
-<!-- navigation Bar -->
-{% include 'navigation.html' %}
+{% include 'statSegments/statusBar.html' %}
+
+<!-- navigation bar place spectrum type -->
+<nav class="navbar navbar-expand-sm" style="height: 47px; background-color: #052755">
+    <div class="container-fluid d-flex align-items-center justify-content-start">
+        <img src="static/selectSpectro.png" alt="Icon" width="30" height="30" class="me-2">
+        <h6 class="mb-0" style="color: white;">Select Spectrometer Application Type</h6>
+    </div>
+</nav>
 
 
 <!-- Main content area -->
-<div class="container mt-4 container-custom">
+<div class="container">
+    <div class="main-div">
+        <!-- Top Section -->
+        <div class="top-div">
 
+            <button href="#" class="btn btn-light btn-custom btn-click" style="width: 104px; height: 140px">
+                <img src="static/adaption.png" alt="Icon" width="74px" height="74px" class="me-2">
+                Absorbance
+            </button>
 
+            <button href="#" class="btn btn-light btn-custom btn-click" style="width: 104px; height: 140px">
+                <img src="static/Reflectance.png" alt="Icon" width="74px" height="74px" class="me-2">
+                Reflectance
+            </button>
 
+            <button href="#" class="btn btn-light btn-custom btn-click" style="width: 104px; height: 140px">
+                <img src="static/Transmission.png" alt="Icon" width="74px" height="74px" class="me-2">
+                Transmission
+            </button>
+
+        </div>
+
+        <!-- Bottom Section -->
+        <div class="bottom-div align-content-center">
+            <a href="{{ url_for('navigate_to_index') }}">
+                <button class="btn btn-info bi bi-arrow-left" style="width: 88px; height: 30px; font-size: 11px">
+                    Back
+                </button>
+            </a>
+
+            <a href="#">
+                <button class="btn btn-danger bi bi-arrow-right" style="width: 88px; height: 30px; font-size: 11px">
+                    Next
+                </button>
+            </a>
+        </div>
+    </div>
 </div>
 
 

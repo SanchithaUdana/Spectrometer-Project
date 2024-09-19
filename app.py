@@ -43,7 +43,7 @@ def generate_plot():
 
 @app.route('/')
 def splash():
-    return render_template('splash.html')
+    return render_template('statSegments/splash.html')
 
 
 @app.route('/navigate_to_index')

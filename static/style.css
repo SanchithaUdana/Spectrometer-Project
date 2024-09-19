@@ -150,7 +150,6 @@ body {
 }
 
 /*chart css*/
-
 #live-chart {
     width: 100%;
     height: 261px;
@@ -162,5 +161,56 @@ iframe {
     height: 60px; /* Adjust the height to fit your status bar */
 }
 
+/*apptype css*/
+.main-div {
+    height: 243px;
+    width: 480px;
+    display: flex;
+    flex-direction: column;
+    /*border: 1px solid #ddd; !* Optional: border for visual reference *!*/
+}
 
+.top-div, .bottom-div {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
 
+.top-div {
+    justify-content: space-between;
+    padding: 6px;
+    margin-left: 20px;
+    margin-right: 50px;
+}
+
+.bottom-div {
+    justify-content: space-between;
+    padding: 6px;
+    margin-left: 120px;
+    margin-right: 145px;
+}
+
+.btn-custom {
+    flex: 1;
+    margin: 0 3px; /* Adjust horizontal spacing between buttons */
+    height: 243px; /* Fill container height */
+    width: 470px;
+    font-size: 11px; /* Adjust font size as needed */
+    color: white;
+    background-color: #2F2DA0;
+}
+
+.top-div .btn-custom {
+    height: 100%; /* Adjust height for top buttons */
+}
+
+.bottom-div .btn-custom {
+    height: 100%; /* Adjust height for bottom buttons */
+    font-size: 11px;
+}
+
+@media (max-width: 480px) {
+    .btn-custom {
+        font-size: 13px; /* Smaller font size for small screens */
+    }
+}
