@@ -91,6 +91,11 @@ def appType():
     return render_template('appType.html')
 
 
+@app.route('/spectrumDefault')
+def spectrumDefault():
+    return render_template('absorbance.html')
+
+
 # Function to simulate updating plot data
 # Route to serve the live-updating chart image
 # Route to generate the plot dynamically

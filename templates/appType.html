@@ -45,7 +45,7 @@
         <!-- Top Section -->
         <div class="top-div">
 
-            <a href="#">
+            <a href="{{ url_for('spectrumDefault') }}">
                 <button href="#" class="btn btn-light btn-custom btn-click" style="width: 104px; height: 140px">
                     <img src="static/adaption.png" alt="Icon" width="74px" height="74px" class="me-2">
                     Absorbance
@@ -66,21 +66,6 @@
                 </button>
             </a>
 
-        </div>
-
-        <!-- Bottom Section -->
-        <div class="bottom-div align-content-center">
-            <a href="{{ url_for('navigate_to_index') }}">
-                <button class="btn btn-info bi bi-arrow-left" style="width: 88px; height: 30px; font-size: 11px">
-                    Back
-                </button>
-            </a>
-
-            <a href="#">
-                <button class="btn btn-danger bi bi-arrow-right" style="width: 88px; height: 30px; font-size: 11px">
-                    Next
-                </button>
-            </a>
         </div>
     </div>
 </div>

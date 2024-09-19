@@ -19,7 +19,7 @@ body {
     height: 30px;
     padding: 8px;
     margin-top: 5px;
-    border-radius: 5px;
+    border-radius: 0px;
     text-align: center;
 }
 
@@ -178,7 +178,7 @@ iframe {
 
 .top-div {
     justify-content: space-between;
-    padding: 6px;
+    padding: 4px;
     margin-left: 20px;
     margin-right: 50px;
 }
@@ -186,8 +186,8 @@ iframe {
 .bottom-div {
     justify-content: space-between;
     padding: 6px;
-    margin-left: 120px;
-    margin-right: 145px;
+    margin-left: 175px;
+    margin-right: 150px;
 }
 
 .btn-custom {

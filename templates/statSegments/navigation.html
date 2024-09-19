@@ -1,38 +1,73 @@
-{#navigation bar#}
- <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="height: 47px">
-  <div class="container-fluid justify-content-around">
-{#    <a class="nav-link text-white" href="{{ url_for('navigate_to_index') }}">Home</a>#}
-    <a class="nav-link text-white" href="{{ url_for('analyze') }}">Analyze</a>
-    <a class="nav-link text-white" href="#settings">Settings</a>
-    <a class="nav-link text-white" href="#about">About</a>
-    <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#rebootModal">Re-Boot</a> <!-- Open modal -->
-  </div>
-</nav>
+<style>
+    .settings-bar {
+        display: flex;
+        justify-content: space-between;
+        background-color: #2A2A9D; /* Dark Blue */
+        width: 480px;
+        height: 47px;
+        padding: 5px;
+        border-radius: 0px;
+    }
 
-<!-- Bootstrap Modal -->
-<div class="modal fade" id="rebootModal" tabindex="-1" aria-labelledby="rebootModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="rebootModalLabel">Confirm Re-Boot</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to reboot the application?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="confirmReboot">Confirm</button>
-      </div>
-    </div>
-  </div>
+    .settings-bar button {
+        background-color: #3D3DAF; /* Slightly lighter blue */
+        border: none;
+        color: white;
+        font-size: 20px;
+        padding: 0;
+        margin-right: 10px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+    }
+
+    .settings-bar button:hover {
+        background-color: #4A4ABF;
+    }
+
+    .settings-bar .analyze-btn {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #5E5BEA;
+        color: white;
+        font-size: 12px;
+        width: 40px;
+    }
+
+    .settings-bar i {
+        color: white; /* White color for icons */
+    }
+</style>
+
+
+<div class="settings-bar">
+    <a href="#" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
+    &nbsp;
+    <a href="#" class="btn btn-primary"><i class="bi bi-caret-right-square-fill"></i></a>
+    &nbsp;
+    <a href="#" class="btn btn-primary"><i class="bi bi-camera"></i></a>
+    &nbsp;
+    <a href="#" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
+    &nbsp;
+    <a href="#" class="btn btn-primary"><i class="bi bi-sliders"></i></a>
+    &nbsp;&nbsp;
+    <a href="#" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i></a>
+    &nbsp;
+    <a href="#" class="btn btn-primary"><i class="bi bi-arrows-move"></i></a>
+    &nbsp;
+    <a href="#" class="btn btn-primary"><i class="bi bi-zoom-in"></i></a>
+    &nbsp;
+    <a href="#" class="btn btn-primary"><i class="bi bi-bezier2"></i></a>
+    &nbsp;&nbsp;
+    <a href="#" class="btn btn-primary analyze-btn">
+{#        <img alt="" style="height: 18px; width: 18px" src="static/analyze.png"> <br>#}
+        Analyze
+    </a>
 </div>
 
-{#script event listener for confirm button#}
-<script>
-  // Event listener for the confirm button inside the modal
-  document.getElementById('confirmReboot').addEventListener('click', function() {
-    // Redirect to the splash page
-    window.location.href = "{{ url_for('splash') }}";
-  });
-</script>
+
