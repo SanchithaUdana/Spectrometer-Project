@@ -19,61 +19,62 @@
 
 <!-- Main content area -->
 <div class="container mt-4 container-custom">
-{#    {% include 'indexContent.html' %}#}
+        {% include 'indexContent.html' %}
 
-    <!-- First Row (2 buttons) -->
-    <div class="row mb-2">
-        <div class="col-6">
-            <a href="{{ url_for('directories') }}">
-                <button class="btn btn-light w-100 mh-100 btn-layout" style="height: 80px;">
-                    <img src="static/directories.png" alt="Icon" width="80" height="80" class="me-2">
-                    Directories
-                </button>
-            </a>
-        </div>
+{#    <!-- First Row (2 buttons) -->#}
+{#    <div class="row mb-2">#}
+{#        <div class="col-6">#}
+{#            <a href="{{ url_for('directories') }}">#}
+{#                <button class="btn btn-light w-100 mh-100 btn-layout" style="height: 80px;">#}
+{#                    <img src="static/directories.png" alt="Icon" width="80" height="80" class="me-2">#}
+{#                    Directories#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{##}
+{#        <div class="col-6">#}
+{#            <a href="{{ url_for('appType') }}">#}
+{#                <button class="btn btn-light w-100 mh-100 btn-layout" style="height: 80px;">#}
+{#                    <img src="static/spectrum.png" alt="Icon" width="80" height="80" class="me-2">#}
+{#                    Spectrum#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <!-- Second Row (2 buttons) -->#}
+{#    <div class="row mb-2">#}
+{#        <div class="col-6">#}
+{#            <a href="{{ url_for('models') }}">#}
+{#                <button class="btn btn-light w-100 mh-100 btn-layout" style="height: 80px;">#}
+{#                    <img src="static/model.png" alt="Icon" width="80" height="80" class="me-2">#}
+{#                    Models#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{##}
+{#        <div class="col-6">#}
+{#            <a href="{{ url_for('activity_log') }}">#}
+{#                <button class="btn btn-light w-100 mh-100 btn-layout" style="height: 80px;">#}
+{#                    <img src="static/logs.png" alt="Icon" width="80" height="80" class="me-2">#}
+{#                    Activity Log#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <!-- Third Row (1 large button) -->#}
+{#    <div class="row">#}
+{#        <div class="col-12">#}
+{#            <a href="{{ url_for('settings') }}">#}
+{#                <button class="btn btn-light w-100 btn-layout" style="height: 80px;">#}
+{#                    <img src="static/setting.png" alt="Icon" width="80" height="80" class="me-2">#}
+{#                    Settings#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{#    </div>#}
 
-        <div class="col-6">
-            <a href="{{ url_for('appType') }}">
-                <button class="btn btn-light w-100 mh-100 btn-layout" style="height: 80px;">
-                    <img src="static/spectrum.png" alt="Icon" width="80" height="80" class="me-2">
-                    Spectrum
-                </button>
-            </a>
-        </div>
-    </div>
-
-    <!-- Second Row (2 buttons) -->
-    <div class="row mb-2">
-        <div class="col-6">
-            <a href="{{ url_for('models') }}">
-                <button class="btn btn-light w-100 mh-100 btn-layout" style="height: 80px;">
-                    <img src="static/model.png" alt="Icon" width="80" height="80" class="me-2">
-                    Models
-                </button>
-            </a>
-        </div>
-
-        <div class="col-6">
-            <a href="{{ url_for('activity_log') }}">
-                <button class="btn btn-light w-100 mh-100 btn-layout" style="height: 80px;">
-                    <img src="static/logs.png" alt="Icon" width="80" height="80" class="me-2">
-                    Activity Log
-                </button>
-            </a>
-        </div>
-    </div>
-
-    <!-- Third Row (1 large button) -->
-    <div class="row">
-        <div class="col-12">
-            <a href="{{ url_for('settings') }}">
-                <button class="btn btn-light w-100 btn-layout" style="height: 80px;">
-                    <img src="static/setting.png" alt="Icon" width="80" height="80" class="me-2">
-                    Settings
-                </button>
-            </a>
-        </div>
-    </div>
 </div>
 
 
