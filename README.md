@@ -19,19 +19,6 @@ Welcome to the **Spectrometer Project**, a Flask-based web application designed 
 
 ---
 
-## **Table of Contents**
-
-1. [Project Setup](#project-setup)
-2. [Docker Image Overview](#docker-image-overview)
-3. [Running the Project](#running-the-project)
-4. [Dockerfile Explained](#dockerfile-explained)
-5. [Project Structure](#project-structure)
-6. [Technologies Used](#technologies-used)
-7. [Contributing](#contributing)
-8. [License](#license)
-
----
-
 ## **Project Setup**
 
 ### **Prerequisites**
@@ -44,10 +31,4 @@ Before running the project, make sure you have the following installed:
 - **Bootstrap 5.3.0-alpha1**
 - **Docker** (if you plan to use the containerized version)
 
-### **Local Installation**
 
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/SanchithaUdana/Spectrometer-Project.git
-   cd Spectrometer-Project
