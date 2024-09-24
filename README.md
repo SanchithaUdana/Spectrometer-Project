@@ -1,3 +1,6 @@
+
+<img width="665" alt="Screenshot 2024-09-11 at 10 00 28 AM" src="https://github.com/user-attachments/assets/065d73dd-c3ae-4dcc-94ab-e29e6e7d0f93">
+
 # **Spectrometer Project**
 
 Welcome to the **Spectrometer Project**, a Flask-based web application designed for running a spectrum plot on a Raspberry Pi. The app provides real-time visualizations using **Matplotlib** and is containerized for easy deployment using **Docker**.
@@ -72,3 +75,6 @@ This Dockerfile sets up a lightweight container for running a Flask web applicat
 
 For a pre-built image, visit the Docker Hub link:  
 [https://hub.docker.com/r/sanchithaudana/flask-app](https://hub.docker.com/r/sanchithaudana/flask-app).
+
+<img width="1440" alt="Screenshot 2024-09-24 at 9 10 10 AM" src="https://github.com/user-attachments/assets/0cbd4f22-67b5-442f-a430-28374ca2617f">
+
