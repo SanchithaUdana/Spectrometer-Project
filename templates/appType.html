@@ -45,21 +45,21 @@
         <!-- Top Section -->
         <div class="top-div">
 
-            <a href="{{ url_for('spectrumDefault') }}">
+            <a href="{{ url_for('absorbance') }}">
                 <button href="#" class="btn btn-light btn-custom btn-click" style="width: 104px; height: 140px">
                     <img src="static/adaption.png" alt="Icon" width="74px" height="74px" class="me-2">
                     Absorbance
                 </button>
             </a>
 
-            <a href="#">
+            <a href="{{ url_for('reflectance') }}">
                 <button href="#" class="btn btn-light btn-custom btn-click" style="width: 104px; height: 140px">
                     <img src="static/Reflectance.png" alt="Icon" width="74px" height="74px" class="me-2">
                     Reflectance
                 </button>
             </a>
 
-            <a href="#">
+            <a href="{{ url_for('transmission') }}">
                 <button class="btn btn-light btn-custom btn-click" style="width: 104px; height: 140px">
                     <img src="static/Transmission.png" alt="Icon" width="74px" height="74px" class="me-2">
                     Transmission
@@ -67,6 +67,13 @@
             </a>
 
         </div>
+
+        <div class="bottom-div">
+            <a href="{{ url_for('navigate_to_index') }}">
+                <button class="btn btn-danger bi bi-arrow-left">Back</button>
+            </a>
+        </div>
+
     </div>
 </div>
 

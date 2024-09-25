@@ -1,10 +1,13 @@
 from flask import Flask, render_template, redirect, url_for, Response, jsonify
 import matplotlib.pyplot as plt
+import plotly.graph_objs as go
 import io
 import random
 import numpy as np
 import random
 import time
+
+import plotly.graph_objs as go
 
 app = Flask(__name__)
 
@@ -13,33 +16,9 @@ x_data = []
 y_data = []
 
 
-def generate_live_data():
-    global x_data, y_data
-    if len(x_data) >= 20:  # Keep last 20 data points for better view
-        x_data.pop(0)
-        y_data.pop(0)
-
-    # Simulate live data (random sine wave)
-    new_x = x_data[-1] + 1 if x_data else 0
-    new_y = np.sin(new_x) + random.uniform(-0.5, 0.5)  # Adding some random noise
-    x_data.append(new_x)
-    y_data.append(new_y)
-
-
-# Function to generate a live chart using matplotlib
-def generate_plot():
-    plt.figure(figsize=(5, 3))
-    plt.plot(x_data, y_data, color='blue')
-    plt.xlabel('X-axis')
-    plt.ylabel('Y-axis')
-    plt.title('Live Updating Chart')
-
-    img = io.BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    plt.close()
-    return img
-
+################
+#  UI Routing  #
+################
 
 @app.route('/')
 def splash():
@@ -91,35 +70,79 @@ def appType():
     return render_template('appType.html')
 
 
-@app.route('/spectrumDefault')
-def spectrumDefault():
+@app.route('/absorbance')
+def absorbance():
     return render_template('absorbance.html')
+
+
+@app.route('/reflectance')
+def reflectance():
+    return render_template('reflectance.html')
+
+
+@app.route('/transmission')
+def transmission():
+    return render_template('transmission.html')
+
+
+#####################
+#  Python functions #
+#####################
 
 
 # Function to simulate updating plot data
 # Route to serve the live-updating chart image
 # Route to generate the plot dynamically
-@app.route('/plot.png')
-def plot_png():
-    # Update live data
-    generate_live_data()
+@app.route('/plot-data')
+def plot_data():
+    # Example sensor data: Replace with actual sensor data retrieval
+    x = np.linspace(0, 2048, 2048)
+    y = np.random.random(2048)
 
-    # Create the plot
-    fig, ax = plt.subplots()
-    ax.plot(x_data, y_data, color='blue', marker='o')
+    # Create a Plotly figure
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='Sensor Data'))
+    fig.update_layout(
+        xaxis_title="Pixel",
+        yaxis_title="Value",
+        height=320,  # Set height to fit 480x320 resolution
+        width=480,
+        updatemenus=[
+            {
+                "buttons": [
+                    {
+                        "args": [None, {"frame": {"duration": 500, "redraw": True},
+                                        "fromcurrent": True, "mode": "immediate"}],
+                        "label": "Play",
+                        "method": "animate"
+                    },
+                    {
+                        "args": [None, {"frame": {"duration": 0, "redraw": True},
+                                        "mode": "immediate"}],
+                        "label": "Pause",
+                        "method": "animate"
+                    }
+                ],
+                "direction": "left",
+                "pad": {"r": 10, "t": 87},
+                "showactive": False,
+                "type": "buttons",
+                "x": 0.1,
+                "xanchor": "right",
+                "y": 0,
+                "yanchor": "top"
+            }
+        ]
+    )
 
-    ax.set_title("Live Updating Plot")
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Value")
+    # Convert plotly figure to JSON
+    graphJSON = fig.to_json()
+    return jsonify(graphJSON)
 
-    # Save plot to a BytesIO object
-    png_output = io.BytesIO()
-    plt.savefig(png_output, format='png', dpi=80)  # Adjust DPI for resolution
-    png_output.seek(0)
-    plt.close(fig)
 
-    return Response(png_output.getvalue(), mimetype='image/png')
-
+###################
+#  Main Function  #
+###################
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
