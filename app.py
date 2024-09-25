@@ -89,7 +89,6 @@ def transmission():
 #  Python functions #
 #####################
 
-
 # Function to simulate updating plot data
 # Route to serve the live-updating chart image
 # Route to generate the plot dynamically

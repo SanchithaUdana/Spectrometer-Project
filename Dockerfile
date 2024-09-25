@@ -1,24 +1,24 @@
-# Use a compatible Python runtime for 32-bit Raspberry Pi OS (ARMv7 architecture)
-FROM arm32v7/python:3.9-slim
+# Use a lightweight Python image as the base
+FROM python:3.9-slim
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file to the container
+# Copy the requirements file into the container
 COPY requirements.txt .
 
-# Install any needed packages specified in requirements.txt
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code to the container
+# Copy the entire application code into the container
 COPY . .
 
-# Set environment variables
+# Set environment variables for Flask
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
-# Expose the port on which Flask will run
+# Expose the port Flask will run on
 EXPOSE 5000
 
-# Run the application
+# Command to run the Flask application
 CMD ["flask", "run"]
