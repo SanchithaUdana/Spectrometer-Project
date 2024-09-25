@@ -1,5 +1,5 @@
 
-<img width="665" alt="Screenshot 2024-09-11 at 10 00 28 AM" src="https://github.com/user-attachments/assets/065d73dd-c3ae-4dcc-94ab-e29e6e7d0f93">
+<img width="482" alt="Screenshot 2024-09-25 at 9 48 20 AM" src="https://github.com/user-attachments/assets/eb10617a-a2bd-4432-bf7d-2df8721983f7">
 
 # **Spectrometer Project**
 
