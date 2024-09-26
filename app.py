@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, url_for, Response, jsonify
+from flask import *
+from urllib.parse import quote
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
 import io

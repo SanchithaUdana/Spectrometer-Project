@@ -46,28 +46,83 @@
 
 
 <div class="settings-bar">
-    <a href="#" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
+    <a href="#" id="play-btn" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
     &nbsp;
-    <a href="#" class="btn btn-primary"><i class="bi bi-caret-right-square-fill"></i></a>
+    <a href="#" id="pause-btn" class="btn btn-primary"><i class="bi bi-caret-right-square-fill"></i></a>
     &nbsp;
-    <a href="#" class="btn btn-primary"><i class="bi bi-camera"></i></a>
+    <a href="#" id="save-btn" class="btn btn-primary"><i class="bi bi-camera"></i></a>
     &nbsp;
-    <a href="#" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
+    <a href="#" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
     &nbsp;
-    <a href="#" class="btn btn-primary"><i class="bi bi-sliders"></i></a>
+    <a href="#" id="settings-btn" class="btn btn-primary"><i class="bi bi-sliders"></i></a>
     &nbsp;&nbsp;
-    <a href="#" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i></a>
+    <a href="#" id="reset-btn" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i></a>
     &nbsp;
-    <a href="#" class="btn btn-primary"><i class="bi bi-arrows-move"></i></a>
+    <a href="#" id="pan-btn" class="btn btn-primary"><i class="bi bi-arrows-move"></i></a>
     &nbsp;
-    <a href="#" class="btn btn-primary"><i class="bi bi-zoom-in"></i></a>
+    <a href="#" id="zoom-btn" class="btn btn-primary"><i class="bi bi-zoom-in"></i></a>
     &nbsp;
-    <a href="#" class="btn btn-primary"><i class="bi bi-bezier2"></i></a>
+    <a href="#" id="point-btn" class="btn btn-primary"><i class="bi bi-bezier2"></i></a>
     &nbsp;&nbsp;
-    <a href="#" class="btn btn-primary analyze-btn">
-{#        <img alt="" style="height: 18px; width: 18px" src="static/analyze.png"> <br>#}
+    <a href="#" id="analyze-btn" class="btn btn-primary analyze-btn">
         Analyze
     </a>
 </div>
+
+<script>
+    // Get reference to the Plotly plot
+    var graphDiv = document.getElementById('your-plot-id');  // Replace 'your-plot-id' with the actual ID of your Plotly plot div
+
+    // Play animation
+    document.getElementById('play-btn').addEventListener('click', function() {
+        Plotly.animate(graphDiv, null, {
+            frame: {duration: 500, redraw: true},
+            transition: {duration: 0},
+            mode: "immediate"
+        });
+    });
+
+    // Pause animation
+    document.getElementById('pause-btn').addEventListener('click', function() {
+        Plotly.animate(graphDiv, null, {
+            frame: {duration: 0, redraw: true},
+            mode: "immediate"
+        });
+    });
+
+    // Zoom in
+    document.getElementById('zoom-btn').addEventListener('click', function() {
+        Plotly.relayout(graphDiv, {
+            'xaxis.range': [0, 1024],  // Zoom in on x-axis
+            'yaxis.range': [0, 0.5]    // Zoom in on y-axis
+        });
+    });
+
+    // Pan (change mode to pan)
+    document.getElementById('pan-btn').addEventListener('click', function() {
+        Plotly.relayout(graphDiv, {
+            dragmode: 'pan'
+        });
+    });
+
+    // Reset to home view
+    document.getElementById('reset-btn').addEventListener('click', function() {
+        Plotly.relayout(graphDiv, {
+            'xaxis.autorange': true,
+            'yaxis.autorange': true
+        });
+    });
+
+    // Save plot as image
+    document.getElementById('save-btn').addEventListener('click', function() {
+        Plotly.downloadImage(graphDiv, {format: 'png', height: 480, width: 480, filename: 'sensor-data-plot'});
+    });
+
+    // Additional buttons can be linked to further functionality, like changing point markers
+    document.getElementById('point-btn').addEventListener('click', function() {
+        Plotly.restyle(graphDiv, {'marker.size': 12});  // Example: Change point size
+    });
+</script>
+
 
 
