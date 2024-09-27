@@ -1,0 +1,70 @@
+absorbanceNavigation.html<style>
+    .settings-bar {
+        display: flex;
+        justify-content: space-between;
+        background-color: #2A2A9D; /* Dark Blue */
+        width: 480px;
+        height: 47px;
+        padding: 5px;
+        border-radius: 0px;
+    }
+
+    .settings-bar button {
+        background-color: #3D3DAF; /* Slightly lighter blue */
+        border: none;
+        color: white;
+        font-size: 20px;
+        padding: 0;
+        margin-right: 10px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+    }
+
+    .settings-bar button:hover {
+        background-color: #4A4ABF;
+    }
+
+    .settings-bar .analyze-btn {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #5E5BEA;
+        color: white;
+        font-size: 12px;
+        width: 40px;
+    }
+
+    .settings-bar i {
+        color: white; /* White color for icons */
+    }
+</style>
+
+
+<div class="settings-bar">
+    <a href="#" id="play-btn" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
+    &nbsp;
+    <a href="#" id="pause-btn" class="btn btn-primary"><i class="bi bi-caret-right-square-fill"></i></a>
+    &nbsp;
+    <a href="#" id="save-btn" class="btn btn-primary"><i class="bi bi-camera"></i></a>
+    &nbsp;
+    <a href="#" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
+    &nbsp;
+    <a href="{{ url_for('reflectanceParameters') }}" id="settings-btn" class="btn btn-warning"><i class="bi bi-sliders"></i></a>
+    &nbsp;&nbsp;
+    <a href="#" id="reset-btn" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i></a>
+    &nbsp;
+    <a href="#" id="pan-btn" class="btn btn-primary"><i class="bi bi-arrows-move"></i></a>
+    &nbsp;
+    <a href="#" id="zoom-btn" class="btn btn-primary"><i class="bi bi-zoom-in"></i></a>
+    &nbsp;
+    <a href="#" id="point-btn" class="btn btn-primary"><i class="bi bi-bezier2"></i></a>
+    &nbsp;&nbsp;
+    <a href="#" id="analyze-btn" class="btn btn-primary analyze-btn">
+        Analyze
+    </a>
+</div>

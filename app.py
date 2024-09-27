@@ -84,6 +84,18 @@ def transmission():
     return render_template('transmission.html')
 
 
+@app.route('/absorbanceParameters')
+def absorbanceParameters():
+    return render_template('absorbanceParameters.html')
+
+@app.route('/reflectanceParameters')
+def reflectanceParameters():
+    return render_template('reflectanceParameters.html')
+
+@app.route('/transmissionParameters')
+def transmissionParameters():
+    return render_template('transmissionParameters.html')
+
 #####################
 #  Python functions #
 #####################
