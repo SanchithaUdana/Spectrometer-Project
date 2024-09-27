@@ -21,38 +21,11 @@
     </div>
 
     <div>
-         <a class="btn btn-danger bi bi-bootstrap-reboot" style="height: 30px" href="#" data-bs-toggle="modal"
-       data-bs-target="#splashModal"></a> <!-- Open modal -->
+        <a class="btn btn-danger bi bi-bootstrap-reboot" style="height: 30px" href="#" data-bs-toggle="modal"
+           data-bs-target="#splashModal"></a> <!-- Open modal -->
     </div>
 
 </div>
-
-
-{#update time and date#}
-<script>
-    function updateDateTime() {
-        const dateTimeSpan = document.getElementById('status-time');
-        const now = new Date();
-
-        // Format the date and time
-        const date = now.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric'});
-        const time = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
-
-        // Set the formatted date and time to the HTML element
-        dateTimeSpan.textContent = `${date} ${time}`;
-    }
-
-    // Call the function once to initialize
-    updateDateTime();
-
-    // Update the date and time every second
-    setInterval(updateDateTime, 1000);
-</script>
-
-
-<!-- Bootstrap JS Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
 
 {#home section#}
 <!-- Bootstrap Modal -->
@@ -74,16 +47,6 @@
     </div>
 </div>
 
-{#script event listener for confirm button#}
-<script>
-    // Event listener for the confirm button inside the modal
-    document.getElementById('confirmReboot').addEventListener('click', function () {
-        // Redirect to the splash page
-        window.location.href = "{{ url_for('navigate_to_index') }}";
-    });
-</script>
-
-
 {#splash section#}
 <!-- Bootstrap Modal -->
 <div class="modal fade" id="splashModal" tabindex="-1" aria-labelledby="splashModalLabel" aria-hidden="true">
@@ -104,9 +67,62 @@
     </div>
 </div>
 
-{#script event listener for confirm button#}
+
+{################}
+{#script files#}
+{################}
+
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery for AJAX call -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-    // Event listener for the confirm button inside the modal
+    // Function to update date and time
+    function updateDateTime() {
+        const dateTimeSpan = document.getElementById('status-time');
+        const now = new Date();
+
+        // Format the date and time
+        const date = now.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric'});
+        const time = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+
+        // Set the formatted date and time to the HTML element
+        dateTimeSpan.textContent = `${date} ${time}`;
+    }
+
+    // Function to update Wi-Fi status
+    function updateWifiStatus() {
+        const wifiIcon = document.getElementById('wifi-icon');
+
+        if (navigator.onLine) {
+            // Device is online, show the connected icon
+            wifiIcon.classList.remove('bi-wifi-off', 'icon-gray');
+            wifiIcon.classList.add('bi-wifi', 'icon-green');
+        } else {
+            // Device is offline, show the disconnected icon
+            wifiIcon.classList.remove('bi-wifi', 'icon-green');
+            wifiIcon.classList.add('bi-wifi-off', 'icon-gray');
+        }
+    }
+
+    // Call the functions once to initialize
+    updateDateTime();
+    updateWifiStatus();
+
+    // Update the date and time every second
+    setInterval(updateDateTime, 1000);
+
+    // Update the Wi-Fi status every 2 seconds
+    setInterval(updateWifiStatus, 2000);
+
+    // Event listener for the confirm button inside the Reboot modal
+    document.getElementById('confirmReboot').addEventListener('click', function () {
+        // Redirect to the splash page
+        window.location.href = "{{ url_for('navigate_to_index') }}";
+    });
+
+    // Event listener for the confirm button inside the Splash modal
     document.getElementById('confirmSplash').addEventListener('click', function () {
         // Redirect to the splash screen
         window.location.href = "{{ url_for('splash') }}";

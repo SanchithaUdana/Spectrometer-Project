@@ -1,14 +1,12 @@
 from flask import *
+import plotly.graph_objs as go
+import numpy as np
 from urllib.parse import quote
 import matplotlib.pyplot as plt
-import plotly.graph_objs as go
 import io
 import random
-import numpy as np
 import random
 import time
-
-import plotly.graph_objs as go
 
 app = Flask(__name__)
 
@@ -106,38 +104,23 @@ def plot_data():
         xaxis_title="Pixel",
         yaxis_title="Value",
         height=320,  # Set height to fit 480x320 resolution
-        width=480,
-        updatemenus=[
-            {
-                "buttons": [
-                    {
-                        "args": [None, {"frame": {"duration": 500, "redraw": True},
-                                        "fromcurrent": True, "mode": "immediate"}],
-                        "label": "Play",
-                        "method": "animate"
-                    },
-                    {
-                        "args": [None, {"frame": {"duration": 0, "redraw": True},
-                                        "mode": "immediate"}],
-                        "label": "Pause",
-                        "method": "animate"
-                    }
-                ],
-                "direction": "left",
-                "pad": {"r": 10, "t": 87},
-                "showactive": False,
-                "type": "buttons",
-                "x": 0.1,
-                "xanchor": "right",
-                "y": 0,
-                "yanchor": "top"
-            }
-        ]
+        width=480
     )
+
+    # Define the custom configuration for the toolbar
+    config = {
+        'displaylogo': False,  # Remove the Plotly logo
+        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d', 'resetScale2d',
+                                   'select2d', 'toggleSpikelines', 'toImage'
+                                   ],  # Remove unwanted buttons
+        # 'modeBarButtonsToAdd': ['zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d', 'resetScale2d', 'select2d',
+        #                         ],  # Add custom buttons
+    }
 
     # Convert plotly figure to JSON
     graphJSON = fig.to_json()
-    return jsonify(graphJSON)
+    return jsonify({'figure': graphJSON, 'config': config})
 
 
 ###################
