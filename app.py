@@ -98,6 +98,18 @@ def reflectanceParameters():
 def transmissionParameters():
     return render_template('transmissionParameters.html')
 
+@app.route('/blankReference')
+def blankReference():
+    return render_template('blankReferance.html')
+
+
+@app.route('/darkReference')
+def darkReference():
+    return render_template('darkReferance.html')
+
+@app.route('/calibratePlot')
+def calibratePlot():
+    return render_template('calibratePlot.html')
 
 #####################
 #  Python functions #

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=480, height=320, initial-scale=1.0">
+    <title>Dark Reference</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background-color: white;
+            padding: 0;
+            margin: 0;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%; /* Ensure it doesn't overflow horizontally */
+            height: 320px; /* Set height to fit the viewport */
+            margin-top: 0; /* Align closely to the navbar */
+        }
+
+        /* Adjust image styles */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Status Bar -->
+<div class="status-bar d-flex justify-content-sm-start align-items-center" style="height: 30px">
+
+    <!-- Home Button -->
+    <div>
+        <a class="btn btn-primary bi bi-house" href="#" role="button " data-bs-toggle="modal"
+           data-bs-target="#rebootModal" style="height:30px;"></a>
+        <a href="#">
+
+            <a class="btn btn-info bi bi-arrow-left"
+               style="height: 30px; width: 40px; padding-top: 1px" data-bs-toggle="modal"
+               data-bs-target="#backModel"></a> <!-- Open modal -->
+        </a>
+
+
+    </div>
+
+    <!-- system status -->
+    <div class="status-bar-icons">
+        <i class="icon-gray"></i>
+
+    </div>
+
+    <!-- Wifi Connectivity -->
+    <div class="status-bar-info">
+        <i id="wifi-icon" class="icon-gray bi bi-wifi-off"></i>
+        <span id="status-time">Loading ...</span>
+    </div>
+
+    <div>
+        <a class="btn btn-danger bi bi-bootstrap-reboot" style="height: 30px" href="#" data-bs-toggle="modal"
+           data-bs-target="#splashModal"></a> <!-- Open modal -->
+    </div>
+
+</div>
+
+{#home section#}
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="backModel" tabindex="-1" aria-labelledby="backModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="backModalLabel">Confirm Back</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to back to Absorbance Parameters ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmBack">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Event listener for the confirm button inside the Reboot modal
+    document.getElementById('confirmBack').addEventListener('click', function () {
+        // Redirect to the splash page
+        window.location.href = "{{ url_for('absorbanceParameters') }}";
+    });
+</script>
+
+{#home section#}
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="rebootModal" tabindex="-1" aria-labelledby="rebootModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rebootModalLabel">Confirm Re-Direct</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to redirect to Home ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmReboot">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{#splash section#}
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="splashModal" tabindex="-1" aria-labelledby="splashModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="splashModalLabel">Confirm Re-Boot</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to Re-Boot the Application?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmSplash">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{################}
+{#script files#}
+{################}
+
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery for AJAX call -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Function to update date and time
+    function updateDateTime() {
+        const dateTimeSpan = document.getElementById('status-time');
+        const now = new Date();
+
+        // Format the date and time
+        const date = now.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric'});
+        const time = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+
+        // Set the formatted date and time to the HTML element
+        dateTimeSpan.textContent = `${date} ${time}`;
+    }
+
+    // Function to update Wi-Fi status
+    function updateWifiStatus() {
+        const wifiIcon = document.getElementById('wifi-icon');
+
+        if (navigator.onLine) {
+            // Device is online, show the connected icon
+            wifiIcon.classList.remove('bi-wifi-off', 'icon-gray');
+            wifiIcon.classList.add('bi-wifi', 'icon-green');
+        } else {
+            // Device is offline, show the disconnected icon
+            wifiIcon.classList.remove('bi-wifi', 'icon-green');
+            wifiIcon.classList.add('bi-wifi-off', 'icon-gray');
+        }
+    }
+
+    // Call the functions once to initialize
+    updateDateTime();
+    updateWifiStatus();
+
+    // Update the date and time every second
+    setInterval(updateDateTime, 1000);
+
+    // Update the Wi-Fi status every 2 seconds
+    setInterval(updateWifiStatus, 2000);
+
+    // Event listener for the confirm button inside the Reboot modal
+    document.getElementById('confirmReboot').addEventListener('click', function () {
+        // Redirect to the splash page
+        window.location.href = "{{ url_for('navigate_to_index') }}";
+    });
+
+    // Event listener for the confirm button inside the Splash modal
+    document.getElementById('confirmSplash').addEventListener('click', function () {
+        // Redirect to the splash screen
+        window.location.href = "{{ url_for('splash') }}";
+    });
+</script>
+
+
+
+
+<!-- Navigation bar -->
+<style>
+    .settings-bar {
+        display: flex;
+        justify-content: space-between;
+        background-color: #2A2A9D; /* Dark Blue */
+        width: 480px;
+        height: 47px;
+        padding: 5px;
+        border-radius: 0px;
+    }
+
+    .settings-bar button {
+        background-color: #3D3DAF; /* Slightly lighter blue */
+        border: none;
+        color: white;
+        font-size: 20px;
+        padding: 0;
+        margin-right: 10px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+    }
+
+    .settings-bar button:hover {
+        background-color: #4A4ABF;
+    }
+
+    .settings-bar .analyze-btn {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #5E5BEA;
+        color: white;
+        font-size: 12px;
+        width: 40px;
+    }
+
+    .settings-bar i {
+        color: white; /* White color for icons */
+    }
+</style>
+
+
+<div class="settings-bar">
+    <a href="#" id="play-btn" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
+    &nbsp;
+    <a href="#" id="pause-btn" class="btn btn-primary"><i class="bi bi-caret-right-square-fill"></i></a>
+    &nbsp;
+    <a href="#" id="save-btn" class="btn btn-primary"><i class="bi bi-camera"></i></a>
+    &nbsp;
+    <a href="#" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
+    &nbsp;
+    <a href="#" id="reset-btn" class="btn btn-info"><i class="bi bi-arrow-counterclockwise"></i></a>
+    &nbsp;
+    <a href="#" id="pan-btn" class="btn btn-info"><i class="bi bi-arrows-move"></i></a>
+    &nbsp;
+    <a href="#" id="zoom-btn" class="btn btn-info"><i class="bi bi-zoom-in"></i></a>
+    &nbsp;
+    <a href="#" id="point-btn" class="btn btn-info"><i class="bi bi-bezier2"></i></a>
+    &nbsp;
+    <a href="#" id="analyze-btn" class="btn btn-primary analyze-btn">
+        Record
+    </a>
+</div>
+
+<!-- Main content area -->
+<div class="container">
+
+    <div class="d-flex align-items-center">
+    <p class="h5 mb-0 me-3">Getting Dark Reference</p>
+    <a href="{{ url_for('calibratePlot') }}" style="padding-top: 5px">
+        <button style="height: 40px;" class="btn btn-danger bi bi-card-list">
+            Calibrate
+        </button>
+    </a>
+
+</div>
+
+
+    <div class="chart-container">
+        <!-- Plotly chart container -->
+        <div id="plot" class="img-fluid" style="width: 100%; height: 100%;"></div>
+    </div>
+</div>
+
+
+<!-- Plotly JS -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<!-- jQuery for AJAX call -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+{########################################}
+{# plot customizing script functions #}
+{########################################}
+
+<script>
+    let currentMode = 'pan';
+
+    $(document).ready(function () {
+        // Fetch the plot data and config from the Flask endpoint
+        $.getJSON('/plot-data', function (response) {
+            var plotData = JSON.parse(response.figure); // Extract the figure data
+            var config = response.config; // Extract the config data
+
+            // Extract data and layout from the plotData
+            var data = plotData.data;
+            var layout = plotData.layout;
+
+            // Modify layout to reduce top margin
+            plotData.layout.margin = {
+                l: 30,  // left margin
+                r: 70,  // right margin
+                b: 170,  // bottom margin
+                t: 5,  // top margin: reduce this value to move closer to the top
+                pad: 0  // padding
+            };
+
+            // Plot the figure with data, layout, and config
+            Plotly.newPlot('plot', data, layout, config);
+
+            // Custom toolbar button actions
+            $('#zoom-btn').on('click', function () {
+                currentMode = 'zoom';
+                Plotly.relayout('plot', {'dragmode': 'zoom'});
+            });
+
+            $('#pan-btn').on('click', function () {
+                currentMode = 'pan';
+                Plotly.relayout('plot', {'dragmode': 'pan'});
+            });
+
+            $('#reset-btn').on('click', function () {
+                Plotly.relayout('plot', {
+                    'xaxis.autorange': true,
+                    'yaxis.autorange': true
+                });
+            });
+
+            $('#save-btn').on('click', function () {
+                Plotly.downloadImage('plot', {format: 'png', filename: 'plot_image'});
+            });
+
+            $('#stop-btn').on('click', function () {
+                {#Plotly.purge('plot'); // Removes the plot_image#}
+            });
+
+            $('#play-btn').on('click', function () {
+                // Custom play button action
+                {#alert("Play button clicked!");#}
+            });
+
+            $('#pause-btn').on('click', function () {
+                // Custom pause button action
+                {#alert("Pause button clicked!");#}
+            });
+
+            $('#settings-btn').on('click', function () {
+                // Custom settings button action
+            });
+
+            $('#analyze-btn').on('click', function () {
+
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

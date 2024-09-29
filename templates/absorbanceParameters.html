@@ -12,6 +12,75 @@
         body {
             background-color: white;
         }
+
+        .form-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f7f7f7;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .btn-custom {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #495057;
+        }
+
+        .container-custom {
+            height: 400px; /* Set a fixed height */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f7f7f7;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .btn-custom {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #495057;
+        }
+
+        .btn-dark-moon {
+            background: #141E30; /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #243B55, #141E30); /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            color: #fff;
+            border: 3px solid #eee;
+        }
     </style>
 
 </head>
@@ -20,25 +89,202 @@
 <!-- Status Bar -->
 {% include 'statSegments/statusbarBackAbsorbance.html' %}
 
+<!-- navigation bar place spectrum type -->
+<nav class="navbar navbar-expand-sm" style="height: 47px; background-color: #052755">
+    <div class="container-fluid d-flex align-items-center justify-content-start">
+        <img src="static/selectSpectro.png" alt="Icon" width="30" height="30" class="me-2">
+        <h6 class="mb-0" style="color: white;">Absorbance Basic Calibration Settings</h6>
+
+    </div>
+</nav>
+
 <!-- Main content area -->
 <div class="container mt-4 container-custom">
-
     <div>
-        <p class="h5"> Absorbance Parameters </p>
+        <div class="form-container">
+
+            <form>
+                <!-- Integration Time -->
+                <div class="mb-3">
+                    <label for="integrationTime" class="form-label">Integration Time</label>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="autoSwitch">
+                            <label class="form-check-label" for="autoSwitch">Auto</label>
+                        </div>
+                        <div class="input-group w-50">
+                            <button type="button" class="btn btn-outline-secondary"
+                                    onclick="decreaseValue('manualTime')">-
+                            </button>
+                            <input type="number" class="form-control" id="manualTime" placeholder="8 μs" value="8">
+                            <button type="button" class="btn btn-outline-secondary"
+                                    onclick="increaseValue('manualTime')">+
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scans to Average -->
+                <div class="mb-3">
+                    <label for="scansToAverage" class="form-label">Scans to Average</label>
+                    <div class="input-group">
+                        <button type="button" class="btn btn-outline-secondary"
+                                onclick="decreaseValue('scansToAverage')">-
+                        </button>
+                        <input type="number" class="form-control" id="scansToAverage" value="1">
+                        <button type="button" class="btn btn-outline-secondary"
+                                onclick="increaseValue('scansToAverage')">+
+                        </button>
+                        <span class="input-group-text">Scans</span>
+                    </div>
+                </div>
+
+                <!-- Boxcar Width -->
+                <div class="mb-3">
+                    <label for="boxcarWidth" class="form-label">Boxcar Width</label>
+                    <div class="input-group">
+                        <button type="button" class="btn btn-outline-secondary" onclick="decreaseValue('boxcarWidth')">
+                            -
+                        </button>
+                        <input type="number" class="form-control" id="boxcarWidth" value="3">
+                        <button type="button" class="btn btn-outline-secondary" onclick="increaseValue('boxcarWidth')">
+                            +
+                        </button>
+                        <span class="input-group-text">W/m²·nm⁻¹</span>
+                    </div>
+                </div>
+
+                <!-- Wavelength Range -->
+                <div class="mb-3">
+                    <label for="wavelengthRange" class="form-label">Wavelength Range</label>
+                    <input type="range" class="form-range" id="wavelengthRange" min="300" max="900" value="300"
+                           oninput="updateWavelengthValue()">
+                    <div class="d-flex justify-content-between">
+                        <span>300 nm</span>
+                        <span>900 nm</span>
+                    </div>
+                    <p class="text-center">Current Wavelength: <span id="rangeValue" class="range-value">300</span> nm
+                    </p>
+                </div>
+
+                <!-- X-axis -->
+                <div class="mb-3">
+                    <label for="xAxis" class="form-label">X-axis</label>
+                    <select class="form-select" id="xAxis">
+                        <option value="wavelength" selected>Wavelength (nm)</option>
+                    </select>
+                </div>
+
+                <hr>
+
+                <h2 class="form-title">Sample Settings</h2>
+
+                <!-- No. of Capture Points -->
+                <div class="mb-3">
+                    <label for="capturePoints" class="form-label">No. of Capture Points</label>
+                    <div class="input-group">
+                        <button type="button" class="btn btn-outline-secondary"
+                                onclick="decreaseValue('capturePoints')">-
+                        </button>
+                        <input type="number" class="form-control" id="capturePoints" value="1">
+                        <button type="button" class="btn btn-outline-secondary"
+                                onclick="increaseValue('capturePoints')">+
+                        </button>
+                        <span class="input-group-text">Capture Points</span>
+                    </div>
+                </div>
+
+                <div class="justify-content-sm-end">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#saveModal">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="refreshPage()">Reset</button>
+                </div>
+
+                <!-- Bootstrap Modal -->
+                <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="saveModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="saveModalLabel">Save Confirmation</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Your changes have been saved successfully!
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- JavaScript function to refresh the page -->
+                <script>
+                    function refreshPage() {
+                        window.location.reload();
+                    }
+                </script>
+
+                <hr>
+
+                <h2 class="form-title">Reference Type</h2>
+
+                <!-- Reference Type -->
+                <a href="{{ url_for('blankReference') }}">
+                    <div class="d-flex justify-content-between">
+
+                        <button type="button" style="height: 40px; width: 80px"
+                                class="btn btn-outline-secondary btn-custom">Get the Blank and Dark Reference
+                        </button>
+
+                    </div>
+                </a>
+            </form>
+
+            <div>
+                <p>---------------------------------------------------</p>
+                <br>
+                <br> <br> <br>
+
+
+            </div>
+
+        </div>
     </div>
-
-    <div>
-        <form>
-
-        </form>
-    </div>
-
 
 </div>
+
+<!-- JavaScript to handle range and button logic -->
+<script>
+    // Function to update the displayed wavelength value
+    function updateWavelengthValue() {
+        const range = document.getElementById("wavelengthRange");
+        const output = document.getElementById("rangeValue");
+        output.textContent = range.value;
+    }
+
+    // Function to increase the value of a number input
+    function increaseValue(id) {
+        const input = document.getElementById(id);
+        input.value = parseInt(input.value) + 1;
+    }
+
+    // Function to decrease the value of a number input
+    function decreaseValue(id) {
+        const input = document.getElementById(id);
+        if (parseInt(input.value) > 0) {
+            input.value = parseInt(input.value) - 1;
+        }
+    }
+</script>
 
 
 <!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 </body>
 </html>
