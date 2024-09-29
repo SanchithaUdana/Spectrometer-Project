@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=480, height=320, initial-scale=1.0">
-    <title>Absorbance</title>
+    <title>Reflectance</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -41,11 +41,6 @@
 
 <!-- Main content area -->
 <div class="container">
-
-    <div>
-        <p class="h5"> Absorbance </p>
-    </div>
-
     <div class="chart-container">
         <!-- Plotly chart container -->
         <div id="plot" class="img-fluid" style="width: 100%; height: 100%;"></div>
@@ -81,7 +76,7 @@
             plotData.layout.margin = {
                 l: 30,  // left margin
                 r: 70,  // right margin
-                b: 165,  // bottom margin
+                b: 135,  // bottom margin
                 t: 5,  // top margin: reduce this value to move closer to the top
                 pad: 0  // padding
             };
