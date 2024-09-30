@@ -34,7 +34,7 @@
 <body>
 
 <!-- Status Bar -->
-<div class="status-bar d-flex justify-content-sm-start align-items-center" style="height: 30px">
+<div class="status-bar d-flex justify-content-sm-start align-items-center" style="height: 30px; padding-top: 1px">
 
     <!-- Home Button -->
     <div>
@@ -275,7 +275,7 @@
 <div class="container">
 
     <div class="d-flex align-items-center">
-        <p class="h5 mb-0 me-3">Getting Blank Reference</p>
+        <p class="h5 mb-0 me-3">{% print("Getting Blank Reference") %}</p>
         <a href="{{ url_for('darkReference') }}" style="padding-top: 5px">
             <button style="height: 40px;" class="btn btn-warning bi bi-arrow-right-circle-fill">
                 Next to Dark Reference
@@ -287,7 +287,7 @@
 
     <div class="chart-container">
         <!-- Plotly chart container -->
-        <div id="plot" class="img-fluid" style="width: 100%; height: 100%;"></div>
+        <div id="plot2" class="img-fluid" style="width: 100%; height: 100%;"></div>
     </div>
 
 </div>
@@ -301,15 +301,19 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 {########################################}
-{# plot customizing script functions #}
+{# plot data overriding script function #}
 {########################################}
 
+
+{########################################}
+{# plot customizing script functions #}
+{########################################}
 <script>
     let currentMode = 'pan';
 
     $(document).ready(function () {
         // Fetch the plot data and config from the Flask endpoint
-        $.getJSON('/plot-data', function (response) {
+        $.getJSON('/plot-data2', function (response) {
             var plotData = JSON.parse(response.figure); // Extract the figure data
             var config = response.config; // Extract the config data
 
@@ -321,56 +325,48 @@
             plotData.layout.margin = {
                 l: 30,  // left margin
                 r: 70,  // right margin
-                b: 170,  // bottom margin
+                b: 175,  // bottom margin
                 t: 5,  // top margin: reduce this value to move closer to the top
                 pad: 0  // padding
             };
 
             // Plot the figure with data, layout, and config
-            Plotly.newPlot('plot', data, layout, config);
+            Plotly.newPlot('plot2', data, layout, config);
 
             // Custom toolbar button actions
             $('#zoom-btn').on('click', function () {
                 currentMode = 'zoom';
-                Plotly.relayout('plot', {'dragmode': 'zoom'});
+                Plotly.relayout('plot2', {'dragmode': 'zoom'});
             });
 
             $('#pan-btn').on('click', function () {
                 currentMode = 'pan';
-                Plotly.relayout('plot', {'dragmode': 'pan'});
+                Plotly.relayout('plot2', {'dragmode': 'pan'});
             });
 
             $('#reset-btn').on('click', function () {
-                Plotly.relayout('plot', {
+                Plotly.relayout('plot2', {
                     'xaxis.autorange': true,
                     'yaxis.autorange': true
                 });
             });
 
             $('#save-btn').on('click', function () {
-                Plotly.downloadImage('plot', {format: 'png', filename: 'plot_image'});
+                Plotly.downloadImage('plot2', {format: 'png', filename: 'plot_image2'});
             });
 
             $('#stop-btn').on('click', function () {
-                {#Plotly.purge('plot'); // Removes the plot_image#}
+                Plotly.purge('plot2'); // Removes the plot
             });
 
             $('#play-btn').on('click', function () {
                 // Custom play button action
-                {#alert("Play button clicked!");#}
+                alert("Play button clicked!");
             });
 
             $('#pause-btn').on('click', function () {
                 // Custom pause button action
-                {#alert("Pause button clicked!");#}
-            });
-
-            $('#settings-btn').on('click', function () {
-                // Custom settings button action
-            });
-
-            $('#analyze-btn').on('click', function () {
-
+                alert("Pause button clicked!");
             });
         });
     });

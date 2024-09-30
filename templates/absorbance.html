@@ -43,7 +43,7 @@
 <div class="container">
     <div class="chart-container">
         <!-- Plotly chart container -->
-        <div id="plot" class="img-fluid" style="width: 100%; height: 100%;"></div>
+        <div id="plot1" class="img-fluid" style="width: 100%; height: 100%;"></div>
     </div>
 </div>
 
@@ -58,7 +58,6 @@
 {########################################}
 {# plot customizing script functions #}
 {########################################}
-
 <script>
     let currentMode = 'pan';
 
@@ -76,56 +75,48 @@
             plotData.layout.margin = {
                 l: 30,  // left margin
                 r: 70,  // right margin
-                b: 135,  // bottom margin
+                b: 170,  // bottom margin
                 t: 5,  // top margin: reduce this value to move closer to the top
                 pad: 0  // padding
             };
 
             // Plot the figure with data, layout, and config
-            Plotly.newPlot('plot', data, layout, config);
+            Plotly.newPlot('plot1', data, layout, config);
 
             // Custom toolbar button actions
             $('#zoom-btn').on('click', function () {
                 currentMode = 'zoom';
-                Plotly.relayout('plot', {'dragmode': 'zoom'});
+                Plotly.relayout('plot1', {'dragmode': 'zoom'});
             });
 
             $('#pan-btn').on('click', function () {
                 currentMode = 'pan';
-                Plotly.relayout('plot', {'dragmode': 'pan'});
+                Plotly.relayout('plot1', {'dragmode': 'pan'});
             });
 
             $('#reset-btn').on('click', function () {
-                Plotly.relayout('plot', {
+                Plotly.relayout('plot1', {
                     'xaxis.autorange': true,
                     'yaxis.autorange': true
                 });
             });
 
             $('#save-btn').on('click', function () {
-                Plotly.downloadImage('plot', {format: 'png', filename: 'plot_image'});
+                Plotly.downloadImage('plot1', {format: 'png', filename: 'plot_image1'});
             });
 
             $('#stop-btn').on('click', function () {
-                {#Plotly.purge('plot'); // Removes the plot_image#}
+                
             });
 
             $('#play-btn').on('click', function () {
                 // Custom play button action
-                {#alert("Play button clicked!");#}
+                alert("Play button clicked!");
             });
 
             $('#pause-btn').on('click', function () {
                 // Custom pause button action
-                {#alert("Pause button clicked!");#}
-            });
-
-            $('#settings-btn').on('click', function () {
-                // Custom settings button action
-            });
-
-            $('#analyze-btn').on('click', function () {
-
+                alert("Pause button clicked!");
             });
         });
     });
