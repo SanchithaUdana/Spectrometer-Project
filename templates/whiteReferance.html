@@ -276,19 +276,32 @@
 <div class="container">
 
     <div class="d-flex align-items-center">
+<<<<<<< HEAD:templates/whiteReferance.html
     <p class="h5 mb-0 me-3">Getting Dark Reference</p>
     <a href="{{ url_for('calibratePlot') }}" style="padding-top: 5px">
         <button style="height: 40px;" class="btn btn-danger bi bi-card-list">
             Calibrate
         </button>
     </a>
+=======
+        <p class="h5 mb-0 me-3">Getting Blank Reference</p>
+        <a href="{{ url_for('darkReference') }}" style="padding-top: 5px">
+            <button style="height: 40px;" class="btn btn-warning bi bi-arrow-right-circle-fill">
+                Next to Dark Reference
+            </button>
+        </a>
+>>>>>>> parent of af558bc (plots updated):templates/blankReferance.html
 
 </div>
 
 
     <div class="chart-container">
         <!-- Plotly chart container -->
+<<<<<<< HEAD:templates/whiteReferance.html
         <div id="plot3" class="img-fluid" style="width: 100%; height: 100%;"></div>
+=======
+        <div id="plot" class="img-fluid" style="width: 100%; height: 100%;"></div>
+>>>>>>> parent of af558bc (plots updated):templates/blankReferance.html
     </div>
 </div>
 
@@ -309,7 +322,11 @@
 
     $(document).ready(function () {
         // Fetch the plot data and config from the Flask endpoint
+<<<<<<< HEAD:templates/whiteReferance.html
         $.getJSON('/plot-data3', function (response) {
+=======
+        $.getJSON('/plot-data', function (response) {
+>>>>>>> parent of af558bc (plots updated):templates/blankReferance.html
             var plotData = JSON.parse(response.figure); // Extract the figure data
             var config = response.config; // Extract the config data
 
@@ -327,28 +344,48 @@
             };
 
             // Plot the figure with data, layout, and config
+<<<<<<< HEAD:templates/whiteReferance.html
             Plotly.newPlot('plot3', data, layout, config);
+=======
+            Plotly.newPlot('plot', data, layout, config);
+>>>>>>> parent of af558bc (plots updated):templates/blankReferance.html
 
             // Custom toolbar button actions
             $('#zoom-btn').on('click', function () {
                 currentMode = 'zoom';
+<<<<<<< HEAD:templates/whiteReferance.html
                 Plotly.relayout('plot3', {'dragmode': 'zoom'});
+=======
+                Plotly.relayout('plot', {'dragmode': 'zoom'});
+>>>>>>> parent of af558bc (plots updated):templates/blankReferance.html
             });
 
             $('#pan-btn').on('click', function () {
                 currentMode = 'pan';
+<<<<<<< HEAD:templates/whiteReferance.html
                 Plotly.relayout('plot3', {'dragmode': 'pan'});
             });
 
             $('#reset-btn').on('click', function () {
                 Plotly.relayout('plot3', {
+=======
+                Plotly.relayout('plot', {'dragmode': 'pan'});
+            });
+
+            $('#reset-btn').on('click', function () {
+                Plotly.relayout('plot', {
+>>>>>>> parent of af558bc (plots updated):templates/blankReferance.html
                     'xaxis.autorange': true,
                     'yaxis.autorange': true
                 });
             });
 
             $('#save-btn').on('click', function () {
+<<<<<<< HEAD:templates/whiteReferance.html
                 Plotly.downloadImage('plot3', {format: 'png', filename: 'plot_image'});
+=======
+                Plotly.downloadImage('plot', {format: 'png', filename: 'plot_image'});
+>>>>>>> parent of af558bc (plots updated):templates/blankReferance.html
             });
 
             $('#stop-btn').on('click', function () {

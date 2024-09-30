@@ -118,7 +118,7 @@
 
         // Format the date and time
         const date = now.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric'});
-        const time = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
+        const time = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
 
         // Set the formatted date and time to the HTML element
         dateTimeSpan.textContent = `${date} ${time}`;
