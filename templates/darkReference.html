@@ -268,27 +268,18 @@
     <a href="#" id="point-btn" class="btn btn-info"><i class="bi bi-bezier2"></i></a>
     &nbsp;
     <a href="#" id="analyze-btn" class="btn btn-primary analyze-btn">
-        Record
+        REC
     </a>
+    &nbsp;
+    <a class="btn btn-danger" href="{{ url_for('whiteReference') }}">Next</a>
 </div>
 
 <!-- Main content area -->
 <div class="container">
 
-    <div class="d-flex align-items-center">
-    <p class="h5 mb-0 me-3">Getting Dark Reference</p>
-    <a href="{{ url_for('calibratePlot') }}" style="padding-top: 5px">
-        <button style="height: 40px;" class="btn btn-danger bi bi-card-list">
-            Calibrate
-        </button>
-    </a>
-
-</div>
-
-
     <div class="chart-container">
         <!-- Plotly chart container -->
-        <div id="plot" class="img-fluid" style="width: 100%; height: 100%;"></div>
+        <div id="plot2" class="img-fluid" style="width: 100%; height: 100%;"></div>
     </div>
 </div>
 
@@ -309,7 +300,7 @@
 
     $(document).ready(function () {
         // Fetch the plot data and config from the Flask endpoint
-        $.getJSON('/plot-data', function (response) {
+        $.getJSON('/plot-data2', function (response) {
             var plotData = JSON.parse(response.figure); // Extract the figure data
             var config = response.config; // Extract the config data
 
@@ -320,35 +311,35 @@
             // Modify layout to reduce top margin
             plotData.layout.margin = {
                 l: 30,  // left margin
-                r: 70,  // right margin
-                b: 170,  // bottom margin
+                r: 30,  // right margin
+                b: 130,  // bottom margin
                 t: 5,  // top margin: reduce this value to move closer to the top
                 pad: 0  // padding
             };
 
             // Plot the figure with data, layout, and config
-            Plotly.newPlot('plot', data, layout, config);
+            Plotly.newPlot('plot2', data, layout, config);
 
             // Custom toolbar button actions
             $('#zoom-btn').on('click', function () {
                 currentMode = 'zoom';
-                Plotly.relayout('plot', {'dragmode': 'zoom'});
+                Plotly.relayout('plot2', {'dragmode': 'zoom'});
             });
 
             $('#pan-btn').on('click', function () {
                 currentMode = 'pan';
-                Plotly.relayout('plot', {'dragmode': 'pan'});
+                Plotly.relayout('plot2', {'dragmode': 'pan'});
             });
 
             $('#reset-btn').on('click', function () {
-                Plotly.relayout('plot', {
+                Plotly.relayout('plot2', {
                     'xaxis.autorange': true,
                     'yaxis.autorange': true
                 });
             });
 
             $('#save-btn').on('click', function () {
-                Plotly.downloadImage('plot', {format: 'png', filename: 'plot_image'});
+                Plotly.downloadImage('plot2', {format: 'png', filename: 'plot_image'});
             });
 
             $('#stop-btn').on('click', function () {

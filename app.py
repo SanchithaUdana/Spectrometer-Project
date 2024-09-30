@@ -85,7 +85,7 @@ def transmissionParameters():
 
 @app.route('/whiteReference')
 def whiteReference():
-    return render_template('whiteReference.html')  # Corrected the spelling
+    return render_template('whiteReferance.html')  # Corrected the spelling
 
 
 @app.route('/darkReference')
@@ -141,7 +141,7 @@ def plot_data2():
     fig.add_trace(go.Scatter(x=x, y=y, mode='lines+markers', name='Sensor Data 2'))
     fig.update_layout(
         xaxis_title="Wavelength nm",
-        yaxis_title="Absorbance ( White )",
+        yaxis_title="Absorbance ( Dark )",
         height=320,
         width=480
     )
@@ -171,6 +171,36 @@ def plot_data3():
     fig.update_layout(
         xaxis_title="Wavelength nm",
         yaxis_title="Absorbance ( White )",
+        height=320,
+        width=480
+    )
+
+    # Custom toolbar configuration
+    config = {
+        'displaylogo': False,
+        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d', 'resetScale2d',
+                                   'select2d', 'toggleSpikelines', 'toImage']
+    }
+
+    graphJSON = fig.to_json()
+    return jsonify({'figure': graphJSON, 'config': config})
+
+
+
+# New route for the third plot with different data
+@app.route('/plot-data4')
+def plot_data4():
+    # Generate random dataset
+    y = np.random.random(2088)
+    x = np.linspace(300, 900, 100)
+
+    # Create Plotly figure
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x, y=y, mode='lines+markers', name='Sensor Data 3'))
+    fig.update_layout(
+        xaxis_title="Wavelength nm",
+        yaxis_title="Absorbance ( White & Dark )",
         height=320,
         width=480
     )

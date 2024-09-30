@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=480, height=320, initial-scale=1.0">
-    <title>Dark Reference</title>
+    <title>White Reference</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -268,47 +268,18 @@
     <a href="#" id="point-btn" class="btn btn-info"><i class="bi bi-bezier2"></i></a>
     &nbsp;
     <a href="#" id="analyze-btn" class="btn btn-primary analyze-btn">
-        Record
+        REC
     </a>
+    &nbsp;
+    <a class="btn btn-danger" href="{{ url_for('calibratePlot') }}">CAL</a>
 </div>
 
 <!-- Main content area -->
 <div class="container">
 
-    <div class="d-flex align-items-center">
-<<<<<<< HEAD:templates/whiteReferance.html
-<<<<<<< HEAD:templates/whiteReferance.html
-    <p class="h5 mb-0 me-3">Getting Dark Reference</p>
-    <a href="{{ url_for('calibratePlot') }}" style="padding-top: 5px">
-        <button style="height: 40px;" class="btn btn-danger bi bi-card-list">
-            Calibrate
-        </button>
-    </a>
-=======
-=======
->>>>>>> parent of af558bc (plots updated):templates/blankReferance.html
-        <p class="h5 mb-0 me-3">Getting Blank Reference</p>
-        <a href="{{ url_for('darkReference') }}" style="padding-top: 5px">
-            <button style="height: 40px;" class="btn btn-warning bi bi-arrow-right-circle-fill">
-                Next to Dark Reference
-            </button>
-        </a>
->>>>>>> parent of af558bc (plots updated):templates/blankReferance.html
-
-</div>
-
-
     <div class="chart-container">
         <!-- Plotly chart container -->
-<<<<<<< HEAD:templates/whiteReferance.html
-<<<<<<< HEAD:templates/whiteReferance.html
         <div id="plot3" class="img-fluid" style="width: 100%; height: 100%;"></div>
-=======
-        <div id="plot" class="img-fluid" style="width: 100%; height: 100%;"></div>
->>>>>>> parent of af558bc (plots updated):templates/blankReferance.html
-=======
-        <div id="plot" class="img-fluid" style="width: 100%; height: 100%;"></div>
->>>>>>> parent of af558bc (plots updated):templates/blankReferance.html
     </div>
 </div>
 
@@ -340,8 +311,8 @@
             // Modify layout to reduce top margin
             plotData.layout.margin = {
                 l: 30,  // left margin
-                r: 70,  // right margin
-                b: 165,  // bottom margin
+                r: 30,  // right margin
+                b: 130,  // bottom margin
                 t: 5,  // top margin: reduce this value to move closer to the top
                 pad: 0  // padding
             };
@@ -390,11 +361,11 @@
             });
 
             $('#analyze-btn').on('click', function () {
-                // Custom analyze button action
-                {#alert("Analyze button clicked!");#}
+
             });
         });
     });
 </script>
+
 </body>
 </html>
