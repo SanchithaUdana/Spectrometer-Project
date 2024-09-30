@@ -1,3 +1,5 @@
+
+<!-- Status Bar -->
 <div class="status-bar d-flex justify-content-sm-start align-items-center" style="height: 30px">
 
     <!-- Home Button -->
@@ -6,7 +8,7 @@
            data-bs-target="#rebootModal" style="height:30px;"></a>
         <a href="#">
 
-            <a class="btn btn-info bi bi-arrow-left"
+            <a class="btn btn-info bi bi-gear-wide-connected"
                style="height: 30px; width: 40px; padding-top: 1px" data-bs-toggle="modal"
                data-bs-target="#backModel"></a> <!-- Open modal -->
         </a>
@@ -17,6 +19,7 @@
     <!-- system status -->
     <div class="status-bar-icons">
         <i class="icon-gray"></i>
+
     </div>
 
     <!-- Wifi Connectivity -->
@@ -42,7 +45,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to back to Transmission ?
+                Are you sure you want to back to Absorbance Parameters ?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -56,7 +59,7 @@
     // Event listener for the confirm button inside the Reboot modal
     document.getElementById('confirmBack').addEventListener('click', function () {
         // Redirect to the splash page
-        window.location.href = "{{ url_for('transmission') }}";
+        window.location.href = "{{ url_for('absorbanceParameters') }}";
     });
 </script>
 
@@ -161,5 +164,3 @@
         window.location.href = "{{ url_for('splash') }}";
     });
 </script>
-
-
