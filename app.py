@@ -11,9 +11,70 @@ import time
 
 app = Flask(__name__)
 
-# Global variables to simulate live data for the chart
-x_data = []
-y_data = []
+################
+#  DB Connection  #
+################
+
+# MySQL database connection configuration
+db_config = {
+    'user': 'root',
+    'password': 'root',
+    'host': 'localhost',
+    'database': 'spectro'
+}
+
+
+# Create a connection to the database
+def get_db_connection(mysql=None):
+    conn = mysql.connector.connect(**db_config)
+    return conn
+
+
+# Route to test database connection
+@app.route('/test-db', methods=['GET'])
+def test_db():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)  # Cursor to execute queries
+        cursor.execute("SELECT * FROM log LIMIT 5")
+        result = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return jsonify(result)
+    except Exception as e:
+        return str(e)
+
+
+@app.route('/add-user', methods=['POST'])
+def add_user():
+    try:
+
+        name = "sanchitha"
+        age = 23
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO log (name, age) VALUES (%s, %s)", (name, age))
+        conn.commit()  # Commit the transaction
+        cursor.close()
+        conn.close()
+        return jsonify({"message": "User added successfully!"})
+    except Exception as e:
+        return str(e)
+
+
+@app.route('/users', methods=['GET'])
+def get_users():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM log")
+        users = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return jsonify(users)
+    except Exception as e:
+        return str(e)
 
 
 ################
@@ -102,12 +163,12 @@ def transmissionParameters():
 
 @app.route('/blankReference')
 def blankReference():
-    return render_template('blankReferance.html')
+    return render_template('darkReferance.html')
 
 
 @app.route('/darkReference')
 def darkReference():
-    return render_template('darkReferance.html')
+    return render_template('whiteReferance.html')
 
 
 @app.route('/calibratePlot')
@@ -169,7 +230,7 @@ def plot_data2():
     fig.add_trace(go.Scatter(x=x, y=y, mode='lines+markers', name='Sensor Data 2'))
     fig.update_layout(
         xaxis_title="Wavelength nm",
-        yaxis_title="Absorbance",
+        yaxis_title="Absorbance ( Dark )",
         height=320,
         width=480
     )
@@ -198,7 +259,7 @@ def plot_data3():
     fig.add_trace(go.Scatter(x=x, y=y, mode='lines+markers', name='Sensor Data 3'))
     fig.update_layout(
         xaxis_title="Wavelength nm",
-        yaxis_title="Absorbance",
+        yaxis_title="Absorbance ( White )",
         height=320,
         width=480
     )
