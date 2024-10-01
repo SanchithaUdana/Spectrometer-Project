@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify
 import plotly.graph_objs as go
 import numpy as np
+import mysql.connector
 
 app = Flask(__name__)
 
@@ -8,6 +9,26 @@ app = Flask(__name__)
 ################
 #  DB Connection (if needed in the future)  #
 ################
+def get_activity_logs():
+    # Update these values to match your MySQL/WAMP server settings
+    db = mysql.connector.connect(
+        host="localhost",  # Or your server IP if remote
+        user="root",  # Replace with your MySQL username
+        password="root",  # Replace with your MySQL password (WAMP default is empty)
+        database="spectro"  # Replace with your MySQL database name
+    )
+
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT action, description, timestamp FROM activity_logs ORDER BY timestamp DESC")
+    logs = cursor.fetchall()
+    db.close()
+    return logs
+
+
+@app.route('/activity-log')
+def activity_log():
+    logs = get_activity_logs()
+    return render_template('activityLog.html', activity_logs=logs)
 
 
 ################
@@ -85,6 +106,10 @@ def calibratePlot():
 @app.route('/activityLog')
 def activityLog():
     return render_template('activityLog.html')
+
+@app.route('/logView')
+def logView():
+    return render_template('logView.html')
 
 
 #####################
@@ -198,6 +223,36 @@ def plot_data4():
     fig.update_layout(
         xaxis_title="Wavelength nm",
         yaxis_title="Absorbance ( White & Dark )",
+        height=320,
+        width=480
+    )
+
+    # Custom toolbar configuration
+    config = {
+        'displaylogo': False,
+        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d', 'resetScale2d',
+                                   'select2d', 'toggleSpikelines', 'toImage']
+    }
+
+    graphJSON = fig.to_json()
+    return jsonify({'figure': graphJSON, 'config': config})
+
+
+
+# New route for the third plot with different data
+@app.route('/plot-data5')
+def plot_data5():
+    # Generate random dataset
+    y = np.random.random(2088)
+    x = np.linspace(300, 900, 100)
+
+    # Create Plotly figure
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x, y=y, mode='lines+markers', name='Sensor Data 3'))
+    fig.update_layout(
+        xaxis_title="Wavelength nm",
+        yaxis_title="Absorbance",
         height=320,
         width=480
     )
