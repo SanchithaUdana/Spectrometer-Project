@@ -121,7 +121,7 @@ def plot_data():
     # Generate random dataset
     x = np.linspace(300, 900, 2048)
 
-    wavelengths = np.linspace(0, 1, 2048)
+    wavelengths = np.linspace(300, 900, 2048)
     intensity = (
             np.exp(-((wavelengths - 450) / 50) ** 2)  # First peak around 450nm
             + 0.5 * np.exp(-((wavelengths - 600) / 70) ** 2)  # Second peak around 600nm
