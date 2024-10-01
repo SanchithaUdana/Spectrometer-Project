@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify
 import plotly.graph_objs as go
 import numpy as np
-import mysql.connector
 from arduino_communication import ArduinoCommunicator
 
 app = Flask(__name__)
