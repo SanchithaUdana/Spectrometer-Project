@@ -302,6 +302,4 @@ def plot_data5():
 
 if __name__ == '__main__':
     init_arduino_connection()
-    app.run(debug=True, host='0.0.0.0', port=5000)
-    print("welcome to spectrometer")
-
+    app.run(debug=True, host='0.0.0.0', port=5001)
