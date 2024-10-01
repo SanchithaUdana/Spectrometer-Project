@@ -2,8 +2,35 @@ from flask import Flask, render_template, jsonify
 import plotly.graph_objs as go
 import numpy as np
 import mysql.connector
+from arduino_communication import ArduinoCommunicator
 
 app = Flask(__name__)
+
+#######################
+#  Arduino Connection #
+#######################
+
+# Initialize the Arduino communicator
+arduino = ArduinoCommunicator(port='/dev/ttyUSB0', baudrate=9600)
+
+
+def init_arduino_connection():
+    """Function to automatically connect to the Arduino when the Flask app starts."""
+    if arduino.connect_to_arduino():
+        print("Arduino connected successfully.")
+    else:
+        print("Failed to connect to Arduino.")
+
+
+@app.route('/read', methods=['GET'])
+def read_data():
+    """Route to request and read data from Arduino."""
+    arduino.send_request()  # Send the request to Arduino to start sending data
+    data = arduino.read_data()  # Read the data
+    if data:
+        return jsonify({'data': data}), 200
+    else:
+        return jsonify({'status': 'No data received'}), 500
 
 
 ################
@@ -106,6 +133,7 @@ def calibratePlot():
 @app.route('/activityLog')
 def activityLog():
     return render_template('activityLog.html')
+
 
 @app.route('/logView')
 def logView():
@@ -239,7 +267,6 @@ def plot_data4():
     return jsonify({'figure': graphJSON, 'config': config})
 
 
-
 # New route for the third plot with different data
 @app.route('/plot-data5')
 def plot_data5():
@@ -274,4 +301,7 @@ def plot_data5():
 ###################
 
 if __name__ == '__main__':
+    init_arduino_connection()
     app.run(debug=True, host='0.0.0.0', port=5000)
+    print("welcome to spectrometer")
+

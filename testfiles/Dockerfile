@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Copy the entire application code into the container
-COPY . .
+COPY .. .
 
 # Set environment variables for Flask
 ENV FLASK_APP=app.py
