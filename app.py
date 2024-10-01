@@ -10,7 +10,7 @@ app = Flask(__name__)
 #######################
 
 # Initialize the Arduino communicator
-arduino = ArduinoCommunicator(port='/dev/ttyUSB1', baudrate=230400)
+arduino = ArduinoCommunicator(port='/dev/tty1', baudrate=230400)
 
 
 def init_arduino_connection():
@@ -137,7 +137,6 @@ def activityLog():
 @app.route('/logView')
 def logView():
     return render_template('logView.html')
-
 
 #####################
 #  Plot Data Routes #
