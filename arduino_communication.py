@@ -2,7 +2,7 @@ import serial
 
 
 class ArduinoCommunicator:
-    def __init__(self, port='/dev/tty1', baudrate=230400):
+    def __init__(self, port='/dev/ttyUSB0', baudrate=230400):
         self.ser = None
         self.port = port
         self.baudrate = baudrate
