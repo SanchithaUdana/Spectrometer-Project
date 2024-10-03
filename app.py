@@ -2,6 +2,8 @@ from flask import Flask, render_template, jsonify
 import plotly.graph_objs as go
 import numpy as np
 import serial
+import time
+import threading
 
 app = Flask(__name__)
 
@@ -10,7 +12,6 @@ app = Flask(__name__)
 #  Arduino Connection #
 #######################
 
-
 class ArduinoConnector:
     def __init__(self):
         self.ser = None
@@ -18,7 +19,7 @@ class ArduinoConnector:
 
     def connect_to_arduino(self):
         selected_baudrate = self.baudrate_var
-        connectPort = 'COM3'  # Replace this with your logic to find Arduino port
+        connectPort = '/dev/ttyUSB0'  # Replace this with your logic to find Arduino port
         if selected_baudrate:
             if connectPort != 'None':
                 try:
@@ -55,11 +56,26 @@ class ArduinoConnector:
         self.ser.write(b'r')
 
     def read_data_from_arduino(self):
-        self.send_request()
-        data = self.read_data()
-        print("Received Data List:", data)
-        print("Length of Data List:", len(data))
-        return data
+        try:
+            self.send_request()  # Send a request to Arduino
+
+            # Add a short delay to allow the Arduino time to respond
+            time.sleep(0.5)
+
+            # Try reading the data
+            data = self.read_data()
+
+            # Check if data is received
+            if data:
+                print("Received Data List:", data)
+                print("Length of Data List:", len(data))
+                return data
+            else:
+                print("No data received from Arduino.")
+                return []
+        except Exception as e:
+            print(f"Error while reading from Arduino: {e}")
+            return []
 
 
 arduino = ArduinoConnector()
@@ -173,21 +189,21 @@ def logView():
 #####################
 #  Plot Data Routes #
 #####################
-
 @app.route('/plot-data')
 def plot_data():
-    # Generate random dataset
-    x = np.linspace(300, 900, 2048)
+    # Get real-time data from Arduino
+    data = arduino.read_data_from_arduino()
 
-    wavelengths = np.linspace(300, 900, 2048)
-    intensity = (
-            np.exp(-((wavelengths - 450) / 50) ** 2)  # First peak around 450nm
-            + 0.5 * np.exp(-((wavelengths - 600) / 70) ** 2)  # Second peak around 600nm
-    )
+    if not data:
+        return jsonify({"error": "No data available"}), 500
 
-    intensity = intensity / np.max(intensity)
+    # Generate x and y values from Arduino data
+    # Assuming data corresponds to y-values (intensity) and x-values are indices
+    x = np.linspace(300, 900, len(data))  # Simulate wavelength range
+    y = np.array(data)  # Use Arduino data as y-values (intensity)
 
-    y = intensity
+    # Normalize the y-values (optional, depending on your use case)
+    y = y / np.max(y)
 
     # Create Plotly figure
     fig = go.Figure()
@@ -331,5 +347,4 @@ def plot_data5():
 ###################
 
 if __name__ == '__main__':
-    init_arduino_connection()
     app.run(debug=True, host='0.0.0.0', port=5000)
