@@ -114,6 +114,7 @@ app = Flask(__name__)
 
 class ArduinoConnector:
     def __init__(self):
+        self.read_thread = None
         self.ser = None
         self.baudrate_var = "9600"  # Set default baud rate
         self.data_list = []  # Store data from Arduino
