@@ -1,60 +1,91 @@
 from flask import Flask, render_template, jsonify
 import plotly.graph_objs as go
 import numpy as np
-from arduino_communication import ArduinoCommunicator
+import serial
 
 app = Flask(__name__)
+
 
 #######################
 #  Arduino Connection #
 #######################
 
-# Initialize the Arduino communicator
-arduino = ArduinoCommunicator(port='/dev/ttyUSB0', baudrate=230400)
+
+class ArduinoConnector:
+    def __init__(self):
+        self.ser = None
+        self.baudrate_var = "9600"  # Set default baud rate
+
+    def connect_to_arduino(self):
+        selected_baudrate = self.baudrate_var
+        connectPort = 'COM3'  # Replace this with your logic to find Arduino port
+        if selected_baudrate:
+            if connectPort != 'None':
+                try:
+                    self.ser = serial.Serial(connectPort, baudrate=int(selected_baudrate), timeout=1)
+                    print(f'Connected to {connectPort}')
+                    return "Connected"
+                except Exception as e:
+                    print(f'Connection failed: {str(e)}')
+                    return f'Connection failed: {str(e)}'
+            else:
+                return 'Connection Issue'
+        else:
+            return 'Please select baudrate'
+
+    def read_data(self):
+        data_list = []
+        while True:
+            line = self.ser.readline().decode().strip()
+            if not line:
+                continue
+            elif line == 's':
+                continue
+            elif line == 'f':
+                break
+            else:
+                data_list.append(int(line))
+
+        if data_list:
+            data_list.pop()
+
+        return data_list
+
+    def send_request(self):
+        self.ser.write(b'r')
+
+    def read_data_from_arduino(self):
+        self.send_request()
+        data = self.read_data()
+        print("Received Data List:", data)
+        print("Length of Data List:", len(data))
+        return data
 
 
-def init_arduino_connection():
-    """Function to automatically connect to the Arduino when the Flask app starts."""
-    if arduino.connect_to_arduino():
-        print("Arduino connected successfully.")
-    else:
-        print("Failed to connect to Arduino.")
+arduino = ArduinoConnector()
 
 
-@app.route('/read', methods=['GET'])
+@app.route('/connect')
+def connect():
+    result = arduino.connect_to_arduino()
+    return jsonify({"message": result})
+
+
+@app.route('/read-data')
 def read_data():
-    """Route to request and read data from Arduino."""
-    arduino.send_request()  # Send the request to Arduino to start sending data
-    data = arduino.read_data()  # Read the data
-    if data:
-        return jsonify({'data': data}), 200
-    else:
-        return jsonify({'status': 'No data received'}), 500
+    if arduino.ser is None:
+        return jsonify({"error": "Arduino not connected"}), 400
+
+    try:
+        data = arduino.read_data_from_arduino()
+        return jsonify({"data": data})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 ################
 #  DB Connection (if needed in the future)  #
 ################
-def get_activity_logs():
-    # Update these values to match your MySQL/WAMP server settings
-    db = mysql.connector.connect(
-        host="localhost",  # Or your server IP if remote
-        user="root",  # Replace with your MySQL username
-        password="root",  # Replace with your MySQL password (WAMP default is empty)
-        database="spectro"  # Replace with your MySQL database name
-    )
-
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT action, description, timestamp FROM activity_logs ORDER BY timestamp DESC")
-    logs = cursor.fetchall()
-    db.close()
-    return logs
-
-
-@app.route('/activity-log')
-def activity_log():
-    logs = get_activity_logs()
-    return render_template('activityLog.html', activity_logs=logs)
 
 
 ################
@@ -137,6 +168,7 @@ def activityLog():
 @app.route('/logView')
 def logView():
     return render_template('logView.html')
+
 
 #####################
 #  Plot Data Routes #
