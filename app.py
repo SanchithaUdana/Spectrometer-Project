@@ -12,10 +12,113 @@ app = Flask(__name__)
 #  Arduino Connection #
 #######################
 
+# class ArduinoConnector:
+#     def __init__(self):
+#         self.ser = None
+#         self.baudrate_var = "9600"  # Set default baud rate
+#
+#     def connect_to_arduino(self):
+#         selected_baudrate = self.baudrate_var
+#         connectPort = '/dev/ttyUSB0'  # Replace this with your logic to find Arduino port
+#         if selected_baudrate:
+#             if connectPort != 'None':
+#                 try:
+#                     self.ser = serial.Serial(connectPort, baudrate=int(selected_baudrate), timeout=1)
+#                     print(f'Connected to {connectPort}')
+#                     return "Connected"
+#                 except Exception as e:
+#                     print(f'Connection failed: {str(e)}')
+#                     return f'Connection failed: {str(e)}'
+#             else:
+#                 return 'Connection Issue'
+#         else:
+#             return 'Please select baudrate'
+#
+#     def read_data(self):
+#         data_list = []
+#         while True:
+#             line = self.ser.readline().decode().strip()
+#             if not line:
+#                 continue
+#             elif line == 's':
+#                 continue
+#             elif line == 'f':
+#                 break
+#             else:
+#                 data_list.append(int(line))
+#
+#         if data_list:
+#             data_list.pop()
+#
+#         return data_list
+#
+#     def send_request(self):
+#         self.ser.write(b'r')
+#
+#     def read_data_from_arduino(self):
+#         try:
+#             self.send_request()  # Send a request to Arduino
+#
+#             # Add a short delay to allow the Arduino time to respond
+#             time.sleep(0.5)
+#
+#             # Try reading the data
+#             data = self.read_data()
+#
+#             # Check if data is received
+#             if data:
+#                 print("Received Data List:", data)
+#                 print("Length of Data List:", len(data))
+#                 return data
+#             else:
+#                 print("No data received from Arduino.")
+#                 return []
+#         except Exception as e:
+#             print(f"Error while reading from Arduino: {e}")
+#             return []
+#
+#
+# arduino = ArduinoConnector()
+#
+#
+# @app.route('/connect')
+# def connect():
+#     result = arduino.connect_to_arduino()
+#     return jsonify({"message": result})
+#
+#
+# @app.route('/read-data')
+# def read_data():
+#     if arduino.ser is None:
+#         return jsonify({"error": "Arduino not connected"}), 400
+#
+#     try:
+#         data = arduino.read_data_from_arduino()
+#         return jsonify({"data": data})
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
+
+
+################
+#  DB Connection (if needed in the future)  #
+################
+
+
+################
+#  UI Routing  #
+################
+
+#######################
+#  Arduino Connection #
+#######################
+
 class ArduinoConnector:
     def __init__(self):
         self.ser = None
         self.baudrate_var = "9600"  # Set default baud rate
+        self.data_list = []  # Store data from Arduino
+        self.is_connected = False
+        self.stop_thread = False
 
     def connect_to_arduino(self):
         selected_baudrate = self.baudrate_var
@@ -25,6 +128,8 @@ class ArduinoConnector:
                 try:
                     self.ser = serial.Serial(connectPort, baudrate=int(selected_baudrate), timeout=1)
                     print(f'Connected to {connectPort}')
+                    self.is_connected = True
+                    self.start_reading_thread()  # Start background thread to read data
                     return "Connected"
                 except Exception as e:
                     print(f'Connection failed: {str(e)}')
@@ -34,48 +139,32 @@ class ArduinoConnector:
         else:
             return 'Please select baudrate'
 
+    def start_reading_thread(self):
+        self.stop_thread = False
+        self.read_thread = threading.Thread(target=self.read_data_from_arduino)
+        self.read_thread.start()
+
+    def stop_reading_thread(self):
+        self.stop_thread = True
+        if self.read_thread.is_alive():
+            self.read_thread.join()
+
     def read_data(self):
-        data_list = []
-        while True:
-            line = self.ser.readline().decode().strip()
-            if not line:
-                continue
-            elif line == 's':
-                continue
-            elif line == 'f':
-                break
-            else:
-                data_list.append(int(line))
-
-        if data_list:
-            data_list.pop()
-
-        return data_list
-
-    def send_request(self):
-        self.ser.write(b'r')
+        try:
+            while not self.stop_thread:
+                line = self.ser.readline().decode().strip()
+                if line and line.isdigit():
+                    self.data_list.append(int(line))
+                print(f"Received: {line}")
+        except Exception as e:
+            print(f"Error while reading data: {e}")
 
     def read_data_from_arduino(self):
-        try:
-            self.send_request()  # Send a request to Arduino
-
-            # Add a short delay to allow the Arduino time to respond
-            time.sleep(0.5)
-
-            # Try reading the data
-            data = self.read_data()
-
-            # Check if data is received
-            if data:
-                print("Received Data List:", data)
-                print("Length of Data List:", len(data))
-                return data
-            else:
-                print("No data received from Arduino.")
-                return []
-        except Exception as e:
-            print(f"Error while reading from Arduino: {e}")
-            return []
+        # Loop to continuously read from Arduino and store the data in the background
+        print("Started reading data from Arduino in the background")
+        while not self.stop_thread:
+            self.read_data()
+            time.sleep(0.5)  # Add a delay to avoid CPU overloading
 
 
 arduino = ArduinoConnector()
@@ -88,25 +177,17 @@ def connect():
 
 
 @app.route('/read-data')
-def read_data():
-    if arduino.ser is None:
+def get_data():
+    # Return the current data list read from the Arduino
+    if not arduino.is_connected:
         return jsonify({"error": "Arduino not connected"}), 400
 
-    try:
-        data = arduino.read_data_from_arduino()
-        return jsonify({"data": data})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    return jsonify({"data": arduino.data_list})
 
 
-################
-#  DB Connection (if needed in the future)  #
-################
-
-
-################
-#  UI Routing  #
-################
+#############
+# ui routing
+#############
 
 @app.route('/')
 def splash():
@@ -189,10 +270,11 @@ def logView():
 #####################
 #  Plot Data Routes #
 #####################
+
 @app.route('/plot-data')
 def plot_data():
-    # Get real-time data from Arduino
-    data = arduino.read_data_from_arduino()
+    # Get real-time data from the background thread
+    data = arduino.data_list
 
     if not data:
         return jsonify({"error": "No data available"}), 500
@@ -203,7 +285,8 @@ def plot_data():
     y = np.array(data)  # Use Arduino data as y-values (intensity)
 
     # Normalize the y-values (optional, depending on your use case)
-    y = y / np.max(y)
+    if np.max(y) != 0:  # Avoid division by zero
+        y = y / np.max(y)
 
     # Create Plotly figure
     fig = go.Figure()
