@@ -4,8 +4,6 @@ import numpy as np
 import serial
 import time
 
-from matplotlib.colors import Normalize
-
 app = Flask(__name__)
 
 
@@ -201,21 +199,17 @@ def plot_data():
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
     x = np.linspace(300, 900, len(data))  # Simulate wavelength range
+    y = np.array(data)  # Use Arduino data as y-values (intensity)
 
-    norm = Normalize(vmin=min(data), vmax=max(data))
-    y = norm(data)
-
-    # y = np.array(data)  # Use Arduino data as y-values (intensity)
     # Normalize the y-values (optional, depending on your use case)
+    y = y / np.max(y)
 
     # Create Plotly figure
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name='Sensor Data 1'))
+    fig.add_trace(go.Scatter(x=x, y=y, mode='lines+markers', name='Sensor Data 1'))
     fig.update_layout(
         xaxis_title="Wavelength nm",
-        yaxis_title="Reflectance",
-        xaxis=dict(range=[300, 900]),  # x axis
-        yaxis=dict(range=[0, 1]),  # y axis
+        yaxis_title="Absorbance ( White )",
         height=320,
         width=480
     )
@@ -327,7 +321,7 @@ def plot_data5():
 
     # Create Plotly figure
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name='Sensor Data 3'))
+    fig.add_trace(go.Scatter(x=x, y=y, mode='lines+markers', name='Sensor Data 3'))
     fig.update_layout(
         xaxis_title="Wavelength nm",
         yaxis_title="Absorbance",
