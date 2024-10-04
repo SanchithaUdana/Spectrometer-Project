@@ -209,7 +209,7 @@ def plot_data():
 
     # Create Plotly figure
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=x, y=y, mode='markers', line=dict(dash='dot'), name='Sensor Data 1'))
+    fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name='Sensor Data 1'))
     fig.update_layout(
         xaxis_title="Wavelength nm",
         yaxis_title="Reflectance",
