@@ -19,7 +19,7 @@ class ArduinoConnector:
 
     def connect_to_arduino(self):
         selected_baudrate = self.baudrate_var
-        connectPort = '/dev/ttyUSB0'  # Replace this with your logic to find Arduino port
+        connectPort = 'COM3'  # Replace this with your logic to find Arduino port
         if selected_baudrate:
             if connectPort != 'None':
                 try:
@@ -204,12 +204,16 @@ def plot_data():
     norm = Normalize(vmin=min(data), vmax=max(data))
     y = norm(data)
 
-    # y = np.array(data)  # Use Arduino data as y-values (intensity)
-    # Normalize the y-values (optional, depending on your use case)
-
     # Create Plotly figure
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name='Sensor Data 1'))
+    fig.add_trace(go.Scatter(
+        x=x,
+        y=y,
+        mode='markers',
+        name='Sensor Data 1',
+        marker=dict(size=3)  # Adjust the size (6 is smaller than default)
+    ))
+
     fig.update_layout(
         xaxis_title="Wavelength nm",
         yaxis_title="Reflectance",
