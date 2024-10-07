@@ -98,11 +98,17 @@ arduino = ArduinoConnector()
 
 @app.route('/connect')
 def connect():
-    # connect arduino
-    arduino.connect_to_arduino()
-    # read data
-    arduino.read_data_from_arduino()
-    return render_template('absorbance.html')
+    # Attempt to connect to Arduino
+    connection_result = arduino.connect_to_arduino()
+
+    if connection_result == "Connected":
+        # If successfully connected, read data from Arduino
+        arduino.read_data_from_arduino()
+        flag = 'True'  # Set the flag to True
+    else:
+        flag = 'False'  # Set the flag to False if connection failed
+
+    return render_template('absorbance.html', flag=flag)
 
 
 @app.route('/read-data')
@@ -254,7 +260,7 @@ def plot_data():
     }
 
     graphJSON = fig.to_json()
-    return jsonify({'figure': graphJSON, 'config': config, 'flag': 'False'})
+    return jsonify({'figure': graphJSON, 'config': config, 'flag': 'True'})
 
 
 @app.route('/plot-data2')

@@ -61,99 +61,113 @@
 
 <script>
     let currentMode = 'pan';
+    // Access the flag value in JavaScript
+    let plotUpdateFlag = '{{ flag }}'; // This will be 'True' or 'False' as a string
 
-    $(document).ready(function () {
-        // Function to update the plot with new data from the server
-        function updatePlot() {
-            $.getJSON('/plot-data', function (response) {
-                var plotData = JSON.parse(response.figure); // Extract the figure data
-                var config = response.config; // Extract the config data
+    // Function to start or stop updates based on the flag
+    function managePlotUpdates() {
+        if (plotUpdateFlag === 'True') {
 
+            console.log("Starting plot updates...");
 
-                // Extract data and layout from the plotData
-                var data = plotData.data;
-                var layout = plotData.layout;
-
-                // Modify layout to reduce top margin
-                plotData.layout.margin = {
-                    l: 30,  // left margin
-                    r: 30,  // right margin
-                    b: 130,  // bottom margin
-                    t: 5,  // top margin: reduce this value to move closer to the top
-                    pad: 0  // padding
-                };
-
-                // Update or create the plot
-                Plotly.react('plot', data, layout, config); // Use Plotly.react to update the plot efficiently
-            });
-        }
+            $(document).ready(function () {
+                // Function to update the plot with new data from the server
+                function updatePlot() {
+                    $.getJSON('/plot-data', function (response) {
+                        var plotData = JSON.parse(response.figure); // Extract the figure data
+                        var config = response.config; // Extract the config data
 
 
+                        // Extract data and layout from the plotData
+                        var data = plotData.data;
+                        var layout = plotData.layout;
 
-        // Call updatePlot initially to load the plot
-        updatePlot();
-        // Set an interval to automatically update the plot every 5 seconds (1000 ms)
-        setInterval(updatePlot, 1000);
+                        // Modify layout to reduce top margin
+                        plotData.layout.margin = {
+                            l: 30,  // left margin
+                            r: 30,  // right margin
+                            b: 130,  // bottom margin
+                            t: 5,  // top margin: reduce this value to move closer to the top
+                            pad: 0  // padding
+                        };
 
-        // Custom toolbar button actions
-        // Button click event to show the peak value
-        $('#point-btn').on('click', function () {
-            if (peakValue !== null) {
-                let peakValueNumber = parseFloat(peakValue);  // Convert to float for precise value
-                alert(`The peak X-axis value is: ${peakValueNumber}`);
-            } else {
-                alert("Peak value has not been calculated yet.");
-            }
-        });
+                        // Update or create the plot
+                        Plotly.react('plot', data, layout, config); // Use Plotly.react to update the plot efficiently
+                    });
+                }
+
+                // Call updatePlot initially to load the plot
+                updatePlot();
+                // Set an interval to automatically update the plot every 5 seconds (1000 ms)
+                setInterval(updatePlot, 1000);
+
+                // Custom toolbar button actions
+                // Button click event to show the peak value
+                $('#point-btn').on('click', function () {
+                    if (peakValue !== null) {
+                        let peakValueNumber = parseFloat(peakValue);  // Convert to float for precise value
+                        alert(`The peak X-axis value is: ${peakValueNumber}`);
+                    } else {
+                        alert("Peak value has not been calculated yet.");
+                    }
+                });
 
 // Custom function to find the index of the peak in the y-axis data
-        function findPeakIndex(yData) {
-            // Simple logic to find the index of the maximum value in yData
-            var max = Math.max(...yData);  // Get the max value from the yData array
-            return yData.indexOf(max);  // Return the index of the peak
-        }
+                function findPeakIndex(yData) {
+                    // Simple logic to find the index of the maximum value in yData
+                    var max = Math.max(...yData);  // Get the max value from the yData array
+                    return yData.indexOf(max);  // Return the index of the peak
+                }
 
-        $('#zoom-btn').on('click', function () {
-            currentMode = 'zoom';
-            Plotly.relayout('plot', {'dragmode': 'zoom'});
-        });
+                $('#zoom-btn').on('click', function () {
+                    currentMode = 'zoom';
+                    Plotly.relayout('plot', {'dragmode': 'zoom'});
+                });
 
-        $('#pan-btn').on('click', function () {
-            currentMode = 'pan';
-            Plotly.relayout('plot', {'dragmode': 'pan'});
-        });
+                $('#pan-btn').on('click', function () {
+                    currentMode = 'pan';
+                    Plotly.relayout('plot', {'dragmode': 'pan'});
+                });
 
-        $('#reset-btn').on('click', function () {
-            Plotly.relayout('plot', {
-                'xaxis.autorange': true,
-                'yaxis.autorange': true
+                $('#reset-btn').on('click', function () {
+                    Plotly.relayout('plot', {
+                        'xaxis.autorange': true,
+                        'yaxis.autorange': true
+                    });
+                });
+
+                $('#save-btn').on('click', function () {
+                    Plotly.downloadImage('plot', {format: 'png', filename: 'plot_image'});
+                });
+
+                $('#stop-btn').on('click', function () {
+                    // Optional stop function implementation
+                });
+
+                $('#play-btn').on('click', function () {
+                    // Custom play button action
+                });
+
+                $('#pause-btn').on('click', function () {
+                    // Custom pause button action
+                });
+
+                $('#settings-btn').on('click', function () {
+                    // Custom settings button action
+                });
+
+                $('#analyze-btn').on('click', function () {
+                    // Custom analyze button action
+                });
             });
-        });
+        } else {
+            // Stop updating the plot
+            console.log("Stopping plot updates...");
+        }
+    }
 
-        $('#save-btn').on('click', function () {
-            Plotly.downloadImage('plot', {format: 'png', filename: 'plot_image'});
-        });
+    managePlotUpdates();
 
-        $('#stop-btn').on('click', function () {
-            // Optional stop function implementation
-        });
-
-        $('#play-btn').on('click', function () {
-            // Custom play button action
-        });
-
-        $('#pause-btn').on('click', function () {
-            // Custom pause button action
-        });
-
-        $('#settings-btn').on('click', function () {
-            // Custom settings button action
-        });
-
-        $('#analyze-btn').on('click', function () {
-            // Custom analyze button action
-        });
-    });
 </script>
 
 </body>
