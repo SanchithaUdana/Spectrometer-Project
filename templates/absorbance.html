@@ -73,6 +73,9 @@
                 var data = plotData.data;
                 var layout = plotData.layout;
 
+                // Find the peak value in the y-axis data
+                peakValue = 450;  // Get the peak value
+
                 // Modify layout to reduce top margin
                 plotData.layout.margin = {
                     l: 30,  // left margin
@@ -90,10 +93,20 @@
         // Call updatePlot initially to load the plot
         updatePlot();
 
-        // Set an interval to automatically update the plot every 5 seconds (5000 ms)
+        // Set an interval to automatically update the plot every 5 seconds (1000 ms)
         setInterval(updatePlot, 1000);
 
         // Custom toolbar button actions
+        $('#point-btn').on('click', function () {
+            if (peakValue !== null) {
+                 let peakValueNumber = parseInt(peakValue);
+                alert(`The peak value is: ${peakValueNumber}`);
+                // Alternatively, you could highlight or annotate the peak in a different way if desired
+            } else {
+                alert("Peak value has not been calculated yet.");
+            }
+        });
+
         $('#zoom-btn').on('click', function () {
             currentMode = 'zoom';
             Plotly.relayout('plot', {'dragmode': 'zoom'});

@@ -1,3 +1,5 @@
+from importlib.metadata import pass_none
+
 from flask import Flask, render_template, jsonify
 import plotly.graph_objs as go
 import numpy as np
@@ -88,25 +90,19 @@ arduino = ArduinoConnector()
 ######################
 
 # This will automatically run when the app starts
-@app.before_request
-def auto_connect_and_read():
-    # Automatically call the connect method
-    result = arduino.connect_to_arduino()
-    # print(f"Auto-connect result: {result}")
-
-    # Automatically read data if connected
-    # if arduino.ser is not None:
-    #     data = arduino.read_data_from_arduino()
-    #     if data:
-    #         print(f"Auto-read data: {data}")
-    #     else:
-    #         print("No data to read at startup.")
+# @app.before_request
+# def auto_connect_and_read():
+#     # Automatically call the connect method
+#     result = arduino.connect_to_arduino()
 
 
 @app.route('/connect')
 def connect():
-    result = arduino.connect_to_arduino()
-    return jsonify({"message": result})
+    # connect arduino
+    arduino.connect_to_arduino()
+    # read data
+    arduino.read_data_from_arduino()
+    return render_template('absorbance.html')
 
 
 @app.route('/read-data')
@@ -240,7 +236,7 @@ def plot_data():
         xaxis_title="Wavelength nm",
         yaxis_title="Reflectance",
         xaxis=dict(range=[300, 900]),  # x axis
-        yaxis=dict(range=[0, 1]),  # y axis
+        yaxis=dict(autorange='reversed'),  # y axis
         height=320,
         width=480
     )
@@ -249,7 +245,8 @@ def plot_data():
     config = {
         'displaylogo': False,
         'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
-                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d', 'resetScale2d',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
 
@@ -378,5 +375,3 @@ def plot_data5():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
-    arduino.connect_to_arduino()
-    arduino.read_data_from_arduino()
