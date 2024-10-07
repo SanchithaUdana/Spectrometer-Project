@@ -254,7 +254,7 @@ def plot_data():
     }
 
     graphJSON = fig.to_json()
-    return jsonify({'figure': graphJSON, 'config': config})
+    return jsonify({'figure': graphJSON, 'config': config, 'flag': 'False'})
 
 
 @app.route('/plot-data2')

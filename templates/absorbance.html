@@ -61,13 +61,14 @@
 
 <script>
     let currentMode = 'pan';
-    
+
     $(document).ready(function () {
         // Function to update the plot with new data from the server
         function updatePlot() {
             $.getJSON('/plot-data', function (response) {
                 var plotData = JSON.parse(response.figure); // Extract the figure data
                 var config = response.config; // Extract the config data
+
 
                 // Extract data and layout from the plotData
                 var data = plotData.data;
@@ -87,9 +88,10 @@
             });
         }
 
+
+
         // Call updatePlot initially to load the plot
         updatePlot();
-
         // Set an interval to automatically update the plot every 5 seconds (1000 ms)
         setInterval(updatePlot, 1000);
 
