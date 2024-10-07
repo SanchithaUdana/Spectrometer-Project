@@ -222,6 +222,9 @@ def plot_data():
     norm = Normalize(vmin=min(data), vmax=max(data))
     y = norm(data)
 
+    max_value = max(y)  # Maximum (peak) in the inverted data
+    max_x = x[np.argmax(y)]  # X value where the peak occurs
+
     # Create Plotly figure
     fig = go.Figure()
     fig.add_trace(go.Scatter(

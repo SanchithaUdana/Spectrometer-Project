@@ -61,6 +61,7 @@
 
 <script>
     let currentMode = 'pan';
+    let peakValue = null;  // Initialize peakValue as null to store peak value later
 
     $(document).ready(function () {
         // Function to update the plot with new data from the server
@@ -72,9 +73,6 @@
                 // Extract data and layout from the plotData
                 var data = plotData.data;
                 var layout = plotData.layout;
-
-                // Find the peak value in the y-axis data
-                peakValue = 450;  // Get the peak value
 
                 // Modify layout to reduce top margin
                 plotData.layout.margin = {
@@ -97,15 +95,22 @@
         setInterval(updatePlot, 1000);
 
         // Custom toolbar button actions
+        // Button click event to show the peak value
         $('#point-btn').on('click', function () {
             if (peakValue !== null) {
-                 let peakValueNumber = parseInt(peakValue);
-                alert(`The peak value is: ${peakValueNumber}`);
-                // Alternatively, you could highlight or annotate the peak in a different way if desired
+                let peakValueNumber = parseFloat(peakValue);  // Convert to float for precise value
+                alert(`The peak X-axis value is: ${peakValueNumber}`);
             } else {
                 alert("Peak value has not been calculated yet.");
             }
         });
+
+// Custom function to find the index of the peak in the y-axis data
+        function findPeakIndex(yData) {
+            // Simple logic to find the index of the maximum value in yData
+            var max = Math.max(...yData);  // Get the max value from the yData array
+            return yData.indexOf(max);  // Return the index of the peak
+        }
 
         $('#zoom-btn').on('click', function () {
             currentMode = 'zoom';
