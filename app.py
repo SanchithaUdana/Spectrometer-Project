@@ -16,6 +16,8 @@ class ArduinoConnector:
     def __init__(self):
         self.ser = None
         self.baudrate_var = "230400"  # Set default baud rate
+        # self.connect_to_arduino()
+        # self.read_data_from_arduino()
 
     def connect_to_arduino(self):
         selected_baudrate = self.baudrate_var
@@ -79,6 +81,26 @@ class ArduinoConnector:
 
 
 arduino = ArduinoConnector()
+
+
+######################
+# connection calling #
+######################
+
+# This will automatically run when the app starts
+@app.before_request
+def auto_connect_and_read():
+    # Automatically call the connect method
+    result = arduino.connect_to_arduino()
+    # print(f"Auto-connect result: {result}")
+
+    # Automatically read data if connected
+    # if arduino.ser is not None:
+    #     data = arduino.read_data_from_arduino()
+    #     if data:
+    #         print(f"Auto-read data: {data}")
+    #     else:
+    #         print("No data to read at startup.")
 
 
 @app.route('/connect')
@@ -356,3 +378,5 @@ def plot_data5():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+    arduino.connect_to_arduino()
+    arduino.read_data_from_arduino()
