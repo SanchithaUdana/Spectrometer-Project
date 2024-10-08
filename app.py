@@ -5,7 +5,7 @@ import serial
 from flask import Flask, render_template, jsonify
 from matplotlib.colors import Normalize
 
-import referanceData
+# import referanceData
 
 app = Flask(__name__)
 
