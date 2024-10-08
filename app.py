@@ -228,17 +228,17 @@ def plot_data():
     # Get real-time data from Arduino
     data = arduino.read_data_from_arduino()
 
-    # calData = ((data - referanceData.darkData) / (referanceData.whiteData - referanceData.darkData))
+    calData = ((data - referanceData.darkData) / (referanceData.whiteData - referanceData.darkData))
 
-    if not data:
+    if not calData:
         return jsonify({"error": "No data available"}), 500
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
-    x = np.linspace(300, 900, len(data))  # Simulate wavelength range
+    x = np.linspace(300, 900, len(calData))  # Simulate wavelength range
 
-    norm = Normalize(vmin=min(data), vmax=max(data))
-    y = norm(data)
+    norm = Normalize(vmin=min(calData), vmax=max(calData))
+    y = norm(calData)
 
     # Create Plotly figure
     fig = go.Figure()
