@@ -154,12 +154,6 @@ def navigate_to_index():
 #     return render_template('directories.html')
 
 
-# Route for Spectrum page
-@app.route('/spectrum')
-def spectrum():
-    return render_template('spectrum.html')  # Corrected to a distinct template if needed
-
-
 # Route for Models page
 @app.route('/models')
 def models():
@@ -216,9 +210,10 @@ def logView():
     return render_template('logView.html')
 
 
-#####################
-#  Plot Data Routes #
-#####################
+#################################
+#  Reflectance Plot Data Routes #
+#################################
+
 freeze_plot = False  # Global flag to manage plot freeze
 frozen_graph = None
 
@@ -226,9 +221,6 @@ frozen_graph = None
 @app.route('/plot-data')
 def plot_data():
     global freeze_plot
-    # If the plot is frozen, return the last plot data
-    if freeze_plot:
-        return jsonify({'figure': frozen_graph, 'config': config})
 
     # Get real-time data from Arduino
     data = arduino.read_data_from_arduino()
@@ -275,6 +267,9 @@ def plot_data():
     }
 
     frozen_graph = fig.to_json()  # Update the last frozen graph
+    # If the plot is frozen, return the last plot data
+    if freeze_plot:
+        return jsonify({'figure': frozen_graph, 'config': config})
     return jsonify({'figure': fig.to_json(), 'config': config})
 
 
