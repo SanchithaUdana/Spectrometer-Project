@@ -235,7 +235,7 @@ darkData = [596, 596, 596, 596, 596, 596, 597, 595, 600, 595, 596, 593, 595, 591
 import numpy as np
 
 # Assuming your lists are named Iraw, Iwhite, and Idark and contain 2088 values each
-Iraw = np.array(Iraw)     # Convert the list to NumPy arrays for easier calculations
+Iraw = np.array(Iraw)  # Convert the list to NumPy arrays for easier calculations
 Iwhite = np.array(Iwhite)
 Idark = np.array(Idark)
 
