@@ -1,3 +1,5 @@
+import numpy as np
+
 raw = [596, 596, 595, 600, 595, 598, 595, 596, 600, 595, 598, 591, 598, 594, 598, 591, 595, 595, 596, 591, 596, 593,
        596, 596, 600, 595, 596, 595, 595, 598, 571, 548,
        547, 547, 548, 548, 550, 548, 550, 551, 550, 551, 551, 547, 550, 551, 551, 551, 548, 550, 551, 548, 546, 550,
@@ -114,7 +116,6 @@ raw = [596, 596, 595, 600, 595, 598, 595, 596, 600, 595, 598, 591, 598, 594, 598
        582, 583, 583, 583, 583, 582, 587, 582, 585, 579, 583, 583, 583, 583,
        583, 585, 585, 585, 583, 583, 583, 587, 582, 587, 582, 583, 583, 587, 583, 583, 583, 585, 582, 583, 587, 582,
        585, 583, 583, 588, 585, 585, 583, 583, 585, 588, 598, 596, 598, 598, 595, 598, 593, 600]
-
 
 whiteData = [596, 594, 594, 591, 596, 593, 598, 593, 596, 595, 596, 591, 595, 593, 593, 591, 591, 595, 595, 591, 593,
              590, 596, 593, 593, 591, 591, 591, 591, 593, 374, 242,
@@ -350,15 +351,16 @@ darkData = [596, 596, 596, 596, 596, 596, 597, 595, 600, 595, 596, 593, 595, 591
             568, 565, 563, 564, 561, 564, 564, 561, 564, 561, 564, 563, 566, 560, 566, 563, 568, 563, 564, 564, 564,
             563, 563, 559, 568, 561, 568, 560, 566, 562, 564, 580, 594, 596, 595, 595, 594, 596, 595, 596]
 
-import numpy as np
+raw = np.array(raw)  # Convert the list to NumPy arrays for easier calculations
+white = np.array(whiteData)
+dark = np.array(darkData)
 
-# Assuming your lists are named Iraw, Iwhite, and Idark and contain 2088 values each
-Iraw = np.array(Iraw)  # Convert the list to NumPy arrays for easier calculations
-Iwhite = np.array(Iwhite)
-Idark = np.array(Idark)
+denominator = white - dark
+calibrated = np.where(denominator != 0, (raw - dark) / denominator, np.nan)  # Use np.nan for division by zero
 
-# Apply the calibration equation: (Iraw - Idark) / (Iwhite - Idark)
-Icalibrated = (Iraw - Idark) / (Iwhite - Idark)
+print(len(calibrated))
+print(calibrated)
 
-# Icalibrated now contains the calibrated values for each wavelength
-print(Icalibrated)  # or return this array for further processing
+# below
+
+
