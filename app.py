@@ -226,7 +226,7 @@ def plot_data():
 
     # If the plot is frozen, return the last plot data
     if freeze_plot:
-        return jsonify({'figure': graphJSON, 'config': config})
+        return jsonify({'figure': frozenGraph, 'config': config})
     # Get real-time data from Arduino
     data = arduino.read_data_from_arduino()
 
@@ -272,6 +272,7 @@ def plot_data():
     }
 
     graphJSON = fig.to_json()
+    frozenGraph = fig.to_json()
     return jsonify({'figure': graphJSON, 'config': config})
 
 
