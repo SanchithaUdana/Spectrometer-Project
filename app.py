@@ -229,18 +229,11 @@ def plot_data():
                                    'resetScale2d',
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
-    
     if freeze_plot:
         return jsonify({'figure': frozen_graph, 'config': config})
 
     # Get real-time data from Arduino
     calData = arduino.read_data_from_arduino()
-
-    # I_raw = np.array(data)  # Raw intensity data
-    # I_white = np.array(referanceData.whiteData)  # White reference intensity
-    # I_dark = np.array(referanceData.darkData)  # Dark reference intensity
-    # # Apply the calibration equation
-    # calData = (I_raw - I_dark) / (I_white - I_dark)
 
     if not calData:
         return jsonify({"error": "No data available"}), 500
