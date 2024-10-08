@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 raw = [596, 596, 595, 600, 595, 598, 595, 596, 600, 595, 598, 591, 598, 594, 598, 591, 595, 595, 596, 591, 596, 593,
        596, 596, 600, 595, 596, 595, 595, 598, 571, 548,
@@ -355,33 +356,41 @@ raw = np.array(raw)  # Convert the list to NumPy arrays for easier calculations
 white = np.array(whiteData)
 dark = np.array(darkData)
 
-denominator = white - dark
-calibrated = np.where(denominator != 0, (raw - dark) / denominator, np.nan)  # Use np.nan for division by zero
-
-print(len(calibrated))
-print(calibrated)
-
 # below
-import numpy as np
-
-# Assuming your lists are named Iraw, Iwhite, and Idark and contain 2088 values each
-Iraw = np.array(Iraw)     # Convert the list to NumPy arrays for easier calculations
-Iwhite = np.array(Iwhite)
-Idark = np.array(Idark)
 
 # Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
 epsilon = 1e-10  # Small constant to avoid division by zero
 
-# Apply the calibration equation: (Iraw - Idark) / (Iwhite - Idark)
-denominator = Iwhite - Idark
+denominator = white - dark
 denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
 
-Icalibrated = (Iraw - Idark) / denominator
+calibrated = (raw - dark) / denominator
 
 # Optionally, you can also mask the NaN values in Icalibrated if needed
-Icalibrated = np.where(np.isnan(Icalibrated), 0, Icalibrated)  # Replace NaN with 0 or any other value
+calibrated = np.where(np.isnan(calibrated), 0, calibrated)  # Replace NaN with 0 or any other value
 
-print(Icalibrated)  # or return this array for further processing
+print(calibrated)  # or return this array for further processing
 
+# Plot the calibrated values
+plt.figure(figsize=(10, 6))
+plt.plot(calibrated, marker='1', color='b')
+plt.title('Calibrated Values')
+plt.xlabel('Index')
+plt.ylabel('Calibrated Value')
+plt.grid(True)
+plt.show()
 
+# Plot the calibrated values
+plt.figure(figsize=(10, 6))
+plt.plot(raw, marker='1', color='c')
+plt.title('Calibrated Values')
+plt.xlabel('Index')
+plt.ylabel('Calibrated Value')
+plt.grid(True)
+plt.show()
 
+# for i in calibrated:
+#     print(i, end=',')
+#
+# print("")
+# print(len(calibrated))
