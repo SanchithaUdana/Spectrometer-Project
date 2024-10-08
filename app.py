@@ -104,11 +104,16 @@ def connect():
     return render_template('absorbance.html', flag=flag)
 
 
+@app.route('/stopData')
+def stopData():
+    flag = 'False'
+    return render_template('absorbance.html', flag=flag)
+
+
 @app.route('/read-data')
 def read_data():
     if arduino.ser is None:
         return jsonify({"error": "Arduino not connected"}), 400
-
     try:
         data = arduino.read_data_from_arduino()
         return jsonify({"data": data})
