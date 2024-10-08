@@ -220,6 +220,7 @@ def logView():
 #  Plot Data Routes #
 #####################
 freeze_plot = False  # Global flag to manage plot freeze
+frozen_graph = None
 
 
 @app.route('/plot-data')
@@ -273,7 +274,6 @@ def plot_data():
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
 
-    global frozen_graph
     frozen_graph = fig.to_json()  # Update the last frozen graph
     return jsonify({'figure': fig.to_json(), 'config': config})
 
