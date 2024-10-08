@@ -254,9 +254,6 @@ def plot_data():
     # mask the NAN values as 0
     calibrated = np.where(np.isnan(calibrated), 0, calibrated)
 
-    if not calibrated:
-        return jsonify({"error": "No data available"}), 500
-
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
     x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
