@@ -228,7 +228,12 @@ def plot_data():
     # Get real-time data from Arduino
     data = arduino.read_data_from_arduino()
 
-    calData = ((data - referanceData.darkData) / (referanceData.whiteData - referanceData.darkData))
+    I_raw = np.array(data)  # Raw intensity data
+    I_white = np.array(referanceData.whiteData)  # White reference intensity
+    I_dark = np.array(referanceData.darkData)  # Dark reference intensity
+
+    # Apply the calibration equation
+    calData = (I_raw - I_dark) / (I_white - I_dark)
 
     if not calData:
         return jsonify({"error": "No data available"}), 500

@@ -232,11 +232,3 @@ darkData = [596, 596, 596, 596, 596, 596, 597, 595, 600, 595, 596, 593, 595, 591
             568, 565, 563, 564, 561, 564, 564, 561, 564, 561, 564, 563, 566, 560, 566, 563, 568, 563, 564, 564, 564,
             563, 563, 559, 568, 561, 568, 560, 566, 562, 564, 580, 594, 596, 595, 595, 594, 596, 595, 596]
 
-
-
-I_raw = np.array(request.json['I_raw'])  # Raw intensity data
-        I_white = np.array(request.json['I_white'])  # White reference intensity
-        I_dark = np.array(request.json['I_dark'])  # Dark reference intensity
-
-        # Apply the calibration equation
-        I_calibrated = (I_raw - I_dark) / (I_white - I_dark)
