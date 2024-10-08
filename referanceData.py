@@ -232,3 +232,15 @@ darkData = [596, 596, 596, 596, 596, 596, 597, 595, 600, 595, 596, 593, 595, 591
             568, 565, 563, 564, 561, 564, 564, 561, 564, 561, 564, 563, 566, 560, 566, 563, 568, 563, 564, 564, 564,
             563, 563, 559, 568, 561, 568, 560, 566, 562, 564, 580, 594, 596, 595, 595, 594, 596, 595, 596]
 
+import numpy as np
+
+# Assuming your lists are named Iraw, Iwhite, and Idark and contain 2088 values each
+Iraw = np.array(Iraw)     # Convert the list to NumPy arrays for easier calculations
+Iwhite = np.array(Iwhite)
+Idark = np.array(Idark)
+
+# Apply the calibration equation: (Iraw - Idark) / (Iwhite - Idark)
+Icalibrated = (Iraw - Idark) / (Iwhite - Idark)
+
+# Icalibrated now contains the calibrated values for each wavelength
+print(Icalibrated)  # or return this array for further processing
