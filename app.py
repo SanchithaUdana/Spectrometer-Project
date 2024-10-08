@@ -5,7 +5,7 @@ import serial
 from flask import Flask, render_template, jsonify
 from matplotlib.colors import Normalize
 
-# import referanceData
+import referanceData
 
 app = Flask(__name__)
 
@@ -98,8 +98,8 @@ arduino = ArduinoConnector()
 
 @app.route('/connect')
 def connect():
-    global freeze_plot
-    freeze_plot = False  # Reset the freeze flag when play is pressed
+    global freeze_plot01
+    freeze_plot01 = False  # Reset the freeze flag when play is pressed
     # Attempt to connect to Arduino
     connection_result = arduino.connect_to_arduino()
     flag = 'True'  # Set the flag to False if connection failed
@@ -108,8 +108,8 @@ def connect():
 
 @app.route('/pauseData')
 def pauseData():
-    global freeze_plot
-    freeze_plot = True  # Set this flag to True to indicate the plot should be frozen
+    global freeze_plot01
+    freeze_plot01 = True  # Set this flag to True to indicate the plot should be frozen
     return jsonify({'message': 'Data stream paused'})
 
 
@@ -211,16 +211,17 @@ def logView():
     return render_template('logView.html')
 
 
-#####################
-#  Plot Data Routes #
-#####################
-freeze_plot = False  # Global flag to manage plot freeze
-frozen_graph = None
+######################
+#  Absorbance Routes #
+######################
+
+freeze_plot01 = False  # Global flag to manage plot freeze
+frozen_graph01 = None
 
 
 @app.route('/plot-data')
 def plot_data():
-    global freeze_plot
+    global freeze_plot01
     # If the plot is frozen, return the last plot data
     config = {
         'displaylogo': False,
@@ -229,21 +230,39 @@ def plot_data():
                                    'resetScale2d',
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
-    if freeze_plot:
-        return jsonify({'figure': frozen_graph, 'config': config})
+
+    if freeze_plot01:
+        return jsonify({'figure': frozen_graph01, 'config': config})
 
     # Get real-time data from Arduino
-    calData = arduino.read_data_from_arduino()
+    data = arduino.read_data_from_arduino()
 
-    if not calData:
+    # Convert the list to NumPy arrays for easier calculations
+    raw = np.array(data)
+    white = np.array(referanceData.whiteData)
+    dark = np.array(referanceData.darkData)
+
+    # Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
+    # Small constant to avoid division by zero
+    epsilon = 1e-10
+
+    denominator = white - dark
+    denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
+
+    calibrated = (raw - dark) / denominator
+
+    # mask the NAN values as 0
+    calibrated = np.where(np.isnan(calibrated), 0, calibrated)
+
+    if not calibrated:
         return jsonify({"error": "No data available"}), 500
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
-    x = np.linspace(300, 900, len(calData))  # Simulate wavelength range
+    x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
 
-    norm = Normalize(vmin=min(calData), vmax=max(calData))
-    y = norm(calData)
+    norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
+    y = norm(calibrated)
 
     # Create Plotly figure
     fig = go.Figure()
@@ -251,7 +270,7 @@ def plot_data():
         x=x,
         y=1 - y,
         mode='markers',
-        name='Sensor Data 1',
+        name='Sensor data 1',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
     ))
 

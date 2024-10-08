@@ -1,5 +1,3 @@
-import numpy as np
-import matplotlib.pyplot as plt
 
 raw = [596, 596, 595, 600, 595, 598, 595, 596, 600, 595, 598, 591, 598, 594, 598, 591, 595, 595, 596, 591, 596, 593,
        596, 596, 600, 595, 596, 595, 595, 598, 571, 548,
@@ -351,64 +349,3 @@ darkData = [596, 596, 596, 596, 596, 596, 597, 595, 600, 595, 596, 593, 595, 591
             568, 561, 563, 562, 563, 563, 562, 564, 563, 560, 563, 564, 565, 563, 560,
             568, 565, 563, 564, 561, 564, 564, 561, 564, 561, 564, 563, 566, 560, 566, 563, 568, 563, 564, 564, 564,
             563, 563, 559, 568, 561, 568, 560, 566, 562, 564, 580, 594, 596, 595, 595, 594, 596, 595, 596]
-
-raw = np.array(raw)  # Convert the list to NumPy arrays for easier calculations
-white = np.array(whiteData)
-dark = np.array(darkData)
-
-# below
-
-# Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
-epsilon = 1e-10  # Small constant to avoid division by zero
-
-denominator = white - dark
-denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
-
-calibrated = (raw - dark) / denominator
-
-# Optionally, you can also mask the NaN values in Icalibrated if needed
-calibrated = np.where(np.isnan(calibrated), 0, calibrated)  # Replace NaN with 0 or any other value
-
-print(calibrated)  # or return this array for further processing
-
-# Plot the calibrated values
-plt.figure(figsize=(10, 6))
-plt.plot(calibrated, marker='1', color='b')
-plt.title('Calibrated Values')
-plt.xlabel('Index')
-plt.ylabel('Calibrated Value')
-plt.grid(True)
-plt.show()
-
-# Invert the raw data
-rawInvert = 1 - raw
-#
-# Plot the calibrated values
-plt.figure(figsize=(10, 6))
-plt.plot(raw, marker='1', color='c')
-plt.title('Calibrated Values')
-plt.xlabel('Index')
-plt.ylabel('Calibrated Value')
-plt.grid(True)
-plt.show()
-
-plt.figure(figsize=(10, 6))
-plt.plot(rawInvert, marker='1', color='c')
-plt.title('Calibrated Values')
-plt.xlabel('Index')
-plt.ylabel('Calibrated Value')
-plt.grid(True)
-plt.show()
-
-# print("raw data")
-# print("raw data")
-# print(len(raw))
-# for i in raw:
-#     print(i, end=',')
-#
-# print("")
-# print("invert data")
-# print("invert data")
-# print(len(rawInvert))
-# for i in rawInvert:
-#     print(i, end=',')
