@@ -238,7 +238,7 @@ def plot_data():
     data = arduino.read_data_from_arduino()
 
     # Convert the list to NumPy arrays for easier calculations
-    raw = np.array(data)
+    raw = np.array(referanceData.raw)
     white = np.array(referanceData.whiteData)
     dark = np.array(referanceData.darkData)
 
