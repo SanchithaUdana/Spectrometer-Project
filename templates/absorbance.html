@@ -144,8 +144,20 @@
                     // Custom play button action
                 });
 
-                $('#pause-btn').on('click', function () {
-                    // Custom pause button action
+                // Handle the pause button click
+                $('#pause-btn').on('click', function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: '/pauseData',
+                        type: 'GET',
+                        success: function (response) {
+                            console.log('Success pausing data');
+                        },
+                        error: function (xhr) {
+                            console.log('Error pausing data');
+                        }
+                    });
                 });
 
                 $('#settings-btn').on('click', function () {

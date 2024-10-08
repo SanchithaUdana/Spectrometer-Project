@@ -1,10 +1,9 @@
-from importlib.metadata import pass_none
-
-from flask import Flask, render_template, jsonify
-import plotly.graph_objs as go
-import numpy as np
-import serial
 import time
+
+import numpy as np
+import plotly.graph_objs as go
+import serial
+from flask import Flask, render_template, jsonify
 from matplotlib.colors import Normalize
 
 app = Flask(__name__)
@@ -102,6 +101,13 @@ def connect():
     connection_result = arduino.connect_to_arduino()
     flag = 'True'  # Set the flag to False if connection failed
     return render_template('absorbance.html', flag=flag)
+
+
+@app.route('/pauseData')
+def pauseData():
+    global freeze_plot
+    freeze_plot = True  # Set this flag to True to indicate the plot should be frozen
+    return jsonify({'message': 'Data stream paused'})
 
 
 @app.route('/stopData')
@@ -211,8 +217,16 @@ def logView():
 #####################
 #  Plot Data Routes #
 #####################
+freeze_plot = False  # Global flag to manage plot freeze
+
+
 @app.route('/plot-data')
 def plot_data():
+    global freeze_plot
+
+    # If the plot is frozen, return the last plot data
+    if freeze_plot:
+        return jsonify({'figure': graphJSON, 'config': config})
     # Get real-time data from Arduino
     data = arduino.read_data_from_arduino()
 
