@@ -66,7 +66,7 @@
 
     // Function to start or stop updates based on the flag
     function managePlotUpdates() {
-        if (plotUpdateFlag === 'True') {
+        if (plotUpdateFlag == 'True') {
 
             console.log("Starting plot updates...");
 
@@ -113,11 +113,7 @@
                 });
 
 // Custom function to find the index of the peak in the y-axis data
-                function findPeakIndex(yData) {
-                    // Simple logic to find the index of the maximum value in yData
-                    var max = Math.max(...yData);  // Get the max value from the yData array
-                    return yData.indexOf(max);  // Return the index of the peak
-                }
+
 
                 $('#zoom-btn').on('click', function () {
                     currentMode = 'zoom';
