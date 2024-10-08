@@ -265,7 +265,7 @@ def plot_data():
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=x,
-        y=1 - y,
+        y=y,
         mode='markers',
         name='Sensor data 1',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
