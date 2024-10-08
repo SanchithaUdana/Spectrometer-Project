@@ -107,7 +107,7 @@ def connect():
 @app.route('/stopData')
 def stopData():
     flag = 'False'
-    return render_template('absorbance.html', flag=flag)
+    return flag
 
 
 @app.route('/read-data')
