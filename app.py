@@ -5,6 +5,7 @@ import plotly.graph_objs as go
 import serial
 from flask import Flask, render_template, jsonify
 from matplotlib.colors import Normalize
+import referanceData
 
 app = Flask(__name__)
 
@@ -216,6 +217,7 @@ def logView():
 freeze_plot = False  # Global flag to manage plot freeze
 frozen_graph = None
 
+
 @app.route('/plot-data')
 def plot_data():
     global freeze_plot
@@ -226,6 +228,8 @@ def plot_data():
     # Get real-time data from Arduino
     data = arduino.read_data_from_arduino()
 
+    # calData = ((data - referanceData.darkData) / (referanceData.whiteData - referanceData.darkData))
+
     if not data:
         return jsonify({"error": "No data available"}), 500
 
@@ -235,9 +239,6 @@ def plot_data():
 
     norm = Normalize(vmin=min(data), vmax=max(data))
     y = norm(data)
-
-    max_value = max(y)  # Maximum (peak) in the inverted data
-    max_x = x[np.argmax(y)]  # X value where the peak occurs
 
     # Create Plotly figure
     fig = go.Figure()
@@ -266,7 +267,6 @@ def plot_data():
                                    'resetScale2d',
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
-
 
     frozen_graph = fig.to_json()  # Update the last frozen graph
     return jsonify({'figure': fig.to_json(), 'config': config})

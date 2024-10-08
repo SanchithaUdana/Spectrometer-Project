@@ -1,0 +1,2 @@
+whiteData = []
+darkData = []
