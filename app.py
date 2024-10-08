@@ -1,5 +1,4 @@
 import time
-
 import numpy as np
 import plotly.graph_objs as go
 import serial
