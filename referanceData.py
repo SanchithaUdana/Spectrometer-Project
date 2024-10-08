@@ -362,5 +362,26 @@ print(len(calibrated))
 print(calibrated)
 
 # below
+import numpy as np
+
+# Assuming your lists are named Iraw, Iwhite, and Idark and contain 2088 values each
+Iraw = np.array(Iraw)     # Convert the list to NumPy arrays for easier calculations
+Iwhite = np.array(Iwhite)
+Idark = np.array(Idark)
+
+# Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
+epsilon = 1e-10  # Small constant to avoid division by zero
+
+# Apply the calibration equation: (Iraw - Idark) / (Iwhite - Idark)
+denominator = Iwhite - Idark
+denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
+
+Icalibrated = (Iraw - Idark) / denominator
+
+# Optionally, you can also mask the NaN values in Icalibrated if needed
+Icalibrated = np.where(np.isnan(Icalibrated), 0, Icalibrated)  # Replace NaN with 0 or any other value
+
+print(Icalibrated)  # or return this array for further processing
+
 
 
