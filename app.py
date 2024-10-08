@@ -222,6 +222,14 @@ frozen_graph = None
 def plot_data():
     global freeze_plot
     # If the plot is frozen, return the last plot data
+    config = {
+        'displaylogo': False,
+        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
+                                   'select2d', 'toggleSpikelines', 'toImage']
+    }
+    
     if freeze_plot:
         return jsonify({'figure': frozen_graph, 'config': config})
 
