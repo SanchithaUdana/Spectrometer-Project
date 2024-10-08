@@ -107,7 +107,7 @@ def connect():
 @app.route('/stopData')
 def stopData():
     flag = 'False'
-    return render_template('', flag=flag)
+    return render_template('absorbance.html', flag=flag)
 
 
 @app.route('/read-data')
@@ -256,7 +256,7 @@ def plot_data():
                                    'resetScale2d',
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
-    print("last data set is :", data)
+
     graphJSON = fig.to_json()
     return jsonify({'figure': graphJSON, 'config': config})
 
