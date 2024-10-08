@@ -1,10 +1,10 @@
 import time
-
 import numpy as np
 import plotly.graph_objs as go
 import serial
 from flask import Flask, render_template, jsonify
 from matplotlib.colors import Normalize
+
 import referanceData
 
 app = Flask(__name__)
@@ -226,14 +226,13 @@ def plot_data():
         return jsonify({'figure': frozen_graph, 'config': config})
 
     # Get real-time data from Arduino
-    data = arduino.read_data_from_arduino()
+    calData = arduino.read_data_from_arduino()
 
-    I_raw = np.array(data)  # Raw intensity data
-    I_white = np.array(referanceData.whiteData)  # White reference intensity
-    I_dark = np.array(referanceData.darkData)  # Dark reference intensity
-
-    # Apply the calibration equation
-    calData = (I_raw - I_dark) / (I_white - I_dark)
+    # I_raw = np.array(data)  # Raw intensity data
+    # I_white = np.array(referanceData.whiteData)  # White reference intensity
+    # I_dark = np.array(referanceData.darkData)  # Dark reference intensity
+    # # Apply the calibration equation
+    # calData = (I_raw - I_dark) / (I_white - I_dark)
 
     if not calData:
         return jsonify({"error": "No data available"}), 500
@@ -273,7 +272,7 @@ def plot_data():
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
 
-    frozen_graph = fig.to_json()  # Update the last frozen graph
+    # frozen_graph = fig.to_json()  # Update the last frozen graph
     return jsonify({'figure': fig.to_json(), 'config': config})
 
 
