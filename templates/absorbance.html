@@ -63,10 +63,11 @@
     let currentMode = 'pan';
     // Access the flag value in JavaScript
     let plotUpdateFlag = '{{ flag }}'; // This will be 'True' or 'False' as a string
+    let isPlotPausingFlag = 'False'
 
     // Function to start or stop updates based on the flag
     function managePlotUpdates() {
-        if (plotUpdateFlag === 'True') {
+        if (plotUpdateFlag === 'True' || isPlotPausingFlag === 'False') {
 
             console.log("Starting plot updates...");
 
@@ -162,7 +163,9 @@
                         url: '/pauseData',
                         type: 'GET',
                         success: function (response) {
+                            isPlotPausingFlag = 'False'
                             console.log('Success pausing data');
+
                         },
                         error: function (xhr) {
                             console.log('Error pausing data');
