@@ -249,7 +249,7 @@ def plot_data():
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=x,
-        y=y,
+        y=1 - y,
         mode='markers',
         name='Sensor Data 1',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
@@ -259,7 +259,7 @@ def plot_data():
         xaxis_title="Wavelength (nm)",
         yaxis_title="Reflectance (%)",
         xaxis=dict(range=[300, 900]),  # x axis
-        yaxis=dict(autorange='reversed'),  # y axis
+        yaxis=dict(range=[0, 1]),  # y axis
         height=320,
         width=480
     )

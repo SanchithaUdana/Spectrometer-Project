@@ -380,17 +380,14 @@ plt.ylabel('Calibrated Value')
 plt.grid(True)
 plt.show()
 
+# Invert the raw data
+rawInvert = 1 - raw
+
 # Plot the calibrated values
 plt.figure(figsize=(10, 6))
-plt.plot(raw, marker='1', color='c')
+plt.plot(rawInvert, marker='1', color='c')
 plt.title('Calibrated Values')
 plt.xlabel('Index')
 plt.ylabel('Calibrated Value')
 plt.grid(True)
 plt.show()
-
-# for i in calibrated:
-#     print(i, end=',')
-#
-# print("")
-# print(len(calibrated))
