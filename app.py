@@ -100,14 +100,7 @@ arduino = ArduinoConnector()
 def connect():
     # Attempt to connect to Arduino
     connection_result = arduino.connect_to_arduino()
-
-    if connection_result == "Connected":
-        # If successfully connected, read data from Arduino
-        arduino.read_data_from_arduino()
-        flag = 'True'  # Set the flag to True
-    else:
-        flag = 'False'  # Set the flag to False if connection failed
-
+    flag = 'True'  # Set the flag to False if connection failed
     return render_template('absorbance.html', flag=flag)
 
 
