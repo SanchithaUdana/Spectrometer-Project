@@ -140,8 +140,18 @@
                     // Optional stop function implementation
                 });
 
-                $('#play-btn').on('click', function () {
-                    // Custom play button action
+                $('#play-btn').on('click', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: '/connect',
+                        type: 'GET',
+                        success: function (response) {
+                            console.log('starting data reading...');
+                        },
+                        error: function (xhr) {
+                            console.log('Error starting data');
+                        }
+                    });
                 });
 
                 // Handle the pause button click
