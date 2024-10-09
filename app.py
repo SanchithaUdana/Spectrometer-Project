@@ -349,7 +349,7 @@ def plot_data2():
 
     # Get real-time data from Arduino
     darkData = arduino.read_data_from_arduino()
-    referanceData.darkData = darkData
+    referanceData.darkData.extend(darkData)
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
