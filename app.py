@@ -85,16 +85,9 @@ class ArduinoConnector:
 arduino = ArduinoConnector()
 
 
-######################
-# connection calling #
-######################
-
-# This will automatically run when the app starts
-# @app.before_request
-# def auto_connect_and_read():
-#     # Automatically call the connect method
-#     result = arduino.connect_to_arduino()
-
+############################
+# Reflectance Plot Routing #
+############################
 
 @app.route('/connect')
 def connect():
@@ -119,25 +112,45 @@ def stopData():
     return render_template('absorbance.html', flag=flag)
 
 
+###############################
+# Dark Reference Plot Routing #
+###############################
+@app.route('/connectDark')
+def connectDark():
+    global freeze_plot02
+    freeze_plot02 = False  # Reset the freeze flag when play is pressed
+    # Attempt to connect to Arduino
+    connection_result = arduino.connect_to_arduino()
+    flag = 'True'  # Set the flag to False if connection failed
+    return render_template('darkReference.html', flag=flag)
+
+
+@app.route('/pauseDataDark')
+def pauseDataDark():
+    global freeze_plot01
+    freeze_plot01 = True  # Set this flag to True to indicate the plot should be frozen
+    return jsonify({'message': 'Data stream paused'})
+
+
+@app.route('/stopDataDark')
+def stopDataDark():
+    flag = 'False'
+    return render_template('darkReference.html', flag=flag)
+
+
 @app.route('/recDark')
 def recDark():
     return jsonify({'message': 'Dark Data Saved'})
 
 
-# @app.route('/read-data')
-# def read_data():
-#     if arduino.ser is None:
-#         return jsonify({"error": "Arduino not connected"}), 400
-#     try:
-#         data = arduino.read_data_from_arduino()
-#         return jsonify({"data": data})
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+################################
+# White Reference Plot Routing #
+################################
 
 
-################
+#############################################
 #  DB Connection (if needed in the future)  #
-################
+#############################################
 
 
 ################
@@ -321,14 +334,14 @@ def plot_data2():
         return jsonify({'figure': frozen_graph02, 'config': config})
 
     # Get real-time data from Arduino
-    rawData = arduino.read_data_from_arduino()
-    referanceData.darkData = rawData
+    darkData = arduino.read_data_from_arduino()
+    referanceData.darkData = darkData
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
-    x = np.linspace(300, 900, len(rawData))  # Simulate wavelength range
-    norm = Normalize(vmin=min(rawData), vmax=max(rawData))
-    y = norm(rawData)
+    x = np.linspace(300, 900, len(darkData))  # Simulate wavelength range
+    norm = Normalize(vmin=min(darkData), vmax=max(darkData))
+    y = norm(darkData)
 
     # Create Plotly figure
     fig = go.Figure()
@@ -358,7 +371,7 @@ def plot_data2():
     }
 
     # frozen_graph = fig.to_json()  # Update the last frozen graph
-    return rawData, jsonify({'figure': fig.to_json(), 'config': config})
+    return darkData, jsonify({'figure': fig.to_json(), 'config': config})
 
 
 # New route for the third plot with different data
