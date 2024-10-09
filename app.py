@@ -139,8 +139,8 @@ def connectDark():
 
 @app.route('/pauseDataDark')
 def pauseDataDark():
-    global freeze_plot01
-    freeze_plot01 = True  # Set this flag to True to indicate the plot should be frozen
+    global freeze_plot02
+    freeze_plot02 = True  # Set this flag to True to indicate the plot should be frozen
     return jsonify({'message': 'Data stream paused'})
 
 
