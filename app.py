@@ -91,8 +91,8 @@ arduino = ArduinoConnector()
 
 @app.route('/connect')
 def connect():
-    global freeze_plot01
-    freeze_plot01 = False  # Reset the freeze flag when play is pressed
+    # global freeze_plot01
+    # freeze_plot01 = False  # Reset the freeze flag when play is pressed
     # Attempt to connect to Arduino
     connection_result = arduino.connect_to_arduino()
     flag = 'True'  # Set the flag to False if connection failed
@@ -101,8 +101,8 @@ def connect():
 
 @app.route('/pauseData')
 def pauseData():
-    global freeze_plot01
-    freeze_plot01 = True  # Set this flag to True to indicate the plot should be frozen
+    # global freeze_plot01
+    # freeze_plot01 = True  # Set this flag to True to indicate the plot should be frozen
     return jsonify({'message': 'Data stream paused'})
 
 
@@ -129,8 +129,8 @@ def read_data():
 ###############################
 @app.route('/connectDark')
 def connectDark():
-    global freeze_plot
-    freeze_plot = False  # Reset the freeze flag when play is pressed
+    # global freeze_plot
+    # freeze_plot = False  # Reset the freeze flag when play is pressed
     # Attempt to connect to Arduino
     connection_result = arduino.connect_to_arduino()
     flag2 = 'True'  # Set the flag to False if connection failed
@@ -139,8 +139,8 @@ def connectDark():
 
 @app.route('/pauseDataDark')
 def pauseDataDark():
-    global freeze_plot
-    freeze_plot = True  # Set this flag to True to indicate the plot should be frozen
+    # global freeze_plot
+    # freeze_plot = True  # Set this flag to True to indicate the plot should be frozen
     return jsonify({'message': 'Data stream paused'})
 
 
@@ -152,6 +152,7 @@ def stopDataDark():
 
 @app.route('/recDark')
 def recDark():
+    connection_result = arduino.connect_to_arduino()
     data = arduino.read_data_from_arduino()
     referanceData.darkData[:] = data
     return render_template('darkReference.html')
