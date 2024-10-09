@@ -129,6 +129,13 @@
 {########################################}
 
 <script>
+    // Automatically trigger play button click when the page loads
+    $(document).ready(function() {
+        $('#play-btn').click();
+    });
+</script>
+
+<script>
     let currentMode = 'pan';
     // Access the flag value in JavaScript
     let plotUpdateFlag = '{{ flag2 }}'; // This will be 'True' or 'False' as a string
