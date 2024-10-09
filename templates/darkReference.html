@@ -131,8 +131,16 @@
 <script>
     window.onload = function () {
         // Automatically trigger the button click when the page loads
-        document.getElementById('play-btn').click();
+        const playButton = document.getElementById('play-btn');
+        if (playButton) {
+            playButton.click();
+        }
     };
+
+    function handleButtonClick() {
+        alert('Play button was clicked!');
+        // Add your button handling logic here
+    }
 </script>
 
 
