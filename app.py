@@ -358,7 +358,7 @@ def plot_data2():
     referanceData.darkData[:] = darkData
 
     # Save darkData to a Python file
-    save_dark_data_to_py(darkData)
+    # save_dark_data_to_py(darkData)
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
