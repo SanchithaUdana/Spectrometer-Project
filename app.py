@@ -5,7 +5,6 @@ import serial
 from flask import Flask, render_template, jsonify, make_response
 from matplotlib.colors import Normalize
 
-import referanceData
 import whitedata
 import darkdata
 
