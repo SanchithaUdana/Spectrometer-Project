@@ -355,7 +355,6 @@ def plot_data2():
 
     # Get real-time data from Arduino
     darkData = arduino.read_data_from_arduino()
-    referanceData.darkData[:] = darkData
 
     # Save darkData to a Python file
     # save_dark_data_to_py(darkData)
