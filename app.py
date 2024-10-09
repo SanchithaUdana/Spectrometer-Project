@@ -162,7 +162,7 @@ def recDark():
         # Save the data in darkdata.py file
         save_dark_data_to_py(data)
 
-        return make_response('', 204)
+        return render_template('darkReference.html')
     else:
         return jsonify({'message': 'Failed to connect to Arduino'}), 500
     # return render_template('darkReference.html')
@@ -177,6 +177,7 @@ def save_dark_data_to_py(data):
 ################################
 # White Reference Plot Routing #
 ################################
+
 @app.route('/connectWhite')
 def connectWhite():
     global freeze_plot
