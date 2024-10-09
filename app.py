@@ -103,7 +103,7 @@ def connect():
 def pauseData():
     # global freeze_plot01
     # freeze_plot01 = True  # Set this flag to True to indicate the plot should be frozen
-    return jsonify({'message': 'Data stream paused'})
+    return make_response('', 204)
 
 
 @app.route('/stopData')
@@ -141,7 +141,7 @@ def connectDark():
 def pauseDataDark():
     # global freeze_plot
     # freeze_plot = True  # Set this flag to True to indicate the plot should be frozen
-    return jsonify({'message': 'Data stream paused'})
+    return make_response('', 204)
 
 
 @app.route('/stopDataDark')
