@@ -29,6 +29,27 @@
             max-width: 100%;
             height: auto;
         }
+
+        /* Loading animation */
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        /* Keyframes for loading animation */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -117,6 +138,8 @@
 </div>
 
 
+
+
 <!-- Plotly JS -->
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <!-- jQuery for AJAX call -->
@@ -142,6 +165,18 @@
 {#        // Add your button handling logic here#}
 {#    }#}
 {#</script>#}
+
+<!-- Pop-up Modal -->
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="loader"></div>
+                <p>Loading... Please wait</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -227,16 +262,28 @@
                     // Optional stop function implementation
                 });
 
+                // Click event for the play button
                 $('#play-btn').on('click', function (e) {
                     e.preventDefault();
+
+                    // Show the loading modal
+                    $('#loadingModal').modal('show');
+
+                    // Perform the AJAX call to start data reading
                     $.ajax({
-                        url: '/connect',
+                        url: '/connectDark', // Your Flask route for starting data
                         type: 'GET',
                         success: function (response) {
-                            console.log('starting data reading...');
+                            console.log('Starting data reading...');
+                            // After the process completes, hide the loading modal
+                            setTimeout(function () {
+                                $('#loadingModal').modal('hide');
+                            }, 60000); // Simulate delay for data processing (you can change this)
                         },
                         error: function (xhr) {
                             console.log('Error starting data');
+                            // Hide the modal even if there's an error
+                            $('#loadingModal').modal('hide');
                         }
                     });
                 });

@@ -180,7 +180,7 @@ def save_dark_data_to_py(data):
 
 @app.route('/connectWhite')
 def connectWhite():
-    global freeze_plot
+    # global freeze_plot
     freeze_plot = False  # Reset the freeze flag when play is pressed
     # Attempt to connect to Arduino
     connection_result = arduino.connect_to_arduino()
@@ -190,7 +190,7 @@ def connectWhite():
 
 @app.route('/pauseDataWhite')
 def pauseDataWhite():
-    global freeze_plot
+    # global freeze_plot
     freeze_plot = True  # Set this flag to True to indicate the plot should be frozen
     return jsonify({'message': 'Data stream paused'})
 
@@ -203,7 +203,26 @@ def stopDataWhite():
 
 @app.route('/recWhite')
 def recWhite():
-    return jsonify({'message': 'White Data Saved'})
+    # Connect to the Arduino
+    connection_result = arduino.connect_to_arduino()
+
+    if connection_result:
+        # Read raw data from Arduino
+        data = arduino.read_data_from_arduino()
+
+        # Save the data in whiteData.py file
+        save_white_data_to_py(data)
+
+        return render_template('whiteReferance.html')
+    else:
+        return jsonify({'message': 'Failed to connect to Arduino'}), 500
+    # return render_template('darkReference.html')
+
+
+# Function to save darkData as a Python variable in darkdata.py
+def save_white_data_to_py(data):
+    with open('whitedata.py', 'w') as f:
+        f.write(f"whiteData = {data}")
 
 
 #############################################
