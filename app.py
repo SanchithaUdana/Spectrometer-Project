@@ -141,7 +141,7 @@ def connectDark():
 def pauseDataDark():
     # global freeze_plot
     # freeze_plot = True  # Set this flag to True to indicate the plot should be frozen
-    return make_response('', 204)
+    return jsonify({'message': 'Data stream paused'})
 
 
 @app.route('/stopDataDark')
@@ -162,7 +162,7 @@ def recDark():
         # Save the data in darkdata.py file
         save_dark_data_to_py(data)
 
-        return make_response('', 204)
+        return render_template('darkReference.html')
     else:
         return jsonify({'message': 'Failed to connect to Arduino'}), 500
     # return render_template('darkReference.html')

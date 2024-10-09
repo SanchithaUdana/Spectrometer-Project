@@ -129,6 +129,14 @@
 {########################################}
 
 <script>
+    window.onload = function () {
+        // Automatically trigger the button click when the page loads
+        document.getElementById('play-btn').click();
+    };
+</script>
+
+
+<script>
     let currentMode = 'pan';
     // Access the flag value in JavaScript
     let plotUpdateFlag = '{{ flag2 }}'; // This will be 'True' or 'False' as a string
