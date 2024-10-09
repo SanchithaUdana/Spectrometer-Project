@@ -356,13 +356,13 @@ def plot_data():
     # Assuming data corresponds to y-values (intensity) and x-values are indices
     # x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
 
-    norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
+    # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
 
     # Create Plotly figure
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=np.arange(len(calibrated)),  # x-axis as the index
-        y=norm(calibrated),
+        y=calibrated,
         mode='markers',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
     ))
