@@ -122,8 +122,8 @@ def connectDark():
     freeze_plot02 = False  # Reset the freeze flag when play is pressed
     # Attempt to connect to Arduino
     connection_result = darkArduino.connect_to_arduino()
-    flag = 'True'  # Set the flag to False if connection failed
-    return render_template('darkReference.html', flag=flag)
+    flag2 = 'True'  # Set the flag to False if connection failed
+    return render_template('darkReference.html', flag2=flag2)
 
 
 @app.route('/pauseDataDark')
@@ -336,7 +336,7 @@ def plot_data2():
 
     # Get real-time data from Arduino
     darkData = darkArduino.read_data_from_arduino()
-    referanceData.darkData = darkData
+    # referanceData.darkData = darkData
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
@@ -372,7 +372,7 @@ def plot_data2():
     }
 
     # frozen_graph = fig.to_json()  # Update the last frozen graph
-    return darkData, jsonify({'figure': fig.to_json(), 'config': config})
+    return jsonify({'figure': fig.to_json(), 'config': config})
 
 
 # New route for the third plot with different data
