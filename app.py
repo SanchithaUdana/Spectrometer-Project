@@ -85,7 +85,6 @@ class ArduinoConnector:
 arduino = ArduinoConnector()
 
 
-
 ############################
 # Reflectance Plot Routing #
 ############################
@@ -290,6 +289,8 @@ def plot_data():
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
     # x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
+    # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
+
     # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
 
     # Create Plotly figure
