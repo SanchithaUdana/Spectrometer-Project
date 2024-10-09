@@ -11,7 +11,6 @@ from whitedata import whiteData
 # spectrometer_calibration.py
 
 
-
 # Assume you also have corresponding wavelengths (you can replace this with actual values)
 wavelengths = np.linspace(300, 900, len(rawData.rawData))
 
@@ -20,9 +19,11 @@ S_raw = np.array(rawData.rawData)
 S_white = np.array(whitedata.whiteData)
 S_black = np.array(darkdata.darkData)
 
+
 # Calibration equation
 def calibrate_signal(S_raw, S_white, S_black):
     return (S_raw - S_black) / (S_white - S_black)
+
 
 # Apply calibration
 calibrated_signal = calibrate_signal(S_raw, S_white, S_black)
@@ -40,4 +41,3 @@ plt.legend()
 
 # Show the plot
 plt.show()
-
