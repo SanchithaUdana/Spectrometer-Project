@@ -159,7 +159,7 @@ def recDark():
 # White Reference Plot Routing #
 ################################
 @app.route('/connectWhite')
-def connectDark():
+def connectWhite():
     global freeze_plot
     freeze_plot = False  # Reset the freeze flag when play is pressed
     # Attempt to connect to Arduino
@@ -169,20 +169,20 @@ def connectDark():
 
 
 @app.route('/pauseDataWhite')
-def pauseDataDark():
+def pauseDataWhite():
     global freeze_plot
     freeze_plot = True  # Set this flag to True to indicate the plot should be frozen
     return jsonify({'message': 'Data stream paused'})
 
 
 @app.route('/stopDataWhite')
-def stopDataDark():
+def stopDataWhite():
     flag = 'False'
     return render_template('whiteReferance.html', flag=flag)
 
 
 @app.route('/recWhite')
-def recDark():
+def recWhite():
     return jsonify({'message': 'White Data Saved'})
 
 
