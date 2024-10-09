@@ -103,7 +103,7 @@ def connect():
     # Attempt to connect to Arduino
     connection_result = arduino.connect_to_arduino()
     flag = 'True'  # Set the flag to False if connection failed
-    return render_template('absorbance.html', flag=flag)
+    return render_template('darkReference.html', flag=flag)
 
 
 @app.route('/pauseData')
