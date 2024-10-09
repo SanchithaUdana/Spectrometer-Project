@@ -152,10 +152,26 @@ def stopDataDark():
 
 @app.route('/recDark')
 def recDark():
+    # Connect to the Arduino
     connection_result = arduino.connect_to_arduino()
-    data = arduino.read_data_from_arduino()
-    referanceData.darkData[:] = data
-    return render_template('darkReference.html')
+
+    if connection_result:
+        # Read raw data from Arduino
+        data = arduino.read_data_from_arduino()
+
+        # Save the data in darkdata.py file
+        save_dark_data_to_py(data)
+
+        return jsonify({'message': 'Dark data saved successfully!'})
+    else:
+        return jsonify({'message': 'Failed to connect to Arduino'}), 500
+    # return render_template('darkReference.html')
+
+
+# Function to save darkData as a Python variable in darkdata.py
+def save_dark_data_to_py(data):
+    with open('darkdata.py', 'w') as f:
+        f.write(f"darkData = {data}")
 
 
 ################################
