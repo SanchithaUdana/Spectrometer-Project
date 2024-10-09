@@ -265,9 +265,9 @@ def logView():
 #                       Plot Routing Start                        #
 ###################################################################
 
-######################
-#  Absorbance Routes #
-######################
+###########################
+#  Reflectance Raw Routes #
+###########################
 
 freeze_plot = False  # Global flag to manage plot freeze
 frozen_graph = None
@@ -275,7 +275,7 @@ frozen_graph = None
 
 @app.route('/plot-data')
 def plot_data():
-    global freeze_plot
+    global freeze_plot, frozen_graph
     # If the plot is frozen, return the last plot data
     config = {
         'displaylogo': False,
@@ -285,8 +285,14 @@ def plot_data():
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
 
+    # If freeze_plot is True, return the last frozen graph
     if freeze_plot:
-        return jsonify({'figure': frozen_graph, 'config': config})
+        # Check if the frozen graph has been set before
+        if frozen_graph:
+            return jsonify({'figure': frozen_graph, 'config': config})
+        else:
+            # Return a placeholder message if no graph has been frozen yet
+            return jsonify({'message': 'No graph data to display (graph has not been frozen yet).'})
 
     # Get real-time data from Arduino
     data = arduino.read_data_from_arduino()
@@ -309,8 +315,6 @@ def plot_data():
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
     # x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
-    # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
-
     # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
 
     # Create Plotly figure
