@@ -6,6 +6,8 @@ from flask import Flask, render_template, jsonify, make_response
 from matplotlib.colors import Normalize
 
 import referanceData
+import whitedata
+import darkdata
 
 app = Flask(__name__)
 
@@ -338,8 +340,8 @@ def plot_data():
 
     # Convert the list to NumPy arrays for easier calculations
     raw = np.array(data)
-    white = np.array(referanceData.whiteData)
-    dark = np.array(referanceData.darkData)
+    white = np.array(whitedata.whiteData)
+    dark = np.array(darkdata.darkData)
 
     # Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
     # Small constant to avoid division by zero
