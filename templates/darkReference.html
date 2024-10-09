@@ -129,9 +129,10 @@
 {########################################}
 
 <script>
-    // Automatically trigger play button click when the page loads
-    $(document).ready(function() {
-        $('#play-btn').click();
+    $(document).ready(function () {
+        // Automatically trigger play button click when the page loads
+        console.log('Auto-clicking the play button');
+        $('#play-btn').trigger('click');  // Trigger the play button click
     });
 </script>
 
