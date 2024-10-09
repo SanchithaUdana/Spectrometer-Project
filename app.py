@@ -103,7 +103,7 @@ def connect():
     # Attempt to connect to Arduino
     connection_result = arduino.connect_to_arduino()
     flag = 'True'  # Set the flag to False if connection failed
-    return render_template('darkReference.html', flag=flag)
+    return render_template('absorbance.html', flag=flag)
 
 
 @app.route('/pauseData')
@@ -124,15 +124,15 @@ def recDark():
     return jsonify({'message': 'Dark Data Saved'})
 
 
-@app.route('/read-data')
-def read_data():
-    if arduino.ser is None:
-        return jsonify({"error": "Arduino not connected"}), 400
-    try:
-        data = arduino.read_data_from_arduino()
-        return jsonify({"data": data})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+# @app.route('/read-data')
+# def read_data():
+#     if arduino.ser is None:
+#         return jsonify({"error": "Arduino not connected"}), 400
+#     try:
+#         data = arduino.read_data_from_arduino()
+#         return jsonify({"data": data})
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 
 ################
