@@ -161,12 +161,10 @@ def recDark():
 
         # Save the data in darkdata.py file
         save_dark_data_to_py(data)
-        
-        pass
-        # return render_template('darkReference.html')
+
+        return jsonify(True)
     else:
-        pass
-        # return jsonify({'message': 'Failed to connect to Arduino'}), 500
+        return jsonify({'message': 'Failed to connect to Arduino'}), 500
     # return render_template('darkReference.html')
 
 
