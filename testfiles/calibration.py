@@ -1,14 +1,15 @@
+from matplotlib import pyplot as plt
 from matplotlib.colors import Normalize
 
 import whitedata
 import darkdata
+import rawData
 import numpy as np
-import plotly.graph_objects as go
 
 # Convert the list to NumPy arrays for easier calculations
-raw = np.array(referanceData.raw)
-white = np.array(referanceData.whiteData)
-dark = np.array(referanceData.darkData)
+raw = np.array(rawData.rawData)
+white = np.array(whitedata.whiteData)
+dark = np.array(darkdata.darkData)
 
 # Small constant to avoid division by zero
 epsilon = 1e-10
@@ -25,29 +26,11 @@ calibrated = np.where(np.isnan(calibrated), 0, calibrated)
 
 norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
 
-# Create a plot using Plotly
-fig = go.Figure()
-
-# Add a line trace for the calibrated data
-fig.add_trace(go.Scatter(
-    x=np.arange(len(calibrated)),  # x-axis as the index
-    y=norm(calibrated),                  # y-axis as the calibrated values
-    mode='markers',          # Use lines and markers
-    marker=dict(symbol='cross', color='blue'),  # Marker settings
-    line=dict(color='blue'),
-))
-
-# Customize the layout
-fig.update_layout(
-    xaxis_title='Index',
-    yaxis_title='Calibrated Value',
-    showlegend=False,  # No legend is needed for a single plot
-    plot_bgcolor='rgba(0,0,0,0)',  # Make the background transparent
-    xaxis=dict(showgrid=True),
-    yaxis=dict(showgrid=True),
-    width=480,
-    height=320
-)
-
-# Show the plot
-fig.show()
+# Create a plot using Matplotlib
+plt.figure(figsize=(6, 4))  # Set the figure size (equivalent to 480x320 in pixels)
+plt.scatter(np.arange(len(calibrated)), norm(calibrated), marker='x', color='blue')  # Use 'x' markers for the plot
+plt.xlabel('Index')
+plt.ylabel('Calibrated Value')
+plt.grid(True)
+plt.title('Calibrated Data Plot')
+plt.show()
