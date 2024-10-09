@@ -6,31 +6,38 @@ import darkdata
 import rawData
 import numpy as np
 
-# Convert the list to NumPy arrays for easier calculations
-raw = np.array(rawData.rawData)
-white = np.array(whitedata.whiteData)
-dark = np.array(darkdata.darkData)
+from whitedata import whiteData
 
-# Small constant to avoid division by zero
-epsilon = 1e-10
+# spectrometer_calibration.py
 
-# Calculate the denominator and replace zeros with epsilon
-denominator = white - dark
-denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
 
-# Calibrate the data
-calibrated = (raw - dark) / denominator
 
-# Mask NaN values as 0
-calibrated = np.where(np.isnan(calibrated), 0, calibrated)
+# Assume you also have corresponding wavelengths (you can replace this with actual values)
+wavelengths = np.linspace(300, 900, len(rawData.rawData))
 
-norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
+# Convert the lists to numpy arrays for easy manipulation
+S_raw = np.array(rawData.rawData)
+S_white = np.array(whitedata.whiteData)
+S_black = np.array(darkdata.darkData)
 
-# Create a plot using Matplotlib
-plt.figure(figsize=(6, 4))  # Set the figure size (equivalent to 480x320 in pixels)
-plt.scatter(np.arange(len(calibrated)), norm(calibrated), marker='x', color='blue')  # Use 'x' markers for the plot
-plt.xlabel('Index')
-plt.ylabel('Calibrated Value')
+# Calibration equation
+def calibrate_signal(S_raw, S_white, S_black):
+    return (S_raw - S_black) / (S_white - S_black)
+
+# Apply calibration
+calibrated_signal = calibrate_signal(S_raw, S_white, S_black)
+
+# Plotting the calibrated signal against wavelength
+plt.figure(figsize=(10, 6))
+plt.plot(wavelengths, calibrated_signal, label='Calibrated Signal', color='b', lw=2)
+
+# Customizing the plot
+plt.title('Calibrated Spectrometer Data')
+plt.xlabel('Wavelength (nm)')
+plt.ylabel('Calibrated Signal')
 plt.grid(True)
-plt.title('Calibrated Data Plot')
+plt.legend()
+
+# Show the plot
 plt.show()
+
