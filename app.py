@@ -154,7 +154,7 @@ def stopDataDark():
 def recDark():
     data = arduino.read_data_from_arduino()
     referanceData.darkData[:] = data
-    return jsonify({'message': 'Dark Data Saved'})
+    return render_template('darkReference.html')
 
 
 ################################
