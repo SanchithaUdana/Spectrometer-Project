@@ -83,6 +83,7 @@ class ArduinoConnector:
 
 
 arduino = ArduinoConnector()
+darkArduino = ArduinoConnector()
 
 
 ############################
@@ -120,7 +121,7 @@ def connectDark():
     global freeze_plot02
     freeze_plot02 = False  # Reset the freeze flag when play is pressed
     # Attempt to connect to Arduino
-    connection_result = arduino.connect_to_arduino()
+    connection_result = darkArduino.connect_to_arduino()
     flag = 'True'  # Set the flag to False if connection failed
     return render_template('darkReference.html', flag=flag)
 
