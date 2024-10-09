@@ -119,6 +119,11 @@ def stopData():
     return render_template('absorbance.html', flag=flag)
 
 
+@app.route('/recDark')
+def recDark():
+    return jsonify({'message': 'Dark Data Saved'})
+
+
 @app.route('/read-data')
 def read_data():
     if arduino.ser is None:
@@ -211,6 +216,10 @@ def logView():
     return render_template('logView.html')
 
 
+###################################################################
+#                       Plot Routing Start                        #
+###################################################################
+
 ######################
 #  Absorbance Routes #
 ######################
@@ -255,7 +264,6 @@ def plot_data():
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
     # x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
-
     # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
 
     # Create Plotly figure
@@ -289,32 +297,68 @@ def plot_data():
     return jsonify({'figure': fig.to_json(), 'config': config})
 
 
+#########################
+# Dark Reference Routes #
+#########################
+
+freeze_plot02 = False  # Global flag to manage plot freeze
+frozen_graph02 = None
+
+
 @app.route('/plot-data2')
 def plot_data2():
-    # Generate random dataset
-    y = np.random.random(2088)
-    x = np.linspace(300, 900, 100)
+    global freeze_plot02
+    # If the plot is frozen, return the last plot data
+    config = {
+        'displaylogo': False,
+        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
+                                   'select2d', 'toggleSpikelines', 'toImage']
+    }
+
+    if freeze_plot02:
+        return jsonify({'figure': frozen_graph02, 'config': config})
+
+    # Get real-time data from Arduino
+    rawData = arduino.read_data_from_arduino()
+    referanceData.darkData = rawData
+
+    # Generate x and y values from Arduino data
+    # Assuming data corresponds to y-values (intensity) and x-values are indices
+    x = np.linspace(300, 900, len(rawData))  # Simulate wavelength range
+    norm = Normalize(vmin=min(rawData), vmax=max(rawData))
+    y = norm(rawData)
 
     # Create Plotly figure
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=x, y=y, mode='lines+markers', name='Sensor Data 2'))
+    fig.add_trace(go.Scatter(
+        x=x,  # x-axis as the index
+        y=y,
+        mode='markers',
+        marker=dict(size=3)  # Adjust the size (6 is smaller than default)
+    ))
+
     fig.update_layout(
-        xaxis_title="Wavelength nm",
-        yaxis_title="Absorbance ( Dark )",
+        xaxis_title="Wavelength (nm)",
+        yaxis_title="Reflectance (%)",
+        xaxis=dict(range=[300, 900]),  # x axis
+        yaxis=dict(range=[0, 1]),  # y axis
         height=320,
-        width=480
+        width=480,
     )
 
     # Custom toolbar configuration
     config = {
         'displaylogo': False,
         'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
-                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d', 'resetScale2d',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
 
-    graphJSON = fig.to_json()
-    return jsonify({'figure': graphJSON, 'config': config})
+    # frozen_graph = fig.to_json()  # Update the last frozen graph
+    return rawData, jsonify({'figure': fig.to_json(), 'config': config})
 
 
 # New route for the third plot with different data

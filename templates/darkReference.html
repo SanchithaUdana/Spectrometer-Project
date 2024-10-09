@@ -84,13 +84,13 @@
 
 
 <div class="settings-bar">
-    <a href="#" id="play-btn" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
+    <a href="/connect" id="play-btn" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
     &nbsp;
-    <a href="#" id="pause-btn" class="btn btn-primary"><i class="bi bi-caret-right-square-fill"></i></a>
+    <a href="/pauseData" id="pause-btn" class="btn btn-primary"><i class="bi bi-caret-right-square-fill"></i></a>
     &nbsp;
     <a href="#" id="save-btn" class="btn btn-primary"><i class="bi bi-camera"></i></a>
     &nbsp;
-    <a href="#" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
+    <a href="/stopData" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
     &nbsp;
     <a href="#" id="reset-btn" class="btn btn-info"><i class="bi bi-arrow-counterclockwise"></i></a>
     &nbsp;
@@ -98,16 +98,14 @@
     &nbsp;
     <a href="#" id="zoom-btn" class="btn btn-info"><i class="bi bi-zoom-in"></i></a>
     &nbsp;
-    <a href="#" id="point-btn" class="btn btn-info"><i class="bi bi-bezier2"></i></a>
-    &nbsp;
-    <a href="#" id="rec-btn" class="btn btn-primary">
+    <a href="/recDark" id="rec-btn" class="btn btn-primary">
         REC
     </a>
     &nbsp;
-    <a href="{{ url_for('whiteReference') }}" id="next-btn" class="btn btn-success bi bi-arrow-right-square-fill border-warning">
+    <a href="{{ url_for('whiteReference') }}" id="next-btn"
+       class="btn btn-success bi bi-arrow-right-square-fill border-warning">
     </a>
-
-{#    <a class="btn btn-danger" href="{{ url_for('whiteReference') }}">Next</a>#}
+    {#    <a class="btn btn-danger" href="{{ url_for('whiteReference') }}">Next</a>#}
 </div>
 
 <!-- Main content area -->
