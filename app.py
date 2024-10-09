@@ -129,8 +129,8 @@ def read_data():
 ###############################
 @app.route('/connectDark')
 def connectDark():
-    global freeze_plot02
-    freeze_plot02 = False  # Reset the freeze flag when play is pressed
+    global freeze_plot
+    freeze_plot = False  # Reset the freeze flag when play is pressed
     # Attempt to connect to Arduino
     connection_result = arduino.connect_to_arduino()
     flag2 = 'True'  # Set the flag to False if connection failed
@@ -139,8 +139,8 @@ def connectDark():
 
 @app.route('/pauseDataDark')
 def pauseDataDark():
-    global freeze_plot02
-    freeze_plot02 = True  # Set this flag to True to indicate the plot should be frozen
+    global freeze_plot
+    freeze_plot = True  # Set this flag to True to indicate the plot should be frozen
     return jsonify({'message': 'Data stream paused'})
 
 
@@ -158,6 +158,32 @@ def recDark():
 ################################
 # White Reference Plot Routing #
 ################################
+@app.route('/connectWhite')
+def connectDark():
+    global freeze_plot
+    freeze_plot = False  # Reset the freeze flag when play is pressed
+    # Attempt to connect to Arduino
+    connection_result = arduino.connect_to_arduino()
+    flag3 = 'True'  # Set the flag to False if connection failed
+    return render_template('whiteReferance.html', flag3=flag3)
+
+
+@app.route('/pauseDataWhite')
+def pauseDataDark():
+    global freeze_plot
+    freeze_plot = True  # Set this flag to True to indicate the plot should be frozen
+    return jsonify({'message': 'Data stream paused'})
+
+
+@app.route('/stopDataWhite')
+def stopDataDark():
+    flag = 'False'
+    return render_template('whiteReferance.html', flag=flag)
+
+
+@app.route('/recWhite')
+def recDark():
+    return jsonify({'message': 'White Data Saved'})
 
 
 #############################################
@@ -249,13 +275,13 @@ def logView():
 #  Absorbance Routes #
 ######################
 
-freeze_plot01 = False  # Global flag to manage plot freeze
-frozen_graph01 = None
+freeze_plot = False  # Global flag to manage plot freeze
+frozen_graph = None
 
 
 @app.route('/plot-data')
 def plot_data():
-    global freeze_plot01
+    global freeze_plot
     # If the plot is frozen, return the last plot data
     config = {
         'displaylogo': False,
@@ -265,8 +291,8 @@ def plot_data():
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
 
-    if freeze_plot01:
-        return jsonify({'figure': frozen_graph01, 'config': config})
+    if freeze_plot:
+        return jsonify({'figure': frozen_graph, 'config': config})
 
     # Get real-time data from Arduino
     data = arduino.read_data_from_arduino()
@@ -328,9 +354,6 @@ def plot_data():
 # Dark Reference Routes #
 #########################
 
-freeze_plot02 = False  # Global flag to manage plot freeze
-frozen_graph02 = None
-
 
 # def save_dark_data_to_py(darkData):
 #     with open('dark_data.py', 'w') as f:
@@ -340,7 +363,7 @@ frozen_graph02 = None
 
 @app.route('/plot-data2')
 def plot_data2():
-    global freeze_plot02
+    global freeze_plot
     # If the plot is frozen, return the last plot data
     config = {
         'displaylogo': False,
@@ -350,8 +373,8 @@ def plot_data2():
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
 
-    if freeze_plot02:
-        return jsonify({'figure': frozen_graph02, 'config': config})
+    if freeze_plot:
+        return jsonify({'figure': frozen_graph, 'config': config})
 
     # Get real-time data from Arduino
     darkData = arduino.read_data_from_arduino()
@@ -396,33 +419,72 @@ def plot_data2():
     return jsonify({'figure': fig.to_json(), 'config': config})
 
 
-# New route for the third plot with different data
+#########################
+# White Reference Routes #
+#########################
+
+# def save_dark_data_to_py(darkData):
+#     with open('dark_data.py', 'w') as f:
+#         # Write darkData as a Python list into the file
+#         f.write(f"darkData = {darkData}")
+
+
 @app.route('/plot-data3')
 def plot_data3():
-    # Generate random dataset
-    y = np.random.random(2088)
-    x = np.linspace(300, 900, 100)
+    global freeze_plot
+    # If the plot is frozen, return the last plot data
+    config = {
+        'displaylogo': False,
+        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
+                                   'select2d', 'toggleSpikelines', 'toImage']
+    }
+
+    if freeze_plot:
+        return jsonify({'figure': frozen_graph, 'config': config})
+
+    # Get real-time data from Arduino
+    whiteData = arduino.read_data_from_arduino()
+
+    # Save darkData to a Python file
+    # save_dark_data_to_py(darkData)
+
+    # Generate x and y values from Arduino data
+    # Assuming data corresponds to y-values (intensity) and x-values are indices
+    x = np.linspace(300, 900, len(whiteData))  # Simulate wavelength range
+    norm = Normalize(vmin=min(whiteData), vmax=max(whiteData))
+    y = norm(whiteData)
 
     # Create Plotly figure
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=x, y=y, mode='lines+markers', name='Sensor Data 3'))
+    fig.add_trace(go.Scatter(
+        x=x,  # x-axis as the index
+        y=1 - y,
+        mode='markers',
+        marker=dict(size=3)  # Adjust the size (6 is smaller than default)
+    ))
+
     fig.update_layout(
-        xaxis_title="Wavelength nm",
-        yaxis_title="Absorbance ( White )",
+        xaxis_title="Wavelength (nm)",
+        yaxis_title="Reflectance (%)",
+        xaxis=dict(range=[300, 900]),  # x axis
+        yaxis=dict(range=[0, 1]),  # y axis
         height=320,
-        width=480
+        width=480,
     )
 
     # Custom toolbar configuration
     config = {
         'displaylogo': False,
         'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
-                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d', 'resetScale2d',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
 
-    graphJSON = fig.to_json()
-    return jsonify({'figure': graphJSON, 'config': config})
+    # frozen_graph = fig.to_json()  # Update the last frozen graph
+    return jsonify({'figure': fig.to_json(), 'config': config})
 
 
 # New route for the third plot with different data
