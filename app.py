@@ -271,7 +271,7 @@ def plot_data():
         xaxis_title="Wavelength (nm)",
         yaxis_title="Reflectance (%)",
         # xaxis=dict(range=[300, 900]),  # x axis
-        yaxis=dict(range=[0, 2]),  # y axis
+        yaxis=dict(range=[0, 4]),  # y axis
         height=320,
         width=480,
     )
