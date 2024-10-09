@@ -332,6 +332,12 @@ freeze_plot02 = False  # Global flag to manage plot freeze
 frozen_graph02 = None
 
 
+def save_dark_data_to_py(darkData):
+    with open('dark_data.py', 'w') as f:
+        # Write darkData as a Python list into the file
+        f.write(f"darkData = {darkData}")
+
+
 @app.route('/plot-data2')
 def plot_data2():
     global freeze_plot02
@@ -351,6 +357,9 @@ def plot_data2():
     darkData = arduino.read_data_from_arduino()
     referanceData.darkData[:] = darkData
 
+    # Save darkData to a Python file
+    save_dark_data_to_py(darkData)
+
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
     x = np.linspace(300, 900, len(darkData))  # Simulate wavelength range
@@ -361,7 +370,7 @@ def plot_data2():
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=x,  # x-axis as the index
-        y=y,
+        y=1 - y,
         mode='markers',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
     ))
