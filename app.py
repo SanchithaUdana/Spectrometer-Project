@@ -332,10 +332,10 @@ freeze_plot02 = False  # Global flag to manage plot freeze
 frozen_graph02 = None
 
 
-def save_dark_data_to_py(darkData):
-    with open('dark_data.py', 'w') as f:
-        # Write darkData as a Python list into the file
-        f.write(f"darkData = {darkData}")
+# def save_dark_data_to_py(darkData):
+#     with open('dark_data.py', 'w') as f:
+#         # Write darkData as a Python list into the file
+#         f.write(f"darkData = {darkData}")
 
 
 @app.route('/plot-data2')
