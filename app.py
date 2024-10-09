@@ -269,30 +269,30 @@ def logView():
 #  Reflectance Raw Routes #
 ###########################
 
-freeze_plot = False  # Global flag to manage plot freeze
-frozen_graph = None
+# freeze_plot = False  # Global flag to manage plot freeze
+# frozen_graph = None
 
 
 @app.route('/plot-data')
 def plot_data():
-    global freeze_plot, frozen_graph
-    # If the plot is frozen, return the last plot data
-    config = {
-        'displaylogo': False,
-        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
-                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
-                                   'resetScale2d',
-                                   'select2d', 'toggleSpikelines', 'toImage']
-    }
+    # global freeze_plot, frozen_graph
+    # # If the plot is frozen, return the last plot data
+    # config = {
+    #     'displaylogo': False,
+    #     'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+    #                                'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+    #                                'resetScale2d',
+    #                                'select2d', 'toggleSpikelines', 'toImage']
+    # }
 
     # If freeze_plot is True, return the last frozen graph
-    if freeze_plot:
-        # Check if the frozen graph has been set before
-        if frozen_graph:
-            return jsonify({'figure': frozen_graph, 'config': config})
-        else:
-            # Return a placeholder message if no graph has been frozen yet
-            return jsonify({'message': 'No graph data to display (graph has not been frozen yet).'})
+    # if freeze_plot:
+    #     # Check if the frozen graph has been set before
+    #     if frozen_graph:
+    #         return jsonify({'figure': frozen_graph, 'config': config})
+    #     else:
+    #         # Return a placeholder message if no graph has been frozen yet
+    #         return jsonify({'message': 'No graph data to display (graph has not been frozen yet).'})
 
     # Get real-time data from Arduino
     data = arduino.read_data_from_arduino()
@@ -344,9 +344,9 @@ def plot_data():
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
 
-    frozen_graph = fig.to_json()  # Update the last frozen graph
+    # frozen_graph = fig.to_json()  # Update the last frozen graph
 
-    return jsonify({'figure': frozen_graph, 'config': config})
+    return jsonify({'figure': fig.to_json(), 'config': config})
 
 
 #########################
