@@ -370,8 +370,8 @@ def plot_data():
     fig.update_layout(
         xaxis_title="Wavelength (nm)",
         yaxis_title="Reflectance (%)",
-        xaxis=dict(range=[300, 900]),  # x axis
-        yaxis=dict(range=[0, 1]),  # y axis
+        xaxis=dict(autorange=True),  # x axis
+        yaxis=dict(autorange=True),  # y axis
         height=320,
         width=480,
     )
