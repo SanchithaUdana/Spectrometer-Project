@@ -346,7 +346,7 @@ def plot_data():
 
     frozen_graph = fig.to_json()  # Update the last frozen graph
 
-    return jsonify({'figure': fig.to_json(), 'config': config})
+    return jsonify({'figure': frozen_graph, 'config': config})
 
 
 #########################
