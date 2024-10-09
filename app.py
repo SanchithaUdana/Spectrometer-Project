@@ -335,7 +335,7 @@ def plot_data2():
         return jsonify({'figure': frozen_graph02, 'config': config})
 
     # Get real-time data from Arduino
-    darkData = arduino.read_data_from_arduino()
+    darkData = darkArduino.read_data_from_arduino()
     referanceData.darkData = darkData
 
     # Generate x and y values from Arduino data
