@@ -2,7 +2,7 @@ import time
 import numpy as np
 import plotly.graph_objs as go
 import serial
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, make_response
 from matplotlib.colors import Normalize
 
 import referanceData
@@ -162,7 +162,7 @@ def recDark():
         # Save the data in darkdata.py file
         save_dark_data_to_py(data)
 
-        return jsonify({'message': 'Dark data saved successfully!'})
+        return make_response('', 204)
     else:
         return jsonify({'message': 'Failed to connect to Arduino'}), 500
     # return render_template('darkReference.html')
@@ -383,8 +383,6 @@ def plot_data():
 def plot_data2():
     # Get real-time data from Arduino
     darkData = arduino.read_data_from_arduino()
-
-    # Save darkData to a Python file
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
