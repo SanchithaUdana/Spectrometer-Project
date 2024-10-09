@@ -340,7 +340,8 @@ def plot_data():
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
 
-    # frozen_graph = fig.to_json()  # Update the last frozen graph
+    frozen_graph = fig.to_json()  # Update the last frozen graph
+
     return jsonify({'figure': fig.to_json(), 'config': config})
 
 
