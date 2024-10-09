@@ -238,17 +238,15 @@ def plot_data():
     data = arduino.read_data_from_arduino()
 
     # Convert the list to NumPy arrays for easier calculations
-    raw = np.array(referanceData.raw)
+    raw = np.array(data)
     white = np.array(referanceData.whiteData)
     dark = np.array(referanceData.darkData)
 
     # Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
     # Small constant to avoid division by zero
     epsilon = 1e-10
-
     denominator = white - dark
     denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
-
     calibrated = (raw - dark) / denominator
 
     # mask the NAN values as 0
@@ -256,28 +254,26 @@ def plot_data():
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
-    x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
+    # x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
 
     norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
-    y = norm(calibrated)
 
     # Create Plotly figure
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=x,
-        y=y,
+        x=np.arange(len(calibrated)),  # x-axis as the index
+        y=norm(calibrated),
         mode='markers',
-        name='Sensor data 1',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
     ))
 
     fig.update_layout(
         xaxis_title="Wavelength (nm)",
         yaxis_title="Reflectance (%)",
-        xaxis=dict(range=[300, 900]),  # x axis
-        yaxis=dict(range=[0, 1]),  # y axis
+        # xaxis=dict(range=[300, 900]),  # x axis
+        # yaxis=dict(range=[0, 1]),  # y axis
         height=320,
-        width=480
+        width=480,
     )
 
     # Custom toolbar configuration

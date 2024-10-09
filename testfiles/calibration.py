@@ -1,60 +1,48 @@
-# Convert the list to NumPy arrays for easier calculations
-raw = np.array(raw)
-white = np.array(whiteData)
-dark = np.array(darkData)
+import referanceData
+import numpy as np
+import plotly.graph_objects as go
 
-# Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
+# Convert the list to NumPy arrays for easier calculations
+raw = np.array(referanceData.raw)
+white = np.array(referanceData.whiteData)
+dark = np.array(referanceData.darkData)
+
 # Small constant to avoid division by zero
 epsilon = 1e-10
 
+# Calculate the denominator and replace zeros with epsilon
 denominator = white - dark
 denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
 
+# Calibrate the data
 calibrated = (raw - dark) / denominator
 
-# mask the NAN values as 0
+# Mask NaN values as 0
 calibrated = np.where(np.isnan(calibrated), 0, calibrated)
 
-print(calibrated)  # or return this array for further processing
+# Create a plot using Plotly
+fig = go.Figure()
 
-# Plot the calibrated values
-plt.figure(figsize=(10, 6))
-plt.plot(calibrated, marker='1', color='b')
-plt.title('Calibrated Values')
-plt.xlabel('Index')
-plt.ylabel('Calibrated Value')
-plt.grid(True)
-plt.show()
+# Add a line trace for the calibrated data
+fig.add_trace(go.Scatter(
+    x=np.arange(len(calibrated)),  # x-axis as the index
+    y=calibrated,                  # y-axis as the calibrated values
+    mode='markers',          # Use lines and markers
+    marker=dict(symbol='cross', color='blue'),  # Marker settings
+    line=dict(color='blue'),
+))
 
-# Invert the raw data
-rawInvert = 1 - raw
-#
-# Plot the calibrated values
-plt.figure(figsize=(10, 6))
-plt.plot(raw, marker='1', color='c')
-plt.title('Calibrated Values')
-plt.xlabel('Index')
-plt.ylabel('Calibrated Value')
-plt.grid(True)
-plt.show()
+# Customize the layout
+fig.update_layout(
+    xaxis_title='Index',
+    yaxis_title='Calibrated Value',
+    showlegend=False,  # No legend is needed for a single plot
+    plot_bgcolor='rgba(0,0,0,0)',  # Make the background transparent
+    xaxis=dict(showgrid=True),
+    yaxis=dict(showgrid=True),
+    width=480,
+    height=320
+)
 
-plt.figure(figsize=(10, 6))
-plt.plot(rawInvert, marker='1', color='c')
-plt.title('Calibrated Values')
-plt.xlabel('Index')
-plt.ylabel('Calibrated Value')
-plt.grid(True)
-plt.show()
-
-# print("raw data")
-# print("raw data")
-# print(len(raw))
-# for i in raw:
-#     print(i, end=',')
-#
-# print("")
-# print("invert data")
-# print("invert data")
-# print(len(rawInvert))
-# for i in rawInvert:
-#     print(i, end=',')
+# Show the plot
+fig.show()
