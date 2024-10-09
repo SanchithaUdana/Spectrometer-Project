@@ -205,12 +205,6 @@ def navigate_to_index():
     return render_template('index.html')
 
 
-# Route for Directories page
-# @app.route('/directories')
-# def directories():
-#     return render_template('directories.html')
-
-
 # Route for Models page
 @app.route('/models')
 def models():
@@ -363,19 +357,6 @@ def plot_data():
 
 @app.route('/plot-data2')
 def plot_data2():
-    global freeze_plot
-    # If the plot is frozen, return the last plot data
-    config = {
-        'displaylogo': False,
-        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
-                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
-                                   'resetScale2d',
-                                   'select2d', 'toggleSpikelines', 'toImage']
-    }
-
-    if freeze_plot:
-        return jsonify({'figure': frozen_graph, 'config': config})
-
     # Get real-time data from Arduino
     darkData = arduino.read_data_from_arduino()
 
@@ -431,19 +412,6 @@ def plot_data2():
 
 @app.route('/plot-data3')
 def plot_data3():
-    global freeze_plot
-    # If the plot is frozen, return the last plot data
-    config = {
-        'displaylogo': False,
-        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
-                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
-                                   'resetScale2d',
-                                   'select2d', 'toggleSpikelines', 'toImage']
-    }
-
-    if freeze_plot:
-        return jsonify({'figure': frozen_graph, 'config': config})
-
     # Get real-time data from Arduino
     whiteData = arduino.read_data_from_arduino()
 
