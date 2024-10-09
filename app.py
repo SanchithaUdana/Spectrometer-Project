@@ -152,6 +152,8 @@ def stopDataDark():
 
 @app.route('/recDark')
 def recDark():
+    data = arduino.read_data_from_arduino()
+    referanceData.darkData[:] = data
     return jsonify({'message': 'Dark Data Saved'})
 
 
@@ -354,10 +356,10 @@ def plot_data():
 #########################
 
 
-def save_dark_data_to_py(darkData):
-    with open('dark_data.py', 'w') as f:
-        # Write darkData as a Python list into the file
-        f.write(f"darkData = {darkData}")
+# def save_dark_data_to_py(darkData):
+#     with open('dark_data.py', 'w') as f:
+#         # Write darkData as a Python list into the file
+#         f.write(f"darkData = {darkData}")
 
 
 @app.route('/plot-data2')
@@ -366,7 +368,6 @@ def plot_data2():
     darkData = arduino.read_data_from_arduino()
 
     # Save darkData to a Python file
-    # save_dark_data_to_py(darkData)
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
