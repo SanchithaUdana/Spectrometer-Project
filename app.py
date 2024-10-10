@@ -66,7 +66,7 @@ class ArduinoConnector:
             self.send_request()  # Send a request to Arduino
 
             # Add a short delay to allow the Arduino time to respond
-            time.sleep(0.1)
+            time.sleep(0.2)
 
             # Try reading the data
             data = self.read_data()
