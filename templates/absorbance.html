@@ -62,7 +62,7 @@
 <script>
     let currentMode = 'pan';
     // Access the flag value in JavaScript
-    let plotUpdateFlag = '{{ flag }}'; // This will be 'True' or 'False' as a string
+    let plotUpdateFlag = '{{ flag1 }}'; // This will be 'True' or 'False' as a string
 
     // Function to start or stop updates based on the flag
     function managePlotUpdates() {
@@ -73,7 +73,7 @@
             $(document).ready(function () {
                 // Function to update the plot with new data from the server
                 function updatePlot() {
-                    $.getJSON('/plot-data', function (response) {
+                    $.getJSON('/plot-data4', function (response) {
                         var plotData = JSON.parse(response.figure); // Extract the figure data
                         var config = response.config; // Extract the config data
 

@@ -86,9 +86,9 @@ class ArduinoConnector:
 arduino = ArduinoConnector()
 
 
-############################
-# Reflectance Plot Routing #
-############################
+#######################################
+# Reflectance Plot Analyzing  Routing #
+#######################################
 
 @app.route('/connect')
 def connect():
@@ -97,7 +97,7 @@ def connect():
     # Attempt to connect to Arduino
     connection_result = arduino.connect_to_arduino()
     flag = 'True'  # Set the flag to False if connection failed
-    return render_template('absorbance.html', flag=flag)
+    return render_template('reflectanceToAnalyze.html', flag=flag)
 
 
 @app.route('/pauseData')
@@ -110,7 +110,7 @@ def pauseData():
 @app.route('/stopData')
 def stopData():
     flag = 'False'
-    return render_template('absorbance.html', flag=flag)
+    return render_template('reflectanceToAnalyze.html', flag=flag)
 
 
 @app.route('/read-data')
@@ -125,9 +125,49 @@ def read_data():
         return jsonify({"error": str(e)}), 500
 
 
+################################
+# Reflectance Raw Plot Routing #
+################################
+
+@app.route('/connectRaw')
+def connectRaw():
+    # global freeze_plot01
+    # freeze_plot01 = False  # Reset the freeze flag when play is pressed
+    # Attempt to connect to Arduino
+    connection_result = arduino.connect_to_arduino()
+    flag1 = 'True'  # Set the flag to False if connection failed
+    return render_template('absorbance.html', flag1=flag1)
+
+
+@app.route('/pauseDataRaw')
+def pauseDataRaw():
+    # global freeze_plot01
+    # freeze_plot01 = True  # Set this flag to True to indicate the plot should be frozen
+    return make_response('', 204)
+
+
+@app.route('/stopDataRaw')
+def stopDataRaw():
+    flag1 = 'False'
+    return render_template('absorbance.html', flag1=flag1)
+
+
+@app.route('/readDataRaw')
+def readDataRaw():
+    if arduino.ser is None:
+        return jsonify({"error": "Arduino not connected"}), 400
+
+    try:
+        data = arduino.read_data_from_arduino()
+        return jsonify({"data": data})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 ###############################
 # Dark Reference Plot Routing #
 ###############################
+
 @app.route('/connectDark')
 def connectDark():
     # global freeze_plot
@@ -286,9 +326,9 @@ def darkReference():
     return render_template('darkReference.html')  # Corrected the spelling
 
 
-@app.route('/calibratePlot')
-def calibratePlot():
-    return render_template('calibratePlot.html')
+@app.route('/reflectanceAnalyzing')
+def reflectanceAnalyzing():
+    return render_template('reflectanceToAnalyze.html')
 
 
 @app.route('/activityLog')
@@ -305,9 +345,9 @@ def logView():
 #                       Plot Routing Start                        #
 ###################################################################
 
-###########################
-#  Reflectance Raw Routes #
-###########################
+###############################
+#  Reflectance Analyze Routes #
+###############################
 
 # freeze_plot = False  # Global flag to manage plot freeze
 # frozen_graph = None
@@ -394,13 +434,6 @@ def plot_data():
 # Dark Reference Routes #
 #########################
 
-
-# def save_dark_data_to_py(darkData):
-#     with open('dark_data.py', 'w') as f:
-#         # Write darkData as a Python list into the file
-#         f.write(f"darkData = {darkData}")
-
-
 @app.route('/plot-data2')
 def plot_data2():
     # Get real-time data from Arduino
@@ -447,12 +480,6 @@ def plot_data2():
 # White Reference Routes #
 #########################
 
-# def save_dark_data_to_py(darkData):
-#     with open('dark_data.py', 'w') as f:
-#         # Write darkData as a Python list into the file
-#         f.write(f"darkData = {darkData}")
-
-
 @app.route('/plot-data3')
 def plot_data3():
     # Get real-time data from Arduino
@@ -498,33 +525,50 @@ def plot_data3():
     return jsonify({'figure': fig.to_json(), 'config': config})
 
 
-# New route for the third plot with different data
+########################
+# Reference Raw Routes #
+########################
+
 @app.route('/plot-data4')
 def plot_data4():
-    # Generate random dataset
-    y = np.random.random(2088)
-    x = np.linspace(300, 900, 100)
+    # Get real-time data from Arduino
+    rawData = arduino.read_data_from_arduino()
+
+    # Generate x and y values from Arduino data
+    # Assuming data corresponds to y-values (intensity) and x-values are indices
+    x = np.linspace(300, 900, len(rawData))  # Simulate wavelength range
+    norm = Normalize(vmin=min(rawData), vmax=max(rawData))
+    y = norm(rawData)
 
     # Create Plotly figure
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=x, y=y, mode='lines+markers', name='Sensor Data 3'))
+    fig.add_trace(go.Scatter(
+        x=x,  # x-axis as the index
+        y=1 - y,
+        mode='markers',
+        marker=dict(size=3)  # Adjust the size (6 is smaller than default)
+    ))
+
     fig.update_layout(
-        xaxis_title="Wavelength nm",
-        yaxis_title="Absorbance ( White & Dark )",
+        xaxis_title="Wavelength (nm)",
+        yaxis_title="Reflectance (%)",
+        xaxis=dict(range=[300, 900]),  # x axis
+        yaxis=dict(range=[0, 1]),  # y axis
         height=320,
-        width=480
+        width=480,
     )
 
     # Custom toolbar configuration
     config = {
         'displaylogo': False,
         'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
-                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d', 'resetScale2d',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
                                    'select2d', 'toggleSpikelines', 'toImage']
     }
 
-    graphJSON = fig.to_json()
-    return jsonify({'figure': graphJSON, 'config': config})
+    # frozen_graph = fig.to_json()  # Update the last frozen graph
+    return jsonify({'figure': fig.to_json(), 'config': config})
 
 
 # New route for the third plot with different data
