@@ -438,6 +438,13 @@ def plot_data():
     calibratedData = np.where(np.isnan(calibrated), 0, calibrated)
     calibratedData = np.abs(calibratedData)
 
+    # Check for max values in the calibrated signal
+    max_calibrated_value = np.max(calibratedData)
+
+    # Normalize calibrated_signal if max value is greater than 1.2 (optional)
+    if max_calibrated_value > 1.2:
+        calibratedData = calibratedData / max_calibrated_value * 1.2
+
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
     # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
