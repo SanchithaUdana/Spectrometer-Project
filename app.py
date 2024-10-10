@@ -151,17 +151,29 @@ def analyze():
         denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
         calibrated = (raw - dark) / denominator
 
-        # mask the NAN values as 0
-        calibratedData = np.where(np.isnan(calibrated), 0, calibrated)
-        # Replace inf values with 0
-        calibratedData = np.where(np.isinf(calibratedData), 0, calibratedData)
-
+        # Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
+        # Small constant to avoid division by zero
+        epsilon = 1e-10
+        denominator = white - dark
         denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
+        calibrated = (raw - dark) / denominator
 
-        calibratedData = np.abs(calibratedData)
+        # mask the NAN values as 0
+        calibrated = np.where(np.isnan(calibrated), 0, calibrated)
+        # Replace 0 in the denominator with a small number
+        denominator[denominator == 0] = epsilon
+        calibrated = (raw - dark) / denominator
+
+        # Replace inf values with 0
+        calibrated = np.where(np.isinf(calibrated), 0, calibrated)
+        # Replace 0 in the denominator with a small number
+        denominator[denominator == 0] = epsilon
+        calibrated = (raw - dark) / denominator
+
+        calibrated = np.abs(calibrated)
 
         # Save the data in calData.py file
-        save_calData_to_py(calibratedData)
+        save_calData_to_py(calibrated)
 
         # check the cal data is empty or not
         if not calData.calData:
