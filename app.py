@@ -156,6 +156,8 @@ def analyze():
         # Replace inf values with 0
         calibratedData = np.where(np.isinf(calibratedData), 0, calibratedData)
 
+        denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
+
         calibratedData = np.abs(calibratedData)
 
         # Save the data in calData.py file
