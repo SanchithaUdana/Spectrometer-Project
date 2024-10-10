@@ -153,7 +153,7 @@ def analyze():
 
         # mask the NAN values as 0
         calibratedData = np.where(np.isnan(calibrated), 0, calibrated)
-        # calibratedData = np.abs(calibratedData)
+        calibratedData = np.abs(calibratedData)
 
         # Save the data in calData.py file
         save_calData_to_py(calibratedData)
