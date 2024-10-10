@@ -436,6 +436,7 @@ def plot_data():
     # Small constant to avoid division by zero
     epsilon = 1e-10
     denominator = white - dark
+
     denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
     calibrated = (raw - dark) / denominator
 
@@ -444,6 +445,8 @@ def plot_data():
 
     # Replace inf values with 0
     calibratedData = np.where(np.isinf(calibratedData), 0, calibratedData)
+
+    denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
 
     calibratedData = np.abs(calibratedData)
 
