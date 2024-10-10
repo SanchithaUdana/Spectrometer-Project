@@ -440,14 +440,14 @@ def plot_data():
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
-    # x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
-
     # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
+
+    x = np.linspace(300, 900, len(raw))  # Simulate wavelength range
 
     # Create Plotly figure
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=np.arange(len(calibratedData)),  # x-axis as the index
+        x=x,  # x-axis as the index
         y=calibratedData,
         mode='markers',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
