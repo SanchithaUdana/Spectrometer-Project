@@ -451,6 +451,8 @@ def plot_data():
     calibrated = np.where(np.isinf(calibrated), 0, calibrated)
     denominator[denominator == 0] = epsilon
 
+    calibrated = np.abs(calibrated)
+
     # Create Plotly figure
     fig = go.Figure()
     fig.add_trace(go.Scatter(
