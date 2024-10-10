@@ -147,7 +147,7 @@ def analyze():
         epsilon = 1e-10
         denominator = white - dark
         denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
-        calibrated = (raw - dark) / denominator
+        calibrated = 100 * ((raw - dark) / denominator)
 
         # mask the NAN values as 0
         calibrated = np.where(np.isnan(calibrated), 0, calibrated)
