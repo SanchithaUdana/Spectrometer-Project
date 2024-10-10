@@ -166,6 +166,7 @@ def analyze():
 
 # Function to save darkData as a Python variable in darkdata.py
 def save_calData_to_py(data):
+    # convert the numpy data array to simple list
     data_list = data.tolist()
     with open('calData.py', 'w') as f:
         f.write(f"calData = {data_list}")
