@@ -1,1 +1,1 @@
-calData = []
+calData = [  0.  inf   1. ...  -0. -inf   0.]

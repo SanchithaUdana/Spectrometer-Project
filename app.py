@@ -166,8 +166,9 @@ def analyze():
 
 # Function to save darkData as a Python variable in darkdata.py
 def save_calData_to_py(data):
+    data_list = data.tolist()
     with open('calData.py', 'w') as f:
-        f.write(f"calData = {data}")
+        f.write(f"calData = {data_list}")
 
 
 ################################
