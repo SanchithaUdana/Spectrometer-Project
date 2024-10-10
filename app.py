@@ -7,6 +7,7 @@ from matplotlib.colors import Normalize
 
 import whitedata
 import darkdata
+import calData
 
 app = Flask(__name__)
 
@@ -125,6 +126,47 @@ def read_data():
         return jsonify({"error": str(e)}), 500
 
 
+###########################
+# Plot Analyzing  Routing #
+###########################
+@app.route('/analyze')
+def recDark():
+    # Connect to the Arduino
+    connection_result = arduino.connect_to_arduino()
+
+    if connection_result:
+        # Read raw data from Arduino
+        data = arduino.read_data_from_arduino()
+
+        raw = np.array(data)
+        white = np.array(whitedata.whiteData)
+        dark = np.array(darkdata.darkData)
+
+        # Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
+        # Small constant to avoid division by zero
+        epsilon = 1e-10
+        denominator = white - dark
+        denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
+        calibrated = (raw - dark) / denominator
+
+        # mask the NAN values as 0
+        calibrated = np.where(np.isnan(calibrated), 0, calibrated)
+
+        # Save the data in calData.py file
+        save_calData_to_py(calibrated)
+
+        return render_template('saveAndModel.html')
+    else:
+        return jsonify({'message': 'Failed to connect to Arduino'}), 500
+    # return render_template('darkReference.html')
+
+
+# Function to save darkData as a Python variable in darkdata.py
+def save_calData_to_py(data):
+    with open('calData.py', 'w') as f:
+        f.write(f"calData = {data}")
+
+
 ################################
 # Reflectance Raw Plot Routing #
 ################################
@@ -198,10 +240,10 @@ def recDark():
 
     if connection_result:
         # Read raw data from Arduino
-        data = arduino.read_data_from_arduino()
+        dataDark = arduino.read_data_from_arduino()
 
         # Save the data in darkdata.py file
-        save_dark_data_to_py(data)
+        save_dark_data_to_py(dataDark)
 
         return render_template('darkReference.html')
     else:
@@ -569,35 +611,6 @@ def plot_data4():
 
     # frozen_graph = fig.to_json()  # Update the last frozen graph
     return jsonify({'figure': fig.to_json(), 'config': config})
-
-
-# New route for the third plot with different data
-@app.route('/plot-data5')
-def plot_data5():
-    # Generate random dataset
-    y = np.random.random(2088)
-    x = np.linspace(300, 900, 100)
-
-    # Create Plotly figure
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name='Sensor Data 3'))
-    fig.update_layout(
-        xaxis_title="Wavelength nm",
-        yaxis_title="Absorbance",
-        height=320,
-        width=480
-    )
-
-    # Custom toolbar configuration
-    config = {
-        'displaylogo': False,
-        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
-                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d', 'resetScale2d',
-                                   'select2d', 'toggleSpikelines', 'toImage']
-    }
-
-    graphJSON = fig.to_json()
-    return jsonify({'figure': graphJSON, 'config': config})
 
 
 ###################

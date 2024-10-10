@@ -3,7 +3,7 @@ from matplotlib.colors import Normalize
 
 import whitedata
 import darkdata
-import rawData
+import calData
 import numpy as np
 
 from whitedata import whiteData
@@ -12,10 +12,10 @@ from whitedata import whiteData
 
 
 # Assume you also have corresponding wavelengths (you can replace this with actual values)
-wavelengths = np.linspace(300, 900, len(rawData.rawData))
+wavelengths = np.linspace(300, 900, len(calData.rawData))
 
 # Convert the lists to numpy arrays for easy manipulation
-S_raw = np.array(rawData.rawData)
+S_raw = np.array(calData.rawData)
 S_white = np.array(whitedata.whiteData)
 S_black = np.array(darkdata.darkData)
 
