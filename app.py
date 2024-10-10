@@ -130,7 +130,7 @@ def read_data():
 # Plot Analyzing  Routing #
 ###########################
 @app.route('/analyze')
-def recDark():
+def analyze():
     # Connect to the Arduino
     connection_result = arduino.connect_to_arduino()
 
