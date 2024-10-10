@@ -438,23 +438,16 @@ def plot_data():
     calibratedData = np.where(np.isnan(calibrated), 0, calibrated)
     calibratedData = np.abs(calibratedData)
 
-    # Check for max values in the calibrated signal
-    max_calibrated_value = np.max(calibratedData)
-
-    # Normalize calibrated_signal if max value is greater than 1.2 (optional)
-    if max_calibrated_value > 1.2:
-        calibratedData = calibratedData / max_calibrated_value * 1.2
-
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
-    # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
+    # x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
 
-    x = np.linspace(300, 900, len(raw))  # Simulate wavelength range
+    # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
 
     # Create Plotly figure
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=x,  # x-axis as the index
+        x=np.arange(len(calibratedData)),  # x-axis as the index
         y=calibratedData,
         mode='markers',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
@@ -463,10 +456,8 @@ def plot_data():
     fig.update_layout(
         xaxis_title="Wavelength (nm)",
         yaxis_title="Reflectance (%)",
-        # xaxis=dict(autorange=True),  # x axis
-        # yaxis=dict(autorange=True),  # y axis
-        xaxis=dict(range=[300, 900]),  # x axis
-        yaxis=dict(range=[0, 1.2]),  # y axis
+        xaxis=dict(autorange=True),  # x axis
+        yaxis=dict(autorange=True),  # y axis
         height=320,
         width=480,
     )
