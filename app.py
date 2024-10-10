@@ -165,7 +165,7 @@ def analyze():
 
         return render_template('saveAndModel.html')
     else:
-        return jsonify({'message': 'Failed to connect to Arduino'}), 500
+        return render_template('reflectanceToAnalyze.html')
     # return render_template('darkReference.html')
 
 
