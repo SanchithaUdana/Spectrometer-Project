@@ -66,7 +66,7 @@ class ArduinoConnector:
             self.send_request()  # Send a request to Arduino
 
             # Add a short delay to allow the Arduino time to respond
-            time.sleep(0.5)
+            time.sleep(0.2)
 
             # Try reading the data
             data = self.read_data()
@@ -164,7 +164,7 @@ def analyze():
         save_calData_to_py(calibrated)
 
         # check the cal data is empty or not
-        if not calData.calData:
+        if len(calData.calData) == 0:
             return render_template('reflectanceToAnalyze.html')
 
         # save the cal data and render the next ui page
