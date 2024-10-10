@@ -84,13 +84,13 @@
 
 
 <div class="settings-bar">
-    <a href="#" id="play-btn" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
+    <a href="/connectDark" id="play-btn" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
     &nbsp;
-    <a href="#" id="pause-btn" class="btn btn-primary"><i class="bi bi-caret-right-square-fill"></i></a>
+    <a href="/pauseDataDark" id="pause-btn" class="btn btn-primary"><i class="bi bi-caret-right-square-fill"></i></a>
     &nbsp;
     <a href="#" id="save-btn" class="btn btn-primary"><i class="bi bi-camera"></i></a>
     &nbsp;
-    <a href="#" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
+    <a href="/stopDataDark" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
     &nbsp;
     <a href="#" id="reset-btn" class="btn btn-info"><i class="bi bi-arrow-counterclockwise"></i></a>
     &nbsp;
@@ -98,20 +98,20 @@
     &nbsp;
     <a href="#" id="zoom-btn" class="btn btn-info"><i class="bi bi-zoom-in"></i></a>
     &nbsp;
-    <a href="#" id="point-btn" class="btn btn-info"><i class="bi bi-bezier2"></i></a>
-    &nbsp;
-    <a href="#" id="rec-btn" class="btn btn-primary">
+    <a href="/recDark" id="rec-btn" class="btn btn-primary">
         REC
     </a>
     &nbsp;
-    <a href="{{ url_for('whiteReference') }}" id="next-btn" class="btn btn-success bi bi-arrow-right-square-fill border-warning">
+    <a href="{{ url_for('whiteReference') }}" id="next-btn"
+       class="btn btn-success bi bi-arrow-right-square-fill border-warning">
     </a>
-
-{#    <a class="btn btn-danger" href="{{ url_for('whiteReference') }}">Next</a>#}
 </div>
 
 <!-- Main content area -->
 <div class="container">
+    <div>
+        <h6>Dark Reference Spectrum</h6>
+    </div>
 
     <div class="chart-container">
         <!-- Plotly chart container -->
@@ -131,76 +131,152 @@
 {# plot customizing script functions #}
 {########################################}
 
+{#<script>#}
+{#    window.onload = function () {#}
+{#        // Automatically trigger the button click when the page loads#}
+{#        const playButton = document.getElementById('play-btn');#}
+{#        if (playButton) {#}
+{#            playButton.click();#}
+{#        }#}
+{#    };#}
+{##}
+{#    function handleButtonClick() {#}
+{#        alert('Play button was clicked!');#}
+{#        // Add your button handling logic here#}
+{#    }#}
+{#</script>#}
+
+
 <script>
     let currentMode = 'pan';
+    // Access the flag value in JavaScript
+    let plotUpdateFlag = '{{ flag2 }}'; // This will be 'True' or 'False' as a string
 
-    $(document).ready(function () {
-        // Fetch the plot data and config from the Flask endpoint
-        $.getJSON('/plot-data2', function (response) {
-            var plotData = JSON.parse(response.figure); // Extract the figure data
-            var config = response.config; // Extract the config data
+    // Function to start or stop updates based on the flag
+    function managePlotUpdates() {
+        if (plotUpdateFlag === 'True') {
 
-            // Extract data and layout from the plotData
-            var data = plotData.data;
-            var layout = plotData.layout;
+            console.log("Starting plot updates...");
 
-            // Modify layout to reduce top margin
-            plotData.layout.margin = {
-                l: 30,  // left margin
-                r: 30,  // right margin
-                b: 130,  // bottom margin
-                t: 5,  // top margin: reduce this value to move closer to the top
-                pad: 0  // padding
-            };
+            $(document).ready(function () {
+                // Function to update the plot with new data from the server
+                function updatePlot() {
+                    $.getJSON('/plot-data2', function (response) {
 
-            // Plot the figure with data, layout, and config
-            Plotly.newPlot('plot2', data, layout, config);
+                        var plotData = JSON.parse(response.figure); // Extract the figure data
+                        var config = response.config; // Extract the config data
 
-            // Custom toolbar button actions
-            $('#zoom-btn').on('click', function () {
-                currentMode = 'zoom';
-                Plotly.relayout('plot2', {'dragmode': 'zoom'});
-            });
 
-            $('#pan-btn').on('click', function () {
-                currentMode = 'pan';
-                Plotly.relayout('plot2', {'dragmode': 'pan'});
-            });
+                        // Extract data and layout from the plotData
+                        var data = plotData.data;
+                        var layout = plotData.layout;
 
-            $('#reset-btn').on('click', function () {
-                Plotly.relayout('plot2', {
-                    'xaxis.autorange': true,
-                    'yaxis.autorange': true
+                        // Modify layout to reduce top margin
+                        plotData.layout.margin = {
+                            l: 30,  // left margin
+                            r: 30,  // right margin
+                            b: 170,  // bottom margin
+                            t: 5,  // top margin: reduce this value to move closer to the top
+                            pad: 0  // padding
+                        };
+
+                        // Update or create the plot
+                        Plotly.react('plot2', data, layout, config); // Use Plotly.react to update the plot efficiently
+                    });
+                }
+
+                // Call updatePlot initially to load the plot
+                updatePlot();
+                // Set an interval to automatically update the plot every 5 seconds (1000 ms)
+                setInterval(updatePlot, 1000);
+
+                // Custom toolbar button actions
+                // Button click event to show the peak value
+                $('#point-btn').on('click', function () {
+                    if (peakValue !== null) {
+                        let peakValueNumber = parseFloat(peakValue);  // Convert to float for precise value
+                        alert(`The peak X-axis value is: ${peakValueNumber}`);
+                    } else {
+                        alert("Peak value has not been calculated yet.");
+                    }
                 });
-            });
 
-            $('#save-btn').on('click', function () {
-                Plotly.downloadImage('plot2', {format: 'png', filename: 'plot_image'});
-            });
+// Custom function to find the index of the peak in the y-axis data
 
-            $('#stop-btn').on('click', function () {
-                {#Plotly.purge('plot'); // Removes the plot_image#}
-            });
 
-            $('#play-btn').on('click', function () {
-                // Custom play button action
-                {#alert("Play button clicked!");#}
-            });
+                $('#zoom-btn').on('click', function () {
+                    currentMode = 'zoom';
+                    Plotly.relayout('plot2', {'dragmode': 'zoom'});
+                });
 
-            $('#pause-btn').on('click', function () {
-                // Custom pause button action
-                {#alert("Pause button clicked!");#}
-            });
 
-            $('#settings-btn').on('click', function () {
-                // Custom settings button action
-            });
+                $('#pan-btn').on('click', function () {
+                    currentMode = 'pan';
+                    Plotly.relayout('plot2', {'dragmode': 'pan'});
+                });
 
-            $('#analyze-btn').on('click', function () {
+                $('#reset-btn').on('click', function () {
+                    Plotly.relayout('plot2', {
+                        'xaxis.autorange': true,
+                        'yaxis.autorange': true
+                    });
+                });
+
+                $('#save-btn').on('click', function () {
+                    Plotly.downloadImage('plot2', {format: 'png', filename: 'plot_image'});
+                });
+
+                $('#stop-btn').on('click', function () {
+                    // Optional stop function implementation
+                });
+
+                $('#play-btn').on('click', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: '/connect',
+                        type: 'GET',
+                        success: function (response) {
+                            console.log('starting data reading...');
+                        },
+                        error: function (xhr) {
+                            console.log('Error starting data');
+                        }
+                    });
+                });
+
+                // Handle the pause button click
+                $('#pause-btn').on('click', function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: '/pauseData',
+                        type: 'GET',
+                        success: function (response) {
+                            console.log('Success pausing data');
+                        },
+                        error: function (xhr) {
+                            console.log('Error pausing data');
+                        }
+                    });
+                });
+
+                $('#settings-btn').on('click', function () {
+                    // Custom settings button action
+                });
+
+                $('#analyze-btn').on('click', function () {
+                    // Custom analyze button action
+                });
 
             });
-        });
-    });
+        } else {
+            // Stop updating the plot
+            console.log("Stopping plot updates...");
+        }
+    }
+
+    managePlotUpdates();
+
 </script>
 
 </body>

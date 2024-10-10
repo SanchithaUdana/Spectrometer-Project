@@ -136,7 +136,7 @@
 
     $(document).ready(function () {
         // Fetch the plot data and config from the Flask endpoint
-        $.getJSON('/plot-data4', function (response) {
+        $.getJSON('/plot-data', function (response) {
             var plotData = JSON.parse(response.figure); // Extract the figure data
             var config = response.config; // Extract the config data
 
