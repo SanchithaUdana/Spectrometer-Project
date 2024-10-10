@@ -153,6 +153,9 @@ def analyze():
 
         # mask the NAN values as 0
         calibratedData = np.where(np.isnan(calibrated), 0, calibrated)
+        # Replace inf values with 0
+        calibratedData = np.where(np.isinf(calibratedData), 0, calibratedData)
+
         calibratedData = np.abs(calibratedData)
 
         # Save the data in calData.py file
@@ -438,6 +441,10 @@ def plot_data():
 
     # mask the NAN values as 0
     calibratedData = np.where(np.isnan(calibrated), 0, calibrated)
+
+    # Replace inf values with 0
+    calibratedData = np.where(np.isinf(calibratedData), 0, calibratedData)
+
     calibratedData = np.abs(calibratedData)
 
     # Generate x and y values from Arduino data
