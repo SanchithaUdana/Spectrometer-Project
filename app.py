@@ -441,31 +441,33 @@ def plot_data():
     # Small constant to avoid division by zero
     epsilon = 1e-10
     denominator = white - dark
-
     denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
     calibrated = (raw - dark) / denominator
 
     # mask the NAN values as 0
-    calibratedData = np.where(np.isnan(calibrated), 0, calibrated)
+    calibrated = np.where(np.isnan(calibrated), 0, calibrated)
+    # Replace 0 in the denominator with a small number
+    denominator[denominator == 0] = epsilon
+    calibrated = (raw - dark) / denominator
 
     # Replace inf values with 0
-    calibratedData = np.where(np.isinf(calibratedData), 0, calibratedData)
+    calibrated = np.where(np.isinf(calibrated), 0, calibrated)
+    # Replace 0 in the denominator with a small number
+    denominator[denominator == 0] = epsilon
+    calibrated = (raw - dark) / denominator
 
-    denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
-
-    calibratedData = np.abs(calibratedData)
+    calibrated = np.abs(calibrated)
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
     # x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
-
     # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
 
     # Create Plotly figure
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=np.arange(len(calibratedData)),  # x-axis as the index
-        y=calibratedData,
+        x=np.arange(len(calibrated)),  # x-axis as the index
+        y=calibrated,
         mode='markers',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
     ))
