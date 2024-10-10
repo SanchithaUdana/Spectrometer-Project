@@ -151,24 +151,12 @@ def analyze():
         denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
         calibrated = (raw - dark) / denominator
 
-        # Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
-        # Small constant to avoid division by zero
-        epsilon = 1e-10
-        denominator = white - dark
-        denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
-        calibrated = (raw - dark) / denominator
-
         # mask the NAN values as 0
         calibrated = np.where(np.isnan(calibrated), 0, calibrated)
-        # Replace 0 in the denominator with a small number
         denominator[denominator == 0] = epsilon
-        calibrated = (raw - dark) / denominator
-
         # Replace inf values with 0
         calibrated = np.where(np.isinf(calibrated), 0, calibrated)
-        # Replace 0 in the denominator with a small number
         denominator[denominator == 0] = epsilon
-        calibrated = (raw - dark) / denominator
 
         calibrated = np.abs(calibrated)
 
@@ -458,22 +446,10 @@ def plot_data():
 
     # mask the NAN values as 0
     calibrated = np.where(np.isnan(calibrated), 0, calibrated)
-    # Replace 0 in the denominator with a small number
     denominator[denominator == 0] = epsilon
-    calibrated = (raw - dark) / denominator
-
     # Replace inf values with 0
     calibrated = np.where(np.isinf(calibrated), 0, calibrated)
-    # Replace 0 in the denominator with a small number
     denominator[denominator == 0] = epsilon
-    calibrated = (raw - dark) / denominator
-
-    calibrated = np.abs(calibrated)
-
-    # Generate x and y values from Arduino data
-    # Assuming data corresponds to y-values (intensity) and x-values are indices
-    # x = np.linspace(300, 900, len(calibrated))  # Simulate wavelength range
-    # norm = Normalize(vmin=min(calibrated), vmax=max(calibrated))
 
     # Create Plotly figure
     fig = go.Figure()
