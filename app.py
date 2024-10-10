@@ -136,8 +136,10 @@ def analyze():
 
     if connection_result:
         # Read raw data from Arduino
+        # Get real-time data from Arduino
         data = arduino.read_data_from_arduino()
 
+        # Convert the list to NumPy arrays for easier calculations
         raw = np.array(data)
         white = np.array(whitedata.whiteData)
         dark = np.array(darkdata.darkData)
@@ -147,13 +149,13 @@ def analyze():
         epsilon = 1e-10
         denominator = white - dark
         denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
-        calibrated = 100 * ((raw - dark) / denominator)
+        calibrated = (raw - dark) / denominator
 
         # mask the NAN values as 0
-        calibrated = np.where(np.isnan(calibrated), 0, calibrated)
+        calibratedData = np.where(np.isnan(calibrated), 0, calibrated)
 
         # Save the data in calData.py file
-        save_calData_to_py(calibrated)
+        save_calData_to_py(calibratedData)
 
         return render_template('saveAndModel.html')
     else:
@@ -429,10 +431,10 @@ def plot_data():
     epsilon = 1e-10
     denominator = white - dark
     denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
-    calibrated = 100 * ((raw - dark) / denominator)
+    calibrated = (raw - dark) / denominator
 
     # mask the NAN values as 0
-    calibrated = np.where(np.isnan(calibrated), 0, calibrated)
+    calibratedData = np.where(np.isnan(calibrated), 0, calibrated)
 
     # Generate x and y values from Arduino data
     # Assuming data corresponds to y-values (intensity) and x-values are indices
@@ -443,8 +445,8 @@ def plot_data():
     # Create Plotly figure
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=np.arange(len(calibrated)),  # x-axis as the index
-        y=calibrated,
+        x=np.arange(len(calibratedData)),  # x-axis as the index
+        y=calibratedData,
         mode='markers',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
     ))
@@ -500,7 +502,7 @@ def plot_data2():
         xaxis_title="Wavelength (nm)",
         yaxis_title="Reflectance (%)",
         xaxis=dict(range=[300, 900]),  # x axis
-        yaxis=dict(range=[0, 1]),  # y axis
+        yaxis=dict(range=[0, 1.2]),  # y axis
         height=320,
         width=480,
     )
@@ -549,7 +551,7 @@ def plot_data3():
         xaxis_title="Wavelength (nm)",
         yaxis_title="Reflectance (%)",
         xaxis=dict(range=[300, 900]),  # x axis
-        yaxis=dict(range=[0, 1]),  # y axis
+        yaxis=dict(range=[0, 1.2]),  # y axis
         height=320,
         width=480,
     )
@@ -595,7 +597,7 @@ def plot_data4():
         xaxis_title="Wavelength (nm)",
         yaxis_title="Reflectance (%)",
         xaxis=dict(range=[300, 900]),  # x axis
-        yaxis=dict(range=[0, 1]),  # y axis
+        yaxis=dict(range=[0, 1.2]),  # y axis
         height=320,
         width=480,
     )
