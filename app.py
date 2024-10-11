@@ -131,51 +131,55 @@ def read_data():
 ###########################
 @app.route('/analyze')
 def analyze():
-    return render_template('saveAndModel.html')
+    # return render_template('saveAndModel.html')
 
-    # # Connect to the Arduino
-    # connection_result = arduino.connect_to_arduino()
-    #
-    # if connection_result:
-    #     # Read raw data from Arduino
-    #     # Get real-time data from Arduino
-    #     data = arduino.read_data_from_arduino()
-    #
-    #     # Convert the list to NumPy arrays for easier calculations
-    #     raw = np.array(data)
-    #     white = np.array(whitedata.whiteData)
-    #     dark = np.array(darkdata.darkData)
-    #
-    #     # Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
-    #     # Small constant to avoid division by zero
-    #     epsilon = 1e-10
-    #     denominator = white - dark
-    #     denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
-    #     calibrated = (raw - dark) / denominator
-    #
-    #     # mask the NAN values as 0
-    #     calibrated = np.where(np.isnan(calibrated), 0, calibrated)
-    #     denominator[denominator == 0] = epsilon
-    #     # Replace inf values with 0
-    #     calibrated = np.where(np.isinf(calibrated), 0, calibrated)
-    #     denominator[denominator == 0] = epsilon
-    #
-    #     calibrated = np.abs(calibrated)
-    #
-    #     # Save the data in calData.py file
-    #     save_calData_to_py(calibrated)
-    #
-    #     # check the cal data is empty or not
-    #     if len(calData.calData) < 2088:
-    #         return render_template('reflectanceToAnalyze.html')
-    #
-    #     # save the cal data and render the next ui page
-    #     return render_template('saveAndModel.html')
-    # else:
-    #     return jsonify('Could not connect to Arduino')
+    # Connect to the Arduino
+    connection_result = arduino.connect_to_arduino()
+
+    if connection_result:
+        # Read raw data from Arduino
+        # Get real-time data from Arduino
+        data = arduino.read_data_from_arduino()
+
+        # Convert the list to NumPy arrays for easier calculations
+        raw = np.array(data)
+        white = np.array(whitedata.whiteData)
+        dark = np.array(darkdata.darkData)
+
+        # Ensure that all arrays have the same shape
+        if raw.shape != white.shape or raw.shape != dark.shape:
+            return jsonify("Error: Data arrays have incompatible shapes"), 400
+
+        # Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
+        # Small constant to avoid division by zero
+        epsilon = 1e-10
+        denominator = white - dark
+        denominator[denominator == 0] = epsilon  # Replace 0 in the denominator with a small number
+        calibrated = (raw - dark) / denominator
+
+        # mask the NAN values as 0
+        calibrated = np.where(np.isnan(calibrated), 0, calibrated)
+        denominator[denominator == 0] = epsilon
+        # Replace inf values with 0
+        calibrated = np.where(np.isinf(calibrated), 0, calibrated)
+        denominator[denominator == 0] = epsilon
+
+        calibrated = np.abs(calibrated)
+
+        # Save the data in calData.py file
+        save_calData_to_py(calibrated)
+
+        # check the cal data is empty or not
+        if len(calData.calData) < 2088:
+            return render_template('reflectanceToAnalyze.html')
+
+        # save the cal data and render the next ui page
+        return render_template('saveAndModel.html')
+    else:
+        return jsonify('Could not connect to Arduino')
 
 
-# Function to save darkData as a Python variable in calData.py
+# Function to save calData as a Python variable in calData.py
 def save_calData_to_py(data):
     # convert the numpy data array to simple list
     data_list = data.tolist()
@@ -257,6 +261,9 @@ def recDark():
     if connection_result:
         # Read raw data from Arduino
         dataDark = arduino.read_data_from_arduino()
+
+        if len(dataDark) < 2088:
+            return render_template('darkReference.html')
 
         # Save the data in darkdata.py file
         save_dark_data_to_py(dataDark)
