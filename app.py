@@ -146,9 +146,8 @@ def analyze():
         white = np.array(whitedata.whiteData)
         dark = np.array(darkdata.darkData)
 
-        # Ensure that all arrays have the same shape
-        if raw.shape != white.shape or raw.shape != dark.shape:
-            return jsonify("Error: Data arrays have incompatible shapes"), 400
+        if len(raw) < 2088:
+            return render_template('errorPages/errorReflectanceToAnalyze.html')
 
         # Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
         # Small constant to avoid division by zero
@@ -171,10 +170,6 @@ def analyze():
 
         # Save the data in calData.py file
         save_calData_to_py(calibrated)
-
-        # check the cal data is empty or not
-        if len(calData.calData) < 2088:
-            return render_template('errorPages/errorReflectanceToAnalyze.html')
 
         # save the cal data and render the next ui page
         return render_template('saveAndModel.html')
