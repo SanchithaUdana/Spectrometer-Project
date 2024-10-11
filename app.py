@@ -166,12 +166,15 @@ def analyze():
 
         calibrated = np.abs(calibrated)
 
+        if len(calibrated) < 2088:
+            return render_template('errorPages/errorReflectanceToAnalyze.html')
+
         # Save the data in calData.py file
         save_calData_to_py(calibrated)
 
         # check the cal data is empty or not
         if len(calData.calData) < 2088:
-            return render_template('reflectanceToAnalyze.html')
+            return render_template('errorPages/errorReflectanceToAnalyze.html')
 
         # save the cal data and render the next ui page
         return render_template('saveAndModel.html')
