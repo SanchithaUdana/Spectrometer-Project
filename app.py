@@ -140,7 +140,8 @@ def analyze():
         # Read raw data from Arduino
         # Get real-time data from Arduino
         data = arduino.read_data_from_arduino()
-
+        time.sleep(2)
+        
         # Convert the list to NumPy arrays for easier calculations
         raw = np.array(data)
         white = np.array(whitedata.whiteData)
