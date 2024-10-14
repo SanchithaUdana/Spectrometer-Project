@@ -171,10 +171,25 @@ def analyze():
         # Save the data in calData.py file
         save_calData_to_py(calibrated)
 
-        # save the cal data and render the next ui page
-        return render_template('saveAndModel.html')
+        if len(calibrated) < 2088:
+            return render_template('errorPages/errorReflectanceToAnalyze.html')
+
+        js_code1 = """
+                                    <script>
+                                        alert('Data Saved !');
+                                        window.location.href = '/darkReference';
+                                    </script>
+                                    """
+        return Response(js_code1, mimetype='text/html')
+
     else:
-        return jsonify('Could not connect to Arduino')
+        js_code = """
+                            <script>
+                                alert('Arduino Not Connected !');
+                                window.location.href = '/darkReference';
+                            </script>
+                            """
+        return Response(js_code, mimetype='text/html')
 
 
 # Function to save calData as a Python variable in calData.py
@@ -268,8 +283,6 @@ def recDark():
 
         if len(dataDark) < 2088:
             return render_template('errorPages/errorDarkReference.html')
-
-        # return render_template('darkReference.html')
 
         js_code = """
                     <script>
@@ -429,6 +442,11 @@ def toAnalyze():
 @app.route('/darkViewPlot')
 def darkViewPlot():
     return render_template('view/viewDarkReference.html')
+
+
+@app.route('/analyzeGo')
+def analyzeGo():
+    return render_template('saveAndModel.html')
 
 
 ###################################################################
