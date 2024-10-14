@@ -274,6 +274,7 @@ def recDark():
         js_code = """
                     <script>
                         alert('Dark reference Data Successfully Saved ! ');
+                        window.location.href = '/darkReference.html';
                     </script>
                     """
         return Response(js_code, mimetype='text/html')
@@ -282,7 +283,7 @@ def recDark():
         js_code = """
             <script>
                 alert('Arduino is Not Connected ?');
-                window.location.href = '/darkReference.html';
+                window.location.href = '/index.html';
             </script>
             """
         return Response(js_code, mimetype='text/html')
