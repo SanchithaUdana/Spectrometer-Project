@@ -2,7 +2,7 @@ import time
 import numpy as np
 import plotly.graph_objs as go
 import serial
-from flask import Flask, render_template, jsonify, make_response
+from flask import Flask, render_template, jsonify, make_response, Response
 from matplotlib.colors import Normalize
 
 import whitedata
@@ -261,14 +261,30 @@ def recDark():
         dataDark = arduino.read_data_from_arduino()
 
         if len(dataDark) < 2088:
-            return render_template('darkReference.html')
+            return render_template('errorPages/errorDarkReference.html')
 
         # Save the data in darkdata.py file
         save_dark_data_to_py(dataDark)
 
-        return render_template('darkReference.html')
+        if len(dataDark) < 2088:
+            return render_template('errorPages/errorDarkReference.html')
+
+        # return render_template('darkReference.html')
+
+        js_code = """
+                    <script>
+                        alert('Dark reference Data Successfully Saved ! ');
+                    </script>
+                    """
+        return Response(js_code, mimetype='text/html')
+
     else:
-        return jsonify({'message': 'Failed to connect to Arduino'}), 500
+        js_code = """
+            <script>
+                alert('Arduino is Not Connected ?');
+            </script>
+            """
+        return Response(js_code, mimetype='text/html')
 
 
 # Function to save darkData as a Python variable in darkdata.py
