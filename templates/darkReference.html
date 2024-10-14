@@ -86,7 +86,7 @@
 <div class="settings-bar">
     <a href="/connectDark" id="play-btn" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
     &nbsp;
-    <a href="/pauseDataDark" id="pause-btn" class="btn btn-primary"><i class="bi bi-caret-right-square-fill"></i></a>
+    <a href="/darkViewPlot" id="pause-btn" class="btn btn-primary"><i class="bi bi-eye"></i></a>
     &nbsp;
     <a href="#" id="save-btn" class="btn btn-primary"><i class="bi bi-camera"></i></a>
     &nbsp;
@@ -130,22 +130,6 @@
 {########################################}
 {# plot customizing script functions #}
 {########################################}
-
-{#<script>#}
-{#    window.onload = function () {#}
-{#        // Automatically trigger the button click when the page loads#}
-{#        const playButton = document.getElementById('play-btn');#}
-{#        if (playButton) {#}
-{#            playButton.click();#}
-{#        }#}
-{#    };#}
-{##}
-{#    function handleButtonClick() {#}
-{#        alert('Play button was clicked!');#}
-{#        // Add your button handling logic here#}
-{#    }#}
-{#</script>#}
-
 
 <script>
     let currentMode = 'pan';
@@ -192,17 +176,6 @@
 
                 // Custom toolbar button actions
                 // Button click event to show the peak value
-                $('#point-btn').on('click', function () {
-                    if (peakValue !== null) {
-                        let peakValueNumber = parseFloat(peakValue);  // Convert to float for precise value
-                        alert(`The peak X-axis value is: ${peakValueNumber}`);
-                    } else {
-                        alert("Peak value has not been calculated yet.");
-                    }
-                });
-
-// Custom function to find the index of the peak in the y-axis data
-
 
                 $('#zoom-btn').on('click', function () {
                     currentMode = 'zoom';

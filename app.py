@@ -424,6 +424,11 @@ def toAnalyze():
     return render_template('reflectanceToAnalyze.html')
 
 
+@app.route('/darkViewPlot')
+def darkViewPlot():
+    return render_template('view/viewDarkReference.html')
+
+
 ###################################################################
 #                       Plot Routing Start                        #
 ###################################################################
@@ -622,6 +627,52 @@ def plot_data4():
     x = np.linspace(300, 900, len(rawData))  # Simulate wavelength range
     norm = Normalize(vmin=min(rawData), vmax=max(rawData))
     y = norm(rawData)
+
+    # Create Plotly figure
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=x,  # x-axis as the index
+        y=1 - y,
+        mode='markers',
+        marker=dict(size=3)  # Adjust the size (6 is smaller than default)
+    ))
+
+    fig.update_layout(
+        xaxis_title="Wavelength (nm)",
+        yaxis_title="Reflectance (%)",
+        xaxis=dict(range=[300, 900]),  # x axis
+        yaxis=dict(range=[0, 1.2]),  # y axis
+        height=320,
+        width=480,
+    )
+
+    # Custom toolbar configuration
+    config = {
+        'displaylogo': False,
+        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
+                                   'select2d', 'toggleSpikelines', 'toImage']
+    }
+
+    # frozen_graph = fig.to_json()  # Update the last frozen graph
+    return jsonify({'figure': fig.to_json(), 'config': config})
+
+
+#########################
+# Dark Data Plot View   #
+#########################
+
+@app.route('/darkDataView')
+def darkDataView():
+    # Get real-time data from Arduino
+    darkData = darkdata.darkData
+
+    # Generate x and y values from Arduino data
+    # Assuming data corresponds to y-values (intensity) and x-values are indices
+    x = np.linspace(300, 900, len(darkData))  # Simulate wavelength range
+    norm = Normalize(vmin=min(darkData), vmax=max(darkData))
+    y = norm(darkData)
 
     # Create Plotly figure
     fig = go.Figure()
