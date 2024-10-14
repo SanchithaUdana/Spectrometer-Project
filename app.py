@@ -282,6 +282,7 @@ def recDark():
         js_code = """
             <script>
                 alert('Arduino is Not Connected ?');
+                window.location.href = '/darkReference';
             </script>
             """
         return Response(js_code, mimetype='text/html')
