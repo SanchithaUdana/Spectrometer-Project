@@ -177,7 +177,7 @@ def analyze():
         js_code1 = """
                                     <script>
                                         alert('Data Saved !');
-                                        window.location.href = '/darkReference';
+                                        window.location.href = '/reflectanceAnalyzing';
                                     </script>
                                     """
         return Response(js_code1, mimetype='text/html')
@@ -186,7 +186,7 @@ def analyze():
         js_code = """
                             <script>
                                 alert('Arduino Not Connected !');
-                                window.location.href = '/darkReference';
+                                window.location.href = '/reflectanceAnalyzing';
                             </script>
                             """
         return Response(js_code, mimetype='text/html')
