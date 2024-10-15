@@ -8,6 +8,7 @@ from matplotlib.colors import Normalize
 import whitedata
 import darkdata
 import calData
+import rawData
 
 app = Flask(__name__)
 
@@ -147,7 +148,13 @@ def analyze():
         dark = np.array(darkdata.darkData)
 
         if len(raw) < 2088:
-            return render_template('errorPages/errorReflectanceToAnalyze.html')
+            js_code = """
+                                            <script>
+                                                alert('Full Data Not Captured. Try Again ! ');
+                                                window.location.href = '/reflectanceAnalyzing';
+                                            </script>
+                                            """
+            return Response(js_code, mimetype='text/html')
 
         # Avoid division by zero by adding a very small number (epsilon) where the denominator is zero
         # Small constant to avoid division by zero
@@ -166,13 +173,25 @@ def analyze():
         calibrated = np.abs(calibrated)
 
         if len(calibrated) < 2088:
-            return render_template('errorPages/errorReflectanceToAnalyze.html')
+            js_code = """
+                                                        <script>
+                                                            alert('Full Data Not Captured. Try Again ! ');
+                                                            window.location.href = '/reflectanceAnalyzing';
+                                                        </script>
+                                                        """
+            return Response(js_code, mimetype='text/html')
 
         # Save the data in calData.py file
         save_calData_to_py(calibrated)
 
-        if len(calibrated) < 2088:
-            return render_template('errorPages/errorReflectanceToAnalyze.html')
+        if len(calData.calData) < 2088:
+            js_code = """
+                                                        <script>
+                                                            alert('Full Data Not Captured. Try Again ! ');
+                                                            window.location.href = '/reflectanceAnalyzing';
+                                                        </script>
+                                                        """
+            return Response(js_code, mimetype='text/html')
 
         js_code1 = """
                                     <script>
@@ -239,6 +258,60 @@ def readDataRaw():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/recRaw')
+def recRaw():
+    # Connect to the Arduino
+    connection_result = arduino.connect_to_arduino()
+
+    if connection_result:
+        # Read raw data from Arduino
+        Data = arduino.read_data_from_arduino()
+
+        if len(Data) < 2088:
+            js_code = """
+                                <script>
+                                    alert('Full Data Not Captured. Try Again ! ');
+                                    window.location.href = '/absorbance';
+                                </script>
+                                """
+            return Response(js_code, mimetype='text/html')
+
+        # Save the data in rawData.py file
+        save_raw_data_to_py(Data)
+
+        if len(darkdata.darkData) < 2088:
+            js_code = """
+                        <script>
+                            alert('Full Data Not Captured. Try Again ! ');
+                            window.location.href = '/absorbance';
+                                            </script>
+                                            """
+            return Response(js_code, mimetype='text/html')
+
+        js_code = """
+                    <script>
+                        alert('Raw Data Successfully Saved ! ');
+                        window.location.href = '/absorbance';
+                    </script>
+                    """
+        return Response(js_code, mimetype='text/html')
+
+    else:
+        js_code = """
+            <script>
+                alert('Arduino is Not Connected ?');
+                window.location.href = '/navigate_to_index';
+            </script>
+            """
+        return Response(js_code, mimetype='text/html')
+
+
+# Function to save darkData as a Python variable in rawData.py
+def save_raw_data_to_py(data):
+    with open('rawData.py', 'w') as f:
+        f.write(f"rawData = {data}")
+
+
 ###############################
 # Dark Reference Plot Routing #
 ###############################
@@ -276,13 +349,25 @@ def recDark():
         dataDark = arduino.read_data_from_arduino()
 
         if len(dataDark) < 2088:
-            return render_template('errorPages/errorDarkReference.html')
+            js_codeDark = """
+                                    <script>
+                                        alert('Full Data Not Captured. Try Again ! ');
+                                        window.location.href = '/darkReference';
+                                    </script>
+                                    """
+            return Response(js_codeDark, mimetype='text/html')
 
         # Save the data in darkdata.py file
         save_dark_data_to_py(dataDark)
 
         if len(dataDark) < 2088:
-            return render_template('errorPages/errorDarkReference.html')
+            js_codeDark = """
+                                                <script>
+                                                    alert('Full Data Not Captured. Try Again ! ');
+                                                    window.location.href = '/darkReference';
+                                                </script>
+                                                """
+            return Response(js_codeDark, mimetype='text/html')
 
         js_code = """
                     <script>
@@ -360,9 +445,8 @@ def save_white_data_to_py(data):
 
 
 #############################################
-#  DB Connection (if needed in the future)  #
+#  Main User Interfaces Routing Area        #
 #############################################
-
 
 ################
 #  UI Routing  #
@@ -447,6 +531,16 @@ def darkViewPlot():
 @app.route('/analyzeGo')
 def analyzeGo():
     return render_template('saveAndModel.html')
+
+
+@app.route('/rawGo')
+def rawGo():
+    return render_template('view/viewRawData.html')
+
+
+@app.route('/viewCal')
+def viewCal():
+    return render_template('view/viewCalData.html')
 
 
 ###################################################################
@@ -699,6 +793,98 @@ def darkDataView():
     fig.add_trace(go.Scatter(
         x=x,  # x-axis as the index
         y=1 - y,
+        mode='markers',
+        marker=dict(size=3)  # Adjust the size (6 is smaller than default)
+    ))
+
+    fig.update_layout(
+        xaxis_title="Wavelength (nm)",
+        yaxis_title="Reflectance (%)",
+        xaxis=dict(range=[300, 900]),  # x axis
+        yaxis=dict(range=[0, 1.2]),  # y axis
+        height=320,
+        width=480,
+    )
+
+    # Custom toolbar configuration
+    config = {
+        'displaylogo': False,
+        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
+                                   'select2d', 'toggleSpikelines', 'toImage']
+    }
+
+    # frozen_graph = fig.to_json()  # Update the last frozen graph
+    return jsonify({'figure': fig.to_json(), 'config': config})
+
+
+#########################
+# Raw Data Plot View   #
+#########################
+
+@app.route('/rawDataView')
+def rawDataView():
+    # Get real-time data from Arduino
+    Data = rawData.rawData
+
+    # Generate x and y values from Arduino data
+    # Assuming data corresponds to y-values (intensity) and x-values are indices
+    x = np.linspace(300, 900, len(Data))  # Simulate wavelength range
+    norm = Normalize(vmin=min(Data), vmax=max(Data))
+    y = norm(Data)
+
+    # Create Plotly figure
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=x,  # x-axis as the index
+        y=1 - y,
+        mode='markers',
+        marker=dict(size=3)  # Adjust the size (6 is smaller than default)
+    ))
+
+    fig.update_layout(
+        xaxis_title="Wavelength (nm)",
+        yaxis_title="Reflectance (%)",
+        xaxis=dict(range=[300, 900]),  # x axis
+        yaxis=dict(range=[0, 1.2]),  # y axis
+        height=320,
+        width=480,
+    )
+
+    # Custom toolbar configuration
+    config = {
+        'displaylogo': False,
+        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
+                                   'select2d', 'toggleSpikelines', 'toImage']
+    }
+
+    # frozen_graph = fig.to_json()  # Update the last frozen graph
+    return jsonify({'figure': fig.to_json(), 'config': config})
+
+
+#########################
+# Raw Data Plot View   #
+#########################
+
+@app.route('/calDataView')
+def calDataView():
+    # Get real-time data from Arduino
+    Data = calData.calData
+
+    # Generate x and y values from Arduino data
+    # Assuming data corresponds to y-values (intensity) and x-values are indices
+    x = np.linspace(300, 900, len(Data))  # Simulate wavelength range
+    norm = Normalize(vmin=min(Data), vmax=max(Data))
+    y = norm(Data)
+
+    # Create Plotly figure
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=x,  # x-axis as the index
+        y=y,
         mode='markers',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
     ))

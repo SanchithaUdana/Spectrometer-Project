@@ -81,6 +81,14 @@
     </div>
 </div>
 
+<script>
+    // Event listener for the confirm button inside the Reboot modal
+    document.getElementById('rebootModal').addEventListener('click', function () {
+        // Redirect to the splash page
+        window.location.href = "{{ url_for('navigate_to_index') }}";
+    });
+</script>
+
 {#splash section#}
 <!-- Bootstrap Modal -->
 <div class="modal fade" id="splashModal" tabindex="-1" aria-labelledby="splashModalLabel" aria-hidden="true">

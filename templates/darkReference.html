@@ -86,24 +86,20 @@
 <div class="settings-bar">
     <a href="/connectDark" id="play-btn" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
     &nbsp;
-    <a href="/darkViewPlot" id="pause-btn" class="btn btn-primary"><i class="bi bi-eye"></i></a>
+    <a href="/stopDataDark" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
     &nbsp;
     <a href="#" id="save-btn" class="btn btn-primary"><i class="bi bi-camera"></i></a>
     &nbsp;
-    <a href="/stopDataDark" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
-    &nbsp;
-    <a href="#" id="reset-btn" class="btn btn-info"><i class="bi bi-arrow-counterclockwise"></i></a>
-    &nbsp;
-    <a href="#" id="pan-btn" class="btn btn-info"><i class="bi bi-arrows-move"></i></a>
-    &nbsp;
-    <a href="#" id="zoom-btn" class="btn btn-info"><i class="bi bi-zoom-in"></i></a>
-    &nbsp;
-    <a href="/recDark" id="rec-btn" class="btn btn-primary">
-        REC
+    <a href="/recDark" id="rec-btn" class="btn btn-secondary bi bi-save">
+        &nbsp;Record
     </a>
     &nbsp;
+    <a href="/darkViewPlot" id="pause-btn" class="btn btn-primary"><i class="bi bi-eye">
+
+    </i>&nbsp;View</a>
+    &nbsp;
     <a href="{{ url_for('whiteReference') }}" id="next-btn"
-       class="btn btn-success bi bi-arrow-right-square-fill border-warning">
+       class="btn btn-success bi bi-arrow-right-square-fill border-warning">&nbsp;Next
     </a>
 </div>
 

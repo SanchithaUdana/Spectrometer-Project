@@ -48,21 +48,18 @@
 <div class="settings-bar">
     <a href="/connectRaw" id="play-btn" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
     &nbsp;
-    <a href="/pauseDataRaw" id="pause-btn" class="btn btn-primary"><i
-            class="bi bi-caret-right-square-fill"></i></a>
+    <a href="/stopDataRaw" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
     &nbsp;
     <a href="#" id="save-btn" class="btn btn-primary"><i class="bi bi-camera"></i></a>
     &nbsp;
-    <a href="/stopDataRaw" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
+    <a href="/recRaw" id="pause-btn" class="btn btn-secondary"><i
+            class="bi bi-save"></i>&nbsp;Record</a>
+    &nbsp;
+    <a href="/rawGo" id="pause-btn" class="btn btn-primary"><i
+            class="bi bi-eye"></i>&nbsp; View</a>
     &nbsp;
     <a href="{{ url_for('absorbanceParameters') }}" id="settings-btn" class="btn btn-success"><i
-            class="bi bi-sliders">&nbsp; Parameters</i></a>
-    &nbsp;&nbsp;
-    <a href="#" id="reset-btn" class="btn btn-info"><i class="bi bi-arrow-counterclockwise"></i></a>
+            class="bi bi-sliders"></i>&nbsp; Parameters</a>
     &nbsp;
-    <a href="#" id="pan-btn" class="btn btn-info"><i class="bi bi-arrows-move"></i></a>
-    &nbsp;
-    <a href="#" id="zoom-btn" class="btn btn-info"><i class="bi bi-zoom-in"></i></a>
-    &nbsp;
-{#    <a href="#" id="analyze-btn" class="btn btn-primary analyze-btn">Analyze</a>#}
+    {#    <a href="#" id="analyze-btn" class="btn btn-primary analyze-btn">Analyze</a>#}
 </div>
