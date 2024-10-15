@@ -14,11 +14,30 @@
 
     </div>
 
+{#    <style>#}
+{#        .hidden {#}
+{#            display: none;#}
+{#        }#}
+{#    </style>#}
+
     <!-- system status -->
     <div class="status-bar-icons">
-        <i class="icon-gray"></i>
-
+        <i id="my-icon" class="icon-blue"></i>
     </div>
+
+{#    <script>#}
+{#    // Automatically triggers toggleIcon after 3 seconds (3000 ms)#}
+{#    setTimeout(toggleIcon, 500);#}
+{##}
+{#    function toggleIcon() {#}
+{#        var icon = document.getElementById('my-icon');#}
+{#        if (icon.classList.contains('hidden')) {#}
+{#            icon.classList.remove('hidden');#}
+{#        } else {#}
+{#            icon.classList.add('hidden');#}
+{#        }#}
+{#    }#}
+{#</script>#}
 
     <!-- Wifi Connectivity -->
     <div class="status-bar-info">
@@ -26,10 +45,10 @@
         <span id="status-time">Loading ...</span>
     </div>
 
-{#    <div>#}
-{#        <a class="btn btn-danger bi bi-bootstrap-reboot" style="height: 30px" href="#" data-bs-toggle="modal"#}
-{#           data-bs-target="#splashModal"></a> <!-- Open modal -->#}
-{#    </div>#}
+    {#    <div>#}
+    {#        <a class="btn btn-danger bi bi-bootstrap-reboot" style="height: 30px" href="#" data-bs-toggle="modal"#}
+    {#           data-bs-target="#splashModal"></a> <!-- Open modal -->#}
+    {#    </div>#}
 
 </div>
 
