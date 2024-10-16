@@ -429,16 +429,45 @@ def recWhite():
         # Read raw data from Arduino
         data = arduino.read_data_from_arduino()
 
+        if len(data) < 2088:
+            js_codeDark = """
+                                    <script>
+                                        alert('Full Data Not Captured. Try Again ! ');
+                                        window.location.href = '/whiteReference';
+                                    </script>
+                                    """
+            return Response(js_codeDark, mimetype='text/html')
+
         # Save the data in whiteData.py file
         save_white_data_to_py(data)
 
-        return render_template('whiteReferance.html')
+        if len(whitedata.whiteData) < 2088:
+            js_codeDark = """
+                                    <script>
+                                        alert('Full Data Not Captured. Try Again ! ');
+                                        window.location.href = '/whiteReference';
+                                    </script>
+                                    """
+            return Response(js_codeDark, mimetype='text/html')
+
+        js_code = """
+                            <script>
+                                alert('White reference Data Successfully Saved ! ');
+                                window.location.href = '/whiteReference';
+                            </script>
+                            """
+        return Response(js_code, mimetype='text/html')
     else:
-        return jsonify({'message': 'Failed to connect to Arduino'}), 500
-    # return render_template('darkReference.html')
+        js_code = """
+                    <script>
+                        alert('Arduino is Not Connected ?');
+                        window.location.href = '/navigate_to_index';
+                    </script>
+                    """
+        return Response(js_code, mimetype='text/html')
 
 
-# Function to save darkData as a Python variable in darkdata.py
+# Function to save darkData as a Python variable in whiteData.py
 def save_white_data_to_py(data):
     with open('whitedata.py', 'w') as f:
         f.write(f"whiteData = {data}")
@@ -541,6 +570,11 @@ def rawGo():
 @app.route('/viewCal')
 def viewCal():
     return render_template('view/viewCalData.html')
+
+
+@app.route('/whiteViewPlot')
+def whiteViewPlot():
+    return render_template('view/viewWhiteReference.html')
 
 
 ###################################################################
@@ -885,6 +919,52 @@ def calDataView():
     fig.add_trace(go.Scatter(
         x=x,  # x-axis as the index
         y=y,
+        mode='markers',
+        marker=dict(size=3)  # Adjust the size (6 is smaller than default)
+    ))
+
+    fig.update_layout(
+        xaxis_title="Wavelength (nm)",
+        yaxis_title="Reflectance (%)",
+        xaxis=dict(range=[300, 900]),  # x axis
+        yaxis=dict(range=[0, 1.2]),  # y axis
+        height=320,
+        width=480,
+    )
+
+    # Custom toolbar configuration
+    config = {
+        'displaylogo': False,
+        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
+                                   'select2d', 'toggleSpikelines', 'toImage']
+    }
+
+    # frozen_graph = fig.to_json()  # Update the last frozen graph
+    return jsonify({'figure': fig.to_json(), 'config': config})
+
+
+##########################
+# White Data Plot View   #
+##########################
+
+@app.route('/whiteDataView')
+def whiteDataView():
+    # Get real-time data from Arduino
+    Data = whitedata.whiteData
+
+    # Generate x and y values from Arduino data
+    # Assuming data corresponds to y-values (intensity) and x-values are indices
+    x = np.linspace(300, 900, len(Data))  # Simulate wavelength range
+    norm = Normalize(vmin=min(Data), vmax=max(Data))
+    y = norm(Data)
+
+    # Create Plotly figure
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=x,  # x-axis as the index
+        y=1-y,
         mode='markers',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
     ))

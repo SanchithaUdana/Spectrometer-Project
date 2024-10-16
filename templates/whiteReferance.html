@@ -86,31 +86,25 @@
 <div class="settings-bar">
     <a href="/connectWhite" id="play-btn" class="btn btn-primary"><i class="bi bi-play-fill"></i></a>
     &nbsp;
-    <a href="/pauseDataWhite" id="pause-btn" class="btn btn-primary"><i class="bi bi-caret-right-square-fill"></i></a>
+    <a href="/stopDataWhite" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
     &nbsp;
     <a href="#" id="save-btn" class="btn btn-primary"><i class="bi bi-camera"></i></a>
     &nbsp;
-    <a href="/stopDataWhite" id="stop-btn" class="btn btn-primary"><i class="bi bi-stop-fill"></i></a>
+    <a href="/recWhite" id="rec-btn" class="btn btn-secondary bi bi-save">
+        &nbsp;Record</a>
     &nbsp;
-    <a href="#" id="reset-btn" class="btn btn-info"><i class="bi bi-arrow-counterclockwise"></i></a>
+    <a href="/whiteViewPlot" id="pause-btn" class="btn btn-primary"><i class="bi bi-eye"></i>&nbsp;View</a>
     &nbsp;
-    <a href="#" id="pan-btn" class="btn btn-info"><i class="bi bi-arrows-move"></i></a>
-    &nbsp;
-    <a href="#" id="zoom-btn" class="btn btn-info"><i class="bi bi-zoom-in"></i></a>
-    &nbsp;
-    <a href="/recWhite" id="rec-btn" class="btn btn-primary">
-        REC
-    </a>
-    &nbsp;
+
     <a href="{{ url_for('reflectanceAnalyzing') }}" id="next-btn"
-       class="btn btn-success bi bi-arrow-right-square-fill border-warning">
+       class="btn btn-success bi bi-arrow-right-square-fill border-warning">&nbsp;Next
     </a>
-    {#    <a class="btn btn-danger" href="{{ url_for('whiteReference') }}">Next</a>#}
+
 </div>
 
 <!-- Main content area -->
 <div class="container">
-<div>
+    <div>
         <h6>White Reference Spectrum</h6>
     </div>
     <div class="chart-container">
