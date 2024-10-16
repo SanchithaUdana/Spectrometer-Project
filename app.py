@@ -74,7 +74,7 @@ class ArduinoConnector:
 
             # Check if data is received
             if data:
-                print("Received Data List:", data)
+                # print("Received Data List:", data)
                 print("Length of Data List:", len(data))
                 return data
             else:
