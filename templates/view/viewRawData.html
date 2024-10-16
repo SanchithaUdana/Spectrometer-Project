@@ -204,7 +204,7 @@
     $(document).ready(function () {
         // Function to plot the route data only once
         function plotRoute() {
-            $.getJSON('/darkDataView', function (response) {
+            $.getJSON('/rawDataView', function (response) {
                 var plotData = JSON.parse(response.figure); // Extract the figure data
                 var config = response.config; // Extract the config data
 
