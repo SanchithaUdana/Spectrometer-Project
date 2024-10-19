@@ -2,8 +2,10 @@ import time
 import numpy as np
 import plotly.graph_objs as go
 import serial
-from flask import Flask, render_template, jsonify, make_response, Response
+from flask import Flask, render_template, jsonify, make_response, Response, send_file, request, redirect, url_for
 from matplotlib.colors import Normalize
+import csv
+import os
 
 import whitedata
 import darkdata
@@ -11,6 +13,10 @@ import calData
 import rawData
 
 app = Flask(__name__)
+
+# Create a directory to save the CSV files
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 #######################
@@ -86,6 +92,49 @@ class ArduinoConnector:
 
 
 arduino = ArduinoConnector()
+
+
+#####################
+# Data Save to CSV  #
+#####################
+
+@app.route('/save_csv', methods=['POST'])
+def save_csv():
+    # Save the predefined list to a CSV file
+    csv_file_path = os.path.join(UPLOAD_FOLDER, 'spectrum.csv')
+    with open(csv_file_path, 'w', newline='') as file:
+        writer = csv.writer(file)
+        data_list = calData.calData
+        for item in data_list:
+            writer.writerow([item])
+
+    # Return the CSV file as a download
+    return send_file(csv_file_path, as_attachment=True)
+
+
+# Route to handle file upload and visualization
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return redirect(url_for('index'))
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return redirect(url_for('index'))
+
+    if file and file.filename.endswith('.csv'):
+        # Read the CSV file into a pandas DataFrame
+        df = pd.read_csv(file)
+
+        # Create a Plotly graph (modify based on your data)
+        fig = px.scatter(df, x=df.columns[0], y=df.columns[1], title="CSV Data Visualization")
+
+        # Convert plotly figure to HTML
+        graph_html = pio.to_html(fig, full_html=False)
+
+        # Render the graph in the browser
+        return render_template('index.html', graph_html=graph_html)
 
 
 #######################################
@@ -577,6 +626,11 @@ def whiteViewPlot():
     return render_template('view/viewWhiteReference.html')
 
 
+@app.route('/csvPage')
+def csvPage():
+    return render_template('csvSave.html')
+
+
 ###################################################################
 #                       Plot Routing Start                        #
 ###################################################################
@@ -964,7 +1018,7 @@ def whiteDataView():
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=x,  # x-axis as the index
-        y=1-y,
+        y=1 - y,
         mode='markers',
         marker=dict(size=3)  # Adjust the size (6 is smaller than default)
     ))

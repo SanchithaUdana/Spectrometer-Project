@@ -99,7 +99,7 @@
     &nbsp;
     <a href="/viewCal" id="pause-btn" class="btn btn-info bi bi-eye"><i></i>&nbsp;View</a>
     &nbsp;
-    <a href="/analyzeGo" id="analyze-btn" class="btn btn-primary">Analyze</a>
+    <a href="/analyzeGo" id="analyze-btn" class="btn btn-primary bi bi-arrow-right"> &nbsp;Next</a>
 </div>
 
 <!-- Main content area -->
@@ -168,17 +168,6 @@
                 setInterval(updatePlot, 1000);
 
                 // Custom toolbar button actions
-                // Button click event to show the peak value
-                $('#point-btn').on('click', function () {
-                    if (peakValue !== null) {
-                        let peakValueNumber = parseFloat(peakValue);  // Convert to float for precise value
-                        alert(`The peak X-axis value is: ${peakValueNumber}`);
-                    } else {
-                        alert("Peak value has not been calculated yet.");
-                    }
-                });
-
-// Custom function to find the index of the peak in the y-axis data
 
 
                 $('#zoom-btn').on('click', function () {
