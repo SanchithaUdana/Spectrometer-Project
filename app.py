@@ -11,6 +11,7 @@ import whitedata
 import darkdata
 import calData
 import rawData
+import csvData
 
 app = Flask(__name__)
 
@@ -112,29 +113,42 @@ def save_csv():
     return send_file(csv_file_path, as_attachment=True)
 
 
-# Route to handle file upload and visualization
+#######################
+# Data view from CSV  #
+#######################
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
-        return redirect(url_for('index'))
-
+        return "No file part"
     file = request.files['file']
 
     if file.filename == '':
-        return redirect(url_for('index'))
+        return "No selected file"
 
     if file and file.filename.endswith('.csv'):
-        # Read the CSV file into a pandas DataFrame
-        df = pd.read_csv(file)
+        # Save the file to the uploads folder
+        file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+        file.save(file_path)
 
-        # Create a Plotly graph (modify based on your data)
-        fig = px.scatter(df, x=df.columns[0], y=df.columns[1], title="CSV Data Visualization")
+        # Process the CSV file
+        csv_data = []
+        with open(file_path, mode='r', newline='', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            csv_data = [float(row[0]) for row in reader]  # Convert strings to floats
 
-        # Convert plotly figure to HTML
-        graph_html = pio.to_html(fig, full_html=False)
+            with open('csvData.py', 'w') as o:
+                o.write(f"csvData = {csv_data}")
 
-        # Render the graph in the browser
-        return render_template('index.html', graph_html=graph_html)
+        return render_template('view/viewCsvData.html')
+    else:
+        js_code = """
+                                                                <script>
+                                                                    alert('Invalid File Format. Try Again ! ');
+                                                                    window.location.href = '/reflectanceAnalyzing';
+                                                                </script>
+                                                                """
+        return Response(js_code, mimetype='text/html')
 
 
 #######################################
@@ -631,6 +645,11 @@ def csvPage():
     return render_template('csvSave.html')
 
 
+@app.route('/viewCsv')
+def viewCsv():
+    return render_template('view/viewCsvData.html')
+
+
 ###################################################################
 #                       Plot Routing Start                        #
 ###################################################################
@@ -954,7 +973,7 @@ def rawDataView():
 
 
 #########################
-# Raw Data Plot View   #
+# Cal Data Plot View   #
 #########################
 
 @app.route('/calDataView')
@@ -998,6 +1017,51 @@ def calDataView():
     # frozen_graph = fig.to_json()  # Update the last frozen graph
     return jsonify({'figure': fig.to_json(), 'config': config})
 
+
+#########################
+# CSV Data Plot View   #
+#########################
+
+@app.route('/csvDataView')
+def csvDataView():
+    # Get real-time data from Arduino
+    Data = csvData.csvData
+
+    # Generate x and y values from Arduino data
+    # Assuming data corresponds to y-values (intensity) and x-values are indices
+    x = np.linspace(300, 900, len(Data))  # Simulate wavelength range
+    norm = Normalize(vmin=min(Data), vmax=max(Data))
+    y = norm(Data)
+
+    # Create Plotly figure
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=x,  # x-axis as the index
+        y=y,
+        mode='markers',
+        marker=dict(size=3)  # Adjust the size (6 is smaller than default)
+    ))
+
+    fig.update_layout(
+        xaxis_title="Wavelength (nm)",
+        yaxis_title="Reflectance (%)",
+        xaxis=dict(range=[300, 900]),  # x axis
+        yaxis=dict(range=[0, 1.2]),  # y axis
+        height=320,
+        width=480,
+    )
+
+    # Custom toolbar configuration
+    config = {
+        'displaylogo': False,
+        'modeBarButtonsToRemove': ['lasso2d', 'autoScale2d', 'hoverClosestCartesian',
+                                   'hoverCompareCartesian', 'zoom2d', 'pan2d', 'zoomIn2d', 'zoomOut2d',
+                                   'resetScale2d',
+                                   'select2d', 'toggleSpikelines', 'toImage']
+    }
+
+    # frozen_graph = fig.to_json()  # Update the last frozen graph
+    return jsonify({'figure': fig.to_json(), 'config': config})
 
 ##########################
 # White Data Plot View   #

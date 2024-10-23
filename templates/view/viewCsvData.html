@@ -110,10 +110,6 @@
         <span id="status-time">Loading ...</span>
     </div>
 
-    {#    <div>#}
-    {#        <a class="btn btn-danger bi bi-bootstrap-reboot" style="height: 30px" href="#" data-bs-toggle="modal"#}
-    {#           data-bs-target="#splashModal"></a> <!-- Open modal -->#}
-    {#    </div>#}
 
 </div>
 
@@ -127,7 +123,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to back to Cal Data Spectrum ?
+                Are you sure you want to back to Save and Model ?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -141,7 +137,7 @@
     // Event listener for the confirm button inside the Reboot modal
     document.getElementById('confirmBack').addEventListener('click', function () {
         // Redirect to the splash page
-        window.location.href = "{{ url_for('reflectanceAnalyzing') }}";
+        window.location.href = "{{ url_for('analyzeGo') }}";
     });
 </script>
 
@@ -174,7 +170,6 @@
 </script>
 
 
-
 <div class="settings-bar">
     <a href="#" id="save-btn" class="btn btn-primary"><i class="bi bi-camera"></i></a>
     <a href="#" id="reset-btn" class="btn btn-info"><i class="bi bi-arrow-counterclockwise"></i></a>
@@ -186,8 +181,39 @@
 <div class="container">
 
     <div>
-        <h6>Saved Raw Data Spectrum</h6>
+        <h6>Saved CSV Data Spectrum</h6>
     </div>
+
+    <!-- Button to trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#csvModal">
+        Choose CSV File
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="csvModalLabel">Upload CSV File</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- CSV upload form -->
+                    <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Select CSV file</label>
+                            <input type="file" class="form-control" id="file" name="file" accept=".csv" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="chart-container">
         <!-- Plotly chart container -->
@@ -213,7 +239,7 @@
     $(document).ready(function () {
         // Function to plot the route data only once
         function plotRoute() {
-            $.getJSON('/calDataView', function (response) {
+            $.getJSON('/csvDataView', function (response) {
                 var plotData = JSON.parse(response.figure); // Extract the figure data
                 var config = response.config; // Extract the config data
 
@@ -225,7 +251,7 @@
                 plotData.layout.margin = {
                     l: 30,  // left margin
                     r: 30,  // right margin
-                    b: 170,  // bottom margin
+                    b: 190,  // bottom margin
                     t: 5,  // top margin: reduce this value to move closer to the top
                     pad: 0  // padding
                 };
@@ -356,16 +382,16 @@
     setInterval(updateWifiStatus, 2000);
 
     // Event listener for the confirm button inside the Reboot modal
-    document.getElementById('confirmReboot').addEventListener('click', function () {
+    //document.getElementById('confirmReboot').addEventListener('click', function () {
         // Redirect to the splash page
-        window.location.href = "{{ url_for('darkReference') }}";
-    });
+        //window.location.href = "{{ url_for('analyzeGo') }}";
+    //});
 
     // Event listener for the confirm button inside the Splash modal
-    document.getElementById('confirmSplash').addEventListener('click', function () {
-        // Redirect to the splash screen
-        window.location.href = "{{ url_for('splash') }}";
-    });
+    //document.getElementById('confirmSplash').addEventListener('click', function () {
+    //    // Redirect to the splash screen
+     //   window.location.href = "{{ url_for('splash') }}";
+    //});
 </script>
 
 
